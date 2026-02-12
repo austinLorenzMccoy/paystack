@@ -22,7 +22,7 @@ export function useRealtimePayments(creatorId: string | null) {
   }, []);
 
   useEffect(() => {
-    if (!creatorId) return;
+    if (!creatorId || !supabase) return;
 
     const channel = supabase
       .channel(`payments:${creatorId}`)
@@ -41,7 +41,7 @@ export function useRealtimePayments(creatorId: string | null) {
       });
 
     return () => {
-      supabase.removeChannel(channel);
+      supabase?.removeChannel(channel);
       setConnected(false);
     };
   }, [creatorId, handleInsert]);

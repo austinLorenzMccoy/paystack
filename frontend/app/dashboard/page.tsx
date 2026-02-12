@@ -121,6 +121,11 @@ export default function DashboardOverview() {
     try {
       setLoading(true);
 
+      if (!supabase) {
+        applyPlaceholderData();
+        return;
+      }
+
       // Fetch payments for current user (creator)
       const { data: payments, error: paymentsError } = await supabase
         .from('payments')

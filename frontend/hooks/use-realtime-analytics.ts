@@ -24,7 +24,7 @@ export function useRealtimeAnalytics(creatorId: string | null) {
   }, []);
 
   useEffect(() => {
-    if (!creatorId) return;
+    if (!creatorId || !supabase) return;
 
     const channel = supabase
       .channel(`analytics:${creatorId}`)
@@ -43,7 +43,7 @@ export function useRealtimeAnalytics(creatorId: string | null) {
       });
 
     return () => {
-      supabase.removeChannel(channel);
+      supabase?.removeChannel(channel);
       setConnected(false);
     };
   }, [creatorId, handleInsert]);
