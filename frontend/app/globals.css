@@ -1,0 +1,193 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    /* PayStack Bitcoin Brutalist Design System */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 33 93% 54%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 245 100% 64%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 88%;
+
+    --accent: 0 0% 18%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 100% 59%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 29%;
+    --input: 0 0% 29%;
+    --ring: 33 93% 54%;
+
+    --chart-1: 33 93% 54%;
+    --chart-2: 245 100% 64%;
+    --chart-3: 120 100% 50%;
+    --chart-4: 51 100% 50%;
+    --chart-5: 0 100% 59%;
+
+    --radius: 0rem;
+
+    --sidebar-background: 0 0% 10%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 33 93% 54%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 18%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 29%;
+    --sidebar-ring: 33 93% 54%;
+
+    /* Custom PayStack tokens */
+    --bitcoin-orange: #F7931A;
+    --stacks-purple: #5546FF;
+    --charcoal: #1A1A1A;
+    --concrete: #2D2D2D;
+    --slate-custom: #4A4A4A;
+    --fog: #E0E0E0;
+    --success-green: #00FF41;
+    --warning-yellow: #FFD700;
+    --error-red: #FF3B30;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-mono antialiased;
+    background-image:
+      linear-gradient(135deg, rgba(0, 0, 0, 0.92) 0%, rgba(26, 26, 26, 0.88) 100%),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 1px,
+        rgba(255, 255, 255, 0.02) 1px,
+        rgba(255, 255, 255, 0.02) 2px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 1px,
+        rgba(255, 255, 255, 0.02) 1px,
+        rgba(255, 255, 255, 0.02) 2px
+      );
+    background-size: cover, 20px 20px, 20px 20px;
+  }
+}
+
+/* Custom animations */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.grid-overlay {
+  position: relative;
+}
+
+.grid-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 6px, rgba(247, 147, 26, 0.08) 6px, rgba(247, 147, 26, 0.08) 7px),
+    repeating-linear-gradient(90deg, transparent, transparent 6px, rgba(85, 70, 255, 0.08) 6px, rgba(85, 70, 255, 0.08) 7px);
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.card-brutalist {
+  @apply border-2 border-border bg-charcoal relative transition-all duration-200;
+}
+
+.card-brutalist::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--bitcoin-orange);
+}
+
+.card-brutalist:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.75);
+}
+
+.btn-brutalist {
+  @apply uppercase font-mono font-bold tracking-widest border-2 px-6 py-3 text-sm transition-transform duration-150;
+  box-shadow: 4px 4px 0 #000;
+}
+
+.btn-brutalist:hover {
+  transform: translate(-3px, -3px);
+}
+
+.ticker-strip {
+  @apply flex items-center gap-6 whitespace-nowrap border-y-2 border-border bg-charcoal px-4 py-2 text-xs font-bold uppercase tracking-widest text-fog;
+}
+
+.ticker-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--success-green);
+  animation: blink 1s infinite;
+}
+
+.outline-glow {
+  position: relative;
+}
+
+.outline-glow::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border: 2px dashed rgba(247, 147, 26, 0.4);
+  pointer-events: none;
+}

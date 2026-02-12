@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Environment files (secrets)
+.env
+.env.local
+.env.*.local
+backend/supabase/.env
+
+# Testnet/Mainnet keys (NEVER commit)
+contracts/paystack-contracts/settings/Testnet.toml
+contracts/paystack-contracts/settings/Mainnet.toml
+
+# Build output
+.next/
+out/
+dist/
+build/
+
+# Cache
+.cache/
+.clarinet/
+contracts/paystack-contracts/.cache/
+
+# Coverage
+coverage/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Supabase local
+backend/supabase/.temp/
