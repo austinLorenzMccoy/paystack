@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="frontend/public/x402pay-logo.svg" alt="x402Pay Logo" width="120" height="120" />
+  <img src="docs/x402pay-logo.svg" alt="x402Pay Logo" width="120" height="120" />
 </p>
 
 # ⚡ x402Pay — Bitcoin-Native Creator Monetization SDK
