@@ -1,8 +1,10 @@
 # ⚡ PayStack Smart Contracts
 
-> Clarity Language · Stacks L2 · Revenue Splitting · Programmable Payments
+> Clarity v2 · Stacks L2 (epoch 2.4) · Revenue Splitting · Programmable Payments
 
-PayStack's on-chain layer uses [Clarity](https://docs.stacks.co/clarity/overview) smart contracts deployed on the Stacks blockchain. The primary contract — `revenue-split` — handles content registration, configurable revenue splits, and atomic payment processing with built-in event logging.
+PayStack's on-chain layer uses [Clarity v2](https://docs.stacks.co/clarity/overview) smart contracts deployed on the Stacks blockchain. The primary contract — `revenue-split` — handles content registration, configurable revenue splits, and atomic payment processing with built-in event logging.
+
+**Deployed (Testnet)**: [`STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-split`](https://explorer.hiro.so/txid/STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-split?chain=testnet)
 
 ---
 
@@ -12,12 +14,15 @@ PayStack's on-chain layer uses [Clarity](https://docs.stacks.co/clarity/overview
 contracts/
 └── paystack-contracts/
     ├── contracts/
-    │   └── revenue-split.clar       # Main Clarity smart contract
+    │   └── revenue-split.clar       # Main Clarity v2 smart contract
     ├── tests/
-    │   └── revenue-split.test.ts    # Clarinet + Vitest test suite
+    │   └── revenue-split.test.ts    # Clarinet + Vitest test suite (6 tests)
+    ├── deployments/
+    │   ├── default.simnet-plan.yaml # Simnet deployment plan
+    │   └── default.testnet-plan.yaml # Testnet deployment plan (Clarity v2, epoch 2.4)
     ├── settings/
     │   └── Devnet.toml              # Clarinet devnet configuration
-    ├── Clarinet.toml                # Project manifest
+    ├── Clarinet.toml                # Project manifest (clarity_version = 2, epoch = 2.4)
     └── package.json                 # Test dependencies
 ```
 
@@ -202,12 +207,24 @@ Tests use the `SIM` mock asset (Clarinet's simulated STX) to avoid real transfer
 
 ## 🚢 Deployment
 
-### Testnet
+### Testnet (Currently Deployed)
+
+```
+Contract: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-split
+Network:  Stacks testnet
+Clarity:  v2
+Epoch:    2.4
+```
 
 ```bash
+# Regenerate deployment plan (if needed)
 clarinet deployments generate --testnet
+
+# Apply deployment
 clarinet deployments apply -p deployments/default.testnet-plan.yaml
 ```
+
+> **Note**: The `Clarinet.toml` must specify `clarity_version = 2` and `epoch = 2.4` for the contract. Top-level `(print ...)` expressions must be removed to avoid `abort_by_response` errors during deployment.
 
 ### Mainnet
 
@@ -224,6 +241,7 @@ clarinet deployments apply -p deployments/default.mainnet-plan.yaml
 - [Clarinet Documentation](https://docs.hiro.so/clarinet)
 - [Stacks API Reference](https://docs.hiro.so/stacks/api)
 - [SIP-010 Fungible Token Standard](https://github.com/stacksgov/sips/blob/main/sips/sip-010/sip-010-fungible-token-standard.md)
+- [Stacks Explorer (Testnet)](https://explorer.hiro.so/?chain=testnet)
 
 ---
 

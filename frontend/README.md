@@ -1,8 +1,10 @@
 # ⚡ PayStack Frontend
 
-> Next.js 14 · React 18 · TailwindCSS · Bitcoin Brutalist Design System
+> Next.js 16 · React 19 · TailwindCSS · shadcn/ui · Bitcoin Brutalist Design System
 
 The PayStack frontend delivers the creator dashboard, landing page, SDK documentation, and wallet integration — all styled with the **Bitcoin Brutalist** design language: zero radii, heavy borders, mono typography, and angular micro-interactions.
+
+**Live**: [paystack-six.vercel.app](https://paystack-six.vercel.app)
 
 ---
 
@@ -12,6 +14,7 @@ The PayStack frontend delivers the creator dashboard, landing page, SDK document
 frontend/
 ├── app/
 │   ├── page.tsx                 # Landing page (Hero, Features, HowItWorks, RealtimePanel, Stats, CTA)
+│   ├── not-found.tsx            # Custom 404 page
 │   ├── dashboard/
 │   │   ├── page.tsx             # Creator Overview (stats, charts, SDK callout, x402 flow)
 │   │   ├── layout.tsx           # Dashboard shell (sidebar + header)
@@ -27,15 +30,17 @@ frontend/
 │   ├── ui/                      # shadcn/ui primitives (50+ components)
 │   └── wallet-connect-button.tsx
 ├── hooks/
+│   ├── use-x402.ts             # x402 v2 payment hook (PAYMENT-REQUIRED/SIGNATURE/RESPONSE headers)
 │   ├── use-realtime-payments.ts # Supabase realtime subscription for payments
 │   └── use-realtime-analytics.ts # Supabase realtime subscription for analytics events
 ├── contexts/
 │   ├── auth-context.tsx         # Supabase auth state provider
 │   └── wallet-context.tsx       # Stacks wallet connection provider
 ├── lib/
-│   ├── supabase.ts              # Browser Supabase client
+│   ├── supabase.ts              # Browser Supabase client (null-safe for SSG)
 │   └── utils.ts                 # cn() utility
-├── __tests__/                   # All test suites
+├── __tests__/                   # All test suites (15 files, 80 tests)
+├── .env.local.example           # Environment variable template
 ├── vitest.config.ts             # Vitest + v8 coverage config
 └── vitest.setup.ts              # Global mocks, polyfills, test setup
 ```
@@ -56,12 +61,20 @@ cd frontend
 pnpm install
 ```
 
-Create `.env.local` with your Supabase credentials:
+Create `.env.local` from the example template:
+
+```bash
+cp .env.local.example .env.local
+```
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOi...
+NEXT_PUBLIC_CONTRACT_ADDRESS=STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-split
+NEXT_PUBLIC_STACKS_NETWORK=testnet
 ```
+
+> The Supabase client is null-safe — the app builds and renders even when env vars are missing (e.g. during Vercel SSG). Features requiring Supabase simply degrade gracefully.
 
 Start the dev server:
 
@@ -100,19 +113,27 @@ pnpm start        # → http://localhost:3000
 
 ---
 
-## 🔌 Realtime Subscriptions
+## 🔌 Hooks
 
-Two custom hooks connect the dashboard to Supabase Realtime:
+### `useX402()` — x402 v2 Payment Protocol
+
+Full implementation of the [Coinbase x402 protocol](https://github.com/coinbase/x402) for Stacks:
+
+- **`checkAccess(contentId, address?)`** — GET request, reads `Payment-Required` header (base64 `PaymentRequirements`), falls back to legacy `X-Payment-*` headers
+- **`submitReceipt(token, txId)`** — POST with `Payment-Signature` header (base64 `PaymentPayload`), reads `Payment-Response` header on success
+- **`reset()`** — Clear state
+
+Returns `{ loading, challenge, hasAccess, error, settlement, checkAccess, submitReceipt, reset }`.
 
 ### `useRealtimePayments(creatorId)`
 
-Subscribes to `INSERT` events on the `payments` table filtered by `creator_id`. Returns `{ payments, connected }`.
+Subscribes to `INSERT` events on the `payments` table filtered by `creator_id`. Returns `{ payments, connected }`. Null-safe — skips subscription if Supabase client is unavailable.
 
 ### `useRealtimeAnalytics(creatorId)`
 
-Subscribes to `INSERT` events on the `analytics_events` table filtered by `creator_id`. Returns `{ events, connected }`.
+Subscribes to `INSERT` events on the `analytics_events` table filtered by `creator_id`. Returns `{ events, connected }`. Null-safe — skips subscription if Supabase client is unavailable.
 
-Both hooks auto-cleanup on unmount via `supabase.removeChannel()`.
+All hooks auto-cleanup on unmount via `supabase?.removeChannel()`.
 
 ---
 
@@ -134,7 +155,7 @@ pnpm test:watch        # Watch mode
 pnpm test:coverage     # Run with coverage report
 ```
 
-### Test Suites (14 files, 72 tests)
+### Test Suites (15 files, 80 tests)
 
 | Suite | Tests | Coverage |
 |-------|-------|----------|
@@ -150,17 +171,9 @@ pnpm test:coverage     # Run with coverage report
 | Dashboard Header | 5 | ✅ Menu, breadcrumbs, testnet badge, wallet |
 | Dashboard Sidebar | 7 | ✅ Logo, nav items, settings, collapse, mobile close |
 | SDK Docs Page | 8 | ✅ Heading, steps, checklist, asset selector, flow, clipboard |
+| x402 Hook | 8 | ✅ Default state, v2 PAYMENT-REQUIRED parsing, legacy fallback, PAYMENT-SIGNATURE send, PAYMENT-RESPONSE read, settlement state, error handling |
 | Realtime Payments Hook | 4 | ✅ Empty state, subscribe, cleanup, null guard |
 | Realtime Analytics Hook | 4 | ✅ Empty state, subscribe, cleanup, null guard |
-
-### Coverage Summary
-
-```
-Statements : 31.56%
-Branches   : 29.87%
-Functions  : 33.75%
-Lines      : 32.89%
-```
 
 > Core landing components and hooks are at 80–100%. Dashboard sub-pages (analytics, content, payments, settings) and auto-generated UI primitives account for the remaining uncovered lines.
 
