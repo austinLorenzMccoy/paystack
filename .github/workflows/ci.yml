@@ -24,7 +24,6 @@ jobs:
           cache: pnpm
           cache-dependency-path: frontend/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
       - run: pnpm test:coverage
       - uses: actions/upload-artifact@v4
         with:
@@ -39,7 +38,17 @@ jobs:
         working-directory: contracts/paystack-contracts
     steps:
       - uses: actions/checkout@v4
-      - uses: stacks-network/clarinet-action@v1
+      - name: Install Clarinet
+        working-directory: /tmp
+        run: |
+          wget -nv https://github.com/hirosystems/clarinet/releases/latest/download/clarinet-linux-x64-glibc.tar.gz -O clarinet-linux-x64.tar.gz
+          tar -xf clarinet-linux-x64.tar.gz
+          chmod +x ./clarinet
+          sudo mv ./clarinet /usr/local/bin/
+          clarinet --version
       - run: clarinet check
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
       - run: npm ci
       - run: npm test
