@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/x402pay-logo.svg" alt="x402Pay Logo" width="120" height="120" />
+  <img src="frontend/public/x402pay-logo.svg" alt="x402Pay Logo" width="120" height="120" />
 </p>
 
 # ⚡ x402Pay — Bitcoin-Native Creator Monetization SDK
@@ -221,11 +221,7 @@ FRONTEND_URL=http://localhost:3000
 
 ## 📖 Documentation
 
-- [`docs/bitcoin-creator-sdk-prd.md`](docs/bitcoin-creator-sdk-prd.md) — Product Requirements
-- [`docs/paystack-architecture-v2-supabase.md`](docs/paystack-architecture-v2-supabase.md) — System Architecture
-- [`docs/paystack-frontend-prd.md`](docs/paystack-frontend-prd.md) — Frontend Design Spec
-- [`docs/paystack-complete-system-architecture.md`](docs/paystack-complete-system-architecture.md) — Complete Architecture
-- [`docs/paystack-video-demo-script.md`](docs/paystack-video-demo-script.md) — Video Demo Script
+Internal design docs, PRDs, and video scripts now live outside this repo to keep the tree lean. Ping the team for the latest shared drive if you need them.
 
 ---
 

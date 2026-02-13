@@ -43,3 +43,6 @@ npm-debug.log*
 
 # Supabase local
 backend/supabase/.temp/
+
+# Documentation (kept local only)
+docs/
