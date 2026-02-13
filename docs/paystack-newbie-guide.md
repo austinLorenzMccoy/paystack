@@ -1,6 +1,6 @@
-# PayStack for New Builders
+# x402Pay for New Builders
 
-Welcome! This guide explains PayStack in plain language so you can understand what it does, why it matters, and how to try it yourself—no prior blockchain experience required.
+Welcome! This guide explains x402Pay in plain language so you can understand what it does, why it matters, and how to try it yourself—no prior blockchain experience required.
 
 ---
 
@@ -15,9 +15,9 @@ It’s like running a cashless recharge stand, but on the internet: **coin goes 
 
 ---
 
-## 1. What is PayStack?
+## 1. What is x402Pay?
 
-PayStack is a toolkit that lets online creators earn Bitcoin-native payments for their content. Imagine adding a “paywall” button to an article, video, or AI agent. With PayStack, that button can accept Bitcoin (sBTC), Stacks (STX), or stablecoins (USDCx) and split revenue automatically between collaborators.
+x402Pay is a toolkit that lets online creators earn Bitcoin-native payments for their content. Imagine adding a “paywall” button to an article, video, or AI agent. With x402Pay, that button can accept Bitcoin (sBTC), Stacks (STX), or stablecoins (USDCx) and split revenue automatically between collaborators.
 
 Think of it as:
 - **Stripe for Bitcoin creators**, but without card processors or banks.
@@ -27,7 +27,7 @@ Think of it as:
 
 ## 2. Why would someone use it?
 
-| Pain point | PayStack’s answer |
+| Pain point | x402Pay’s answer |
 |------------|------------------|
 | “I want to monetize digital content without Web2 fees.” | Bitcoin-native payments with no traditional banking middlemen. |
 | “I work with collaborators and need instant split payouts.” | Revenue split contract guarantees everyone gets paid atomically. |
@@ -38,7 +38,7 @@ Think of it as:
 ## 3. How the pieces fit together
 
 ```
-User Wallet ──▶ PayStack SDK (frontend) ──▶ Supabase backend ──▶ Clarity contract
+User Wallet ──▶ x402Pay SDK (frontend) ──▶ Supabase backend ──▶ Clarity contract
              (pay button)               (Edge Functions)         (revenue split)
 ```
 
@@ -52,7 +52,7 @@ When someone pays, the contract splits the funds, Supabase records the event, an
 
 ## 4. Quick start (high level)
 
-1. **Clone the repo** `git clone ... && cd PayStack`
+1. **Clone the repo** `git clone ... && cd x402Pay`
 2. **Frontend**
    ```bash
    cd frontend
@@ -77,13 +77,13 @@ When someone pays, the contract splits the funds, Supabase records the event, an
 
 ## 5. Key terminology (plain English)
 
-- **Stacks / STX**: The blockchain and native token PayStack uses to run smart contracts.
+- **Stacks / STX**: The blockchain and native token x402Pay uses to run smart contracts.
 - **sBTC**: Bitcoin that moves on Stacks so it can be programmable.
 - **Supabase**: Backend service (database + auth + realtime) with serverless functions.
-- **Edge Function**: A Deno function that runs close to users; PayStack uses them for wallet auth, analytics, etc.
+- **Edge Function**: A Deno function that runs close to users; x402Pay uses them for wallet auth, analytics, etc.
 - **Clarity**: Smart-contract language for Stacks—readable and predictable.
 - **Revenue Split**: Rules that say “creator gets 80%, platform 15%, collaborator 5%,” enforced by the contract.
-- **AI Agent**: A bot or script that can pay for content; PayStack tracks these separately from humans.
+- **AI Agent**: A bot or script that can pay for content; x402Pay tracks these separately from humans.
 
 ---
 
@@ -111,6 +111,6 @@ When someone pays, the contract splits the funds, Supabase records the event, an
 
 ## 8. TL;DR elevator pitch
 
-> **PayStack** is a Bitcoin-native monetization SDK. Drop a button, call an Edge Function, and a Clarity contract enforces instant revenue splits while Supabase streams analytics in realtime.
+> **x402Pay** is a Bitcoin-native monetization SDK. Drop a button, call an Edge Function, and a Clarity contract enforces instant revenue splits while Supabase streams analytics in realtime.
 
 Welcome aboard! Play with the dashboard, tweak the contract splits, or connect your own AI agent—and feel free to iterate on the brutalist design language to make it yours.

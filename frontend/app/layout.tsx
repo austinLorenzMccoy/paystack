@@ -19,7 +19,7 @@ const ibmPlexSans = IBM_Plex_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "PayStack - Bitcoin Creator Monetization SDK",
+  title: "x402Pay - Bitcoin Creator Monetization SDK",
   description:
     "The first Bitcoin-native SDK for content monetization. Built on Stacks. Powered by x402. One line of code, Bitcoin-native payments, creator-first monetization.",
   generator: "v0.app",

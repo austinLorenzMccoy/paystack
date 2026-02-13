@@ -10,7 +10,7 @@
 
 @layer base {
   :root {
-    /* PayStack Bitcoin Brutalist Design System */
+    /* x402Pay Bitcoin Brutalist Design System */
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
 
@@ -56,7 +56,7 @@
     --sidebar-border: 0 0% 29%;
     --sidebar-ring: 33 93% 54%;
 
-    /* Custom PayStack tokens */
+    /* Custom x402Pay tokens */
     --bitcoin-orange: #F7931A;
     --stacks-purple: #5546FF;
     --charcoal: #1A1A1A;

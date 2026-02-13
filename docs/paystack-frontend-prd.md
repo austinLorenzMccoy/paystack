@@ -1,5 +1,5 @@
 # Frontend Product Requirements Document
-## PayStack - Bitcoin Creator Monetization SDK
+## x402Pay - Bitcoin Creator Monetization SDK
 ### Landing Page & Dashboard Experience
 
 ---
@@ -258,7 +258,7 @@ A bold fusion of:
 │                                                         │
 │       [ GET STARTED ]    [ VIEW DOCS ]                 │
 │                                                         │
-│  $ npm install @paystack/sdk                           │
+│  $ npm install @x402pay/sdk                           │
 │  ┌──────────────────────────────────────────┐         │
 │  │ // Add payment to any content             │         │
 │  │ <PaywallButton                             │         │
@@ -392,7 +392,7 @@ A bold fusion of:
 │  SDK                   Docs             GitHub          │
 │                        Pricing          Discord         │
 │                                                         │
-│  © 2026 PayStack. Built on Stacks.                    │
+│  © 2026 x402Pay. Built on Stacks.                    │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -431,7 +431,7 @@ A bold fusion of:
 - Active page: Orange left border (4px)
 - Hover: Background color change
 - Collapse toggle at bottom
-- LocalStorage persistence: `paystack_sidebar_collapsed`
+- LocalStorage persistence: `x402pay_sidebar_collapsed`
 
 **Component Structure:**
 ```tsx
@@ -949,7 +949,7 @@ const labelVariants = {
 
 ### Flow 2: Returning Creator → Check Revenue
 
-1. Navigate to paystack.xyz
+1. Navigate to x402pay.xyz
 2. Click "Launch Dashboard" (header)
 3. Auto-login (wallet already connected)
 4. View /dashboard/overview
@@ -1022,7 +1022,7 @@ const labelVariants = {
 ║     │                                                      │   ║
 ║     │     [GET STARTED]      [VIEW DOCS]                  │   ║
 ║     │                                                      │   ║
-║     │  $ npm install @paystack/sdk                        │   ║
+║     │  $ npm install @x402pay/sdk                        │   ║
 ║     │  ┌────────────────────────────────────────┐        │   ║
 ║     │  │ <PaywallButton                         │        │   ║
 ║     │  │   contentId="article-1"                │        │   ║
@@ -1051,11 +1051,11 @@ const labelVariants = {
 ║                                                               ║
 ║  [1] ────────────────────┐                                   ║
 ║  INSTALL SDK             │                                   ║
-║  $ npm install @paystack/sdk                                 ║
+║  $ npm install @x402pay/sdk                                 ║
 ║                          │                                   ║
 ║                          └──→ [2] ──────────────────┐        ║
 ║                               CONFIGURE              │        ║
-║                               app.use(paystackMw())  │        ║
+║                               app.use(x402payMw())  │        ║
 ║                                                      │        ║
 ║                                                      └──→ [3] ║
 ║                                                           EARN ║
@@ -1078,7 +1078,7 @@ const labelVariants = {
 ║  SDK              Docs              GitHub                   ║
 ║                   Pricing           Discord                  ║
 ║                                                               ║
-║  © 2026 PayStack. Built on Stacks. MIT License.             ║
+║  © 2026 x402Pay. Built on Stacks. MIT License.             ║
 ╚═══════════════════════════════════════════════════════════════╝
 ```
 
@@ -1278,11 +1278,11 @@ const labelVariants = {
 ### Empty States
 - No content: "You haven't monetized anything yet. Start by adding your first content."
 - No payments: "No payments received yet. Share your monetized content to start earning."
-- No API keys: "Generate your first API key to integrate PayStack SDK."
+- No API keys: "Generate your first API key to integrate x402Pay SDK."
 
 ### Error Messages
 - Wallet not connected: "Please connect your Hiro Wallet to continue."
-- Network mismatch: "Switch to Stacks Testnet to use PayStack."
+- Network mismatch: "Switch to Stacks Testnet to use x402Pay."
 - Transaction failed: "Payment failed. Please try again or contact support."
 
 ---
@@ -1311,7 +1311,7 @@ const labelVariants = {
 
 ## 20. CONCLUSION
 
-This frontend PRD provides a complete blueprint for building a distinctive, production-ready interface for PayStack. The "Bitcoin Brutalist" aesthetic sets it apart from generic crypto dashboards while remaining highly functional and accessible.
+This frontend PRD provides a complete blueprint for building a distinctive, production-ready interface for x402Pay. The "Bitcoin Brutalist" aesthetic sets it apart from generic crypto dashboards while remaining highly functional and accessible.
 
 **Key Differentiators:**
 1. ✅ Bold, memorable design (not generic AI slop)

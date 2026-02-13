@@ -1,4 +1,4 @@
-name: PayStack CI
+name: x402Pay CI
 
 on:
   push:

@@ -25,7 +25,7 @@ describe("Hero", () => {
 
   it("renders the code snippet block", () => {
     render(<Hero />);
-    expect(screen.getByText(/npm install @paystack\/sdk/)).toBeInTheDocument();
+    expect(screen.getByText(/npm install @x402pay\/sdk/)).toBeInTheDocument();
   });
 
   it("renders the AI Agent Indicator card", () => {

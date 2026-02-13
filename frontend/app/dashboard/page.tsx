@@ -450,7 +450,7 @@ export default function DashboardOverview() {
           </div>
           <h3 className="font-mono text-2xl font-black uppercase">Drop-in Integration</h3>
           <p className="mt-3 text-sm text-fog">
-            Import the PayStack SDK, register your content IDs, and begin streaming Bitcoin-native payments in under five minutes. Assets are switchable per content block.
+            Import the x402Pay SDK, register your content IDs, and begin streaming Bitcoin-native payments in under five minutes. Assets are switchable per content block.
           </p>
           <div className="mt-4 space-y-2 font-mono text-xs uppercase tracking-widest text-fog">
             <div className="flex items-center justify-between border border-border px-4 py-2">

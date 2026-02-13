@@ -206,7 +206,7 @@ async function sendEmail({ to, subject, html }: { to: string; subject: string; h
       },
       body: JSON.stringify({
         personalizations: [{ to: [{ email: to }] }],
-        from: { email: 'noreply@paystack.xyz' },
+        from: { email: 'noreply@x402pay.xyz' },
         subject,
         content: [{ type: 'text/html', value: html }],
       }),

@@ -1,5 +1,5 @@
 /**
- * Shared constants for PayStack Edge Functions
+ * Shared constants for x402Pay Edge Functions
  */
 
 // Deployed contract address on Stacks testnet

@@ -7,7 +7,7 @@ export default function NotificationsPage() {
   const [emailEnabled, setEmailEnabled] = useState(true);
   const [telegramEnabled, setTelegramEnabled] = useState(false);
   const [webhooks, setWebhooks] = useState([
-    { id: "1", url: "https://myapp.com/webhooks/paystack", active: true },
+    { id: "1", url: "https://myapp.com/webhooks/x402pay", active: true },
   ]);
 
   return (

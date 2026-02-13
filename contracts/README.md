@@ -1,8 +1,8 @@
-# ⚡ PayStack Smart Contracts
+# ⚡ x402Pay Smart Contracts
 
 > Clarity v2 · Stacks L2 (epoch 2.4) · Revenue Splitting · Programmable Payments
 
-PayStack's on-chain layer uses [Clarity v2](https://docs.stacks.co/clarity/overview) smart contracts deployed on the Stacks blockchain. The primary contract — `revenue-split` — handles content registration, configurable revenue splits, and atomic payment processing with built-in event logging.
+x402Pay's on-chain layer uses [Clarity v2](https://docs.stacks.co/clarity/overview) smart contracts deployed on the Stacks blockchain. The primary contract — `revenue-split` — handles content registration, configurable revenue splits, and atomic payment processing with built-in event logging.
 
 **Deployed (Testnet)**: [`STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-split`](https://explorer.hiro.so/txid/STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-split?chain=testnet)
 
@@ -190,7 +190,7 @@ Tests use the `SIM` mock asset (Clarinet's simulated STX) to avoid real transfer
 
 ```
 ┌──────────┐     ┌──────────────┐     ┌─────────────────┐     ┌──────────┐
-│  Wallet   │────▶│  PayStack    │────▶│  revenue-split   │────▶│ Supabase │
+│  Wallet   │────▶│  x402Pay    │────▶│  revenue-split   │────▶│ Supabase │
 │  (Hiro)   │     │  SDK         │     │  .clar           │     │ Backend  │
 │           │     │              │     │                  │     │          │
 │ 1. Sign   │     │ 2. Submit tx │     │ 3. Split + pay   │     │ 4. Grant │

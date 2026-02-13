@@ -1,4 +1,4 @@
-# PayStack Complete System Architecture - UPDATED
+# x402Pay Complete System Architecture - UPDATED
 ## Bitcoin Creator Monetization SDK with Supabase Backend
 
 **Version:** 2.0 (Supabase Edition)  
@@ -262,7 +262,7 @@ Frontend (Vercel)
       ▼
 ┌────────────────────────────┐
 │  Creator's Application     │
-│  (Blog with PayStack SDK)  │
+│  (Blog with x402Pay SDK)  │
 └─────┬──────────────────────┘
       │
       │ 2. SDK checks access via Supabase
@@ -474,7 +474,7 @@ Maintenance: Minimal
 
 ✅ **Frontend** - Next.js 14 with React
 ✅ **Smart Contracts** - Clarity contracts on Stacks
-✅ **SDK** - @paystack/core, @paystack/react
+✅ **SDK** - @x402pay/core, @x402pay/react
 ✅ **Blockchain Integration** - Stacks.js, Hiro API
 ✅ **User Experience** - Same payment flows
 ✅ **Features** - All functionality preserved

@@ -1,16 +1,16 @@
 # Product Requirements Document (PRD)
 ## Bitcoin Creator Monetization SDK
-### "PayStack" - The x402-Stacks Content Monetization API
+### "x402Pay" - The x402-Stacks Content Monetization API
 
 ---
 
 ## 1. EXECUTIVE SUMMARY
 
-**Product Name:** PayStack SDK  
+**Product Name:** x402Pay SDK  
 **Tagline:** *"One Line of Code. Bitcoin-Native Payments. Creator-First Monetization."*
 
 **Vision Statement:**  
-PayStack is the first Bitcoin-native content monetization SDK that enables creators to monetize ANY digital content with x402-stacks micropayments in under 5 minutes. Unlike generic payment APIs, PayStack uniquely combines Stacks' Clarity smart contracts with x402 protocol to provide creator-owned revenue streams, AI agent compatibility, and Bitcoin-secured settlements.
+x402Pay is the first Bitcoin-native content monetization SDK that enables creators to monetize ANY digital content with x402-stacks micropayments in under 5 minutes. Unlike generic payment APIs, x402Pay uniquely combines Stacks' Clarity smart contracts with x402 protocol to provide creator-owned revenue streams, AI agent compatibility, and Bitcoin-secured settlements.
 
 **The 10/10 Unique Angle:**
 1. **Bitcoin-Native First**: Only SDK optimized for sBTC, STX, and USDCx on Stacks - bringing Bitcoin's security to creator economy
@@ -56,7 +56,7 @@ PayStack is the first Bitcoin-native content monetization SDK that enables creat
 
 ### What We're Building:
 
-**PayStack SDK** - A developer toolkit that makes it trivially easy to:
+**x402Pay SDK** - A developer toolkit that makes it trivially easy to:
 1. Add x402-stacks micropayments to ANY content (articles, APIs, videos, courses, datasets)
 2. Deploy Clarity smart contracts for revenue management (splits, royalties, subscriptions)
 3. Accept payments from both humans AND AI agents
@@ -65,7 +65,7 @@ PayStack is the first Bitcoin-native content monetization SDK that enables creat
 ### Core Value Propositions:
 
 **For Creators:**
-- **5-Minute Setup**: Add `<PayStack />` component or 3 lines of backend code
+- **5-Minute Setup**: Add `<x402Pay />` component or 3 lines of backend code
 - **Bitcoin Payments**: Accept sBTC with Bitcoin's security guarantees
 - **Programmable Revenue**: Set splits, royalties, tipping via Clarity contracts
 - **AI Agent Revenue**: Tap into agentic economy - agents pay automatically for your content
@@ -231,7 +231,7 @@ const paymentConfig = {
                     │
                     ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                    PAYSTACK SDK                              │
+│                    x402Pay SDK                              │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
 │  │ React Comps  │  │   REST API   │  │  CLI Tool    │     │
 │  └──────────────┘  └──────────────┘  └──────────────┘     │
@@ -350,12 +350,12 @@ const paymentConfig = {
 
 ```bash
 # Step 1: Install SDK
-npm install @paystack/sdk
+npm install @x402pay/sdk
 
 # Step 2: Initialize in code
-import { paystackMiddleware } from '@paystack/sdk';
+import { x402payMiddleware } from '@x402pay/sdk';
 
-app.use(paystackMiddleware({
+app.use(x402payMiddleware({
   contentMap: {
     '/api/premium-data': {
       price: '0.10',
@@ -367,7 +367,7 @@ app.use(paystackMiddleware({
 }));
 
 # Step 3: Deploy revenue contract (optional)
-npx paystack deploy-contract --splits creator:80,platform:20
+npx x402pay deploy-contract --splits creator:80,platform:20
 
 # Done! Endpoints are now monetized
 ```
@@ -409,7 +409,7 @@ npx paystack deploy-contract --splits creator:80,platform:20
 ### Post-Hackathon Success (6 Months):
 
 - **Adoption**: 50+ creators integrate SDK
-- **Volume**: $10K+ in creator revenue via PayStack
+- **Volume**: $10K+ in creator revenue via x402Pay
 - **Agent Payments**: 20%+ of transactions from AI agents
 - **Open Source**: 100+ GitHub stars, 10+ contributors
 - **Stacks Ecosystem**: Featured in Stacks newsletter, conference talks
@@ -418,7 +418,7 @@ npx paystack deploy-contract --splits creator:80,platform:20
 
 ## 9. COMPETITIVE ANALYSIS
 
-| Feature | PayStack (Us) | Coinbase x402 | Unlock Protocol | Substack |
+| Feature | x402Pay (Us) | Coinbase x402 | Unlock Protocol | Substack |
 |---------|---------------|---------------|-----------------|----------|
 | **Bitcoin Settlement** | ✅ sBTC | ❌ | ❌ | ❌ |
 | **Smart Contract Revenue** | ✅ Clarity | ❌ | ⚠️ Ethereum | ❌ |
@@ -602,7 +602,7 @@ export function PaywallButton({ contentId, price, asset = 'STX' }) {
 
 ### "BitBlog" - Demo Blog Platform
 
-**Purpose:** Showcase PayStack SDK in action with real content monetization
+**Purpose:** Showcase x402Pay SDK in action with real content monetization
 
 **Features:**
 1. **Homepage**
@@ -630,7 +630,7 @@ export function PaywallButton({ contentId, price, asset = 'STX' }) {
    - Next.js 14 (App Router)
    - TailwindCSS
    - Stacks.js for wallet
-   - PayStack SDK integrated
+   - x402Pay SDK integrated
    - Deployed on Vercel
 
 ---
@@ -679,7 +679,7 @@ export function PaywallButton({ contentId, price, asset = 'STX' }) {
 **License:** MIT  
 **Repository Structure:**
 ```
-paystack-sdk/
+x402pay-sdk/
 ├── packages/
 │   ├── core/           # x402 logic
 │   ├── react/          # React components
@@ -705,7 +705,7 @@ paystack-sdk/
 
 **6 Months After Launch:**
 
-*"Sarah, a Bitcoin educator, used to earn $2,000/month on Substack after their 10% fee. She switched to PayStack and now:*
+*"Sarah, a Bitcoin educator, used to earn $2,000/month on Substack after their 10% fee. She switched to x402Pay and now:*
 
 - *Earns $2,400/month (no platform fee)*
 - *Accepts sBTC directly from her global audience*
@@ -721,9 +721,9 @@ paystack-sdk/
 ## 16. DELIVERABLES CHECKLIST
 
 ### Code:
-- [ ] `@paystack/core` package
-- [ ] `@paystack/react` package
-- [ ] `@paystack/express` package
+- [ ] `@x402pay/core` package
+- [ ] `@x402pay/react` package
+- [ ] `@x402pay/express` package
 - [ ] Clarity revenue-split contract
 - [ ] BitBlog demo application
 - [ ] Unit tests (80%+ coverage)
@@ -854,7 +854,7 @@ paystack-sdk/
 
 ### Sample Pitch (30 seconds):
 
-*"Creators lose 30% to platforms and risk deplatforming. PayStack is the first Bitcoin-native SDK that lets creators monetize ANY content with 5 lines of code. Accept sBTC, set revenue splits via Clarity smart contracts, and tap into the AI agent economy. We're bringing content creators to Bitcoin—and proving x402-stacks can power the future of micropayments."*
+*"Creators lose 30% to platforms and risk deplatforming. x402Pay is the first Bitcoin-native SDK that lets creators monetize ANY content with 5 lines of code. Accept sBTC, set revenue splits via Clarity smart contracts, and tap into the AI agent economy. We're bringing content creators to Bitcoin—and proving x402-stacks can power the future of micropayments."*
 
 ---
 

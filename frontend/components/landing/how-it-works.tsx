@@ -3,12 +3,12 @@ export function HowItWorks() {
     {
       number: "01",
       title: "Install SDK",
-      code: "$ npm install @paystack/sdk",
+      code: "$ npm install @x402pay/sdk",
     },
     {
       number: "02",
       title: "Configure Payments",
-      code: 'app.use(paystackMiddleware())',
+      code: 'app.use(x402payMiddleware())',
     },
     {
       number: "03",

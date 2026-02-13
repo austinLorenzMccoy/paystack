@@ -11,9 +11,9 @@ vi.mock("@/components/wallet-connect-button", () => ({
 }));
 
 describe("Header", () => {
-  it("renders the PayStack logo link", () => {
+  it("renders the x402Pay logo link", () => {
     render(<Header />);
-    expect(screen.getByText("PAYSTACK")).toBeInTheDocument();
+    expect(screen.getByText("x402Pay")).toBeInTheDocument();
   });
 
   it("renders navigation links", () => {

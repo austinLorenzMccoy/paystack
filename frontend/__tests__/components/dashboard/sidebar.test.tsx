@@ -5,9 +5,9 @@ import { Sidebar } from "@/components/dashboard/sidebar";
 describe("Sidebar", () => {
   const onMobileClose = vi.fn();
 
-  it("renders the PayStack logo", () => {
+  it("renders the x402Pay logo", () => {
     render(<Sidebar mobileOpen={false} onMobileClose={onMobileClose} />);
-    expect(screen.getByText("PayStack")).toBeInTheDocument();
+    expect(screen.getByText("x402Pay")).toBeInTheDocument();
   });
 
   it("renders main navigation items", () => {

@@ -1,10 +1,10 @@
-# ⚡ PayStack Frontend
+# ⚡ x402Pay Frontend
 
 > Next.js 16 · React 19 · TailwindCSS · shadcn/ui · Bitcoin Brutalist Design System
 
-The PayStack frontend delivers the creator dashboard, landing page, SDK documentation, and wallet integration — all styled with the **Bitcoin Brutalist** design language: zero radii, heavy borders, mono typography, and angular micro-interactions.
+The x402Pay frontend delivers the creator dashboard, landing page, SDK documentation, and wallet integration — all styled with the **Bitcoin Brutalist** design language: zero radii, heavy borders, mono typography, and angular micro-interactions.
 
-**Live**: [paystack-six.vercel.app](https://paystack-six.vercel.app)
+**Live**: [x402pay.vercel.app](https://x402pay.vercel.app)
 
 ---
 

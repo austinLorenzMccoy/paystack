@@ -9,7 +9,7 @@ export function Hero() {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(
-      `import { PaywallButton } from '@paystack/sdk'\n\n<PaywallButton\n  contentId="article-1"\n  price={0.10}\n  asset="STX"\n/>`
+      `import { PaywallButton } from '@x402pay/sdk'\n\n<PaywallButton\n  contentId="article-1"\n  price={0.10}\n  asset="STX"\n/>`
     );
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -88,7 +88,7 @@ export function Hero() {
             </button>
             <div className="p-6 font-mono text-sm leading-relaxed">
               <div className="text-fog">
-                {"$ npm install @paystack/sdk"}
+                {"$ npm install @x402pay/sdk"}
               </div>
               <div className="mt-4 text-slate-custom">
                 {"// Add payment to any content"}

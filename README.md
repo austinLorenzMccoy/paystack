@@ -1,14 +1,14 @@
 <p align="center">
-  <img src="docs/paystack-logo.svg" alt="PayStack Logo" width="120" height="120" />
+  <img src="docs/x402pay-logo.svg" alt="x402Pay Logo" width="120" height="120" />
 </p>
 
-# ⚡ PayStack — Bitcoin-Native Creator Monetization SDK
+# ⚡ x402Pay — Bitcoin-Native Creator Monetization SDK
 
 > **One line of code. Bitcoin-native payments. Creator-first monetization.**
 
-PayStack is the first Bitcoin-native SDK for content monetization, built on [Stacks](https://www.stacks.co/) and powered by the [Coinbase x402 payment protocol](https://github.com/coinbase/x402). It lets creators, publishers, and AI agents stream micropayments through programmable Clarity smart contracts — with zero intermediaries.
+x402Pay is the first Bitcoin-native SDK for content monetization, built on [Stacks](https://www.stacks.co/) and powered by the [Coinbase x402 payment protocol](https://github.com/coinbase/x402). It lets creators, publishers, and AI agents stream micropayments through programmable Clarity smart contracts — with zero intermediaries.
 
-**Live**: [paystack-six.vercel.app](https://paystack-six.vercel.app)
+**Live**: [x402pay.vercel.app](https://x402pay.vercel.app)
 **Contract**: [`STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-split`](https://explorer.hiro.so/txid/STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-split?chain=testnet) (Stacks testnet)
 
 ---
@@ -17,7 +17,7 @@ PayStack is the first Bitcoin-native SDK for content monetization, built on [Sta
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                      PayStack Mono-repo                      │
+│                      x402Pay Mono-repo                      │
 ├──────────────┬───────────────────┬───────────────────────────┤
 │  frontend/   │  backend/         │  contracts/               │
 │  Next.js 16  │  Supabase Edge    │  Clarity v2 Smart         │
@@ -70,7 +70,7 @@ PayStack is the first Bitcoin-native SDK for content monetization, built on [Sta
 ## 📂 Project Structure
 
 ```
-PayStack/
+x402Pay/
 ├── frontend/                # Next.js app (landing + dashboard + SDK docs)
 │   ├── app/                 # App Router pages
 │   ├── components/          # Landing, dashboard, UI components (shadcn/ui)
@@ -231,7 +231,7 @@ FRONTEND_URL=http://localhost:3000
 
 ## 🌐 Ecosystem Compatibility
 
-| Feature | Coinbase x402 | x402-stacks | StacksPay | MoltMarket | **PayStack** |
+| Feature | Coinbase x402 | x402-stacks | StacksPay | MoltMarket | **x402Pay** |
 |---------|---------------|-------------|-----------|------------|--------------|
 | x402 v2 | ✅ | ✅ | ✅ | ✅ | ✅ |
 | CAIP-2 network | ✅ | ✅ | ✅ | ✅ | ✅ |

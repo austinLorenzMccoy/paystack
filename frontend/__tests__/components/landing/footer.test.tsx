@@ -5,7 +5,7 @@ import { Footer } from "@/components/landing/footer";
 describe("Footer", () => {
   it("renders the brand name", () => {
     render(<Footer />);
-    expect(screen.getByText("PayStack")).toBeInTheDocument();
+    expect(screen.getByText("x402Pay")).toBeInTheDocument();
   });
 
   it("renders the tagline", () => {
@@ -31,6 +31,6 @@ describe("Footer", () => {
 
   it("renders the copyright notice", () => {
     render(<Footer />);
-    expect(screen.getByText(/2026 PayStack/)).toBeInTheDocument();
+    expect(screen.getByText(/2026 x402Pay/)).toBeInTheDocument();
   });
 });

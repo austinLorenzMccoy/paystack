@@ -24,8 +24,8 @@ export function Header() {
       <div className="grid-overlay">
         <div className="flex items-center justify-between px-6 py-4 lg:px-8">
           <Link href="/" className="flex items-center gap-3 font-mono text-2xl font-black uppercase tracking-[0.6em] text-bitcoin-orange">
-            <Image src="/paystack-logo.svg" alt="PayStack logo" width={32} height={32} className="h-8 w-8" />
-            PAYSTACK
+            <Image src="/x402pay-logo.svg" alt="x402Pay logo" width={32} height={32} className="h-8 w-8" />
+            x402Pay
           </Link>
 
           <nav className="hidden items-center gap-8 md:flex" aria-label="Main navigation">

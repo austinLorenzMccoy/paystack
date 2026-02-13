@@ -22,8 +22,8 @@ export function Footer() {
           {/* Brand */}
           <div>
             <div className="mb-4 flex items-center gap-2 font-mono text-xl font-extrabold uppercase tracking-widest text-bitcoin-orange">
-              <Image src="/paystack-logo.svg" alt="PayStack logo" width={28} height={28} className="h-7 w-7" />
-              PayStack
+              <Image src="/x402pay-logo.svg" alt="x402Pay logo" width={28} height={28} className="h-7 w-7" />
+              x402Pay
             </div>
             <p className="text-sm leading-relaxed text-fog">
               Bitcoin Creator Monetization SDK. Built on Stacks.
@@ -56,7 +56,7 @@ export function Footer() {
 
         <div className="mt-16 border-t-2 border-border pt-8">
           <p className="font-mono text-xs text-slate-custom">
-            &copy; 2026 PayStack. Built on Stacks. MIT License.
+            &copy; 2026 x402Pay. Built on Stacks. MIT License.
           </p>
         </div>
       </div>

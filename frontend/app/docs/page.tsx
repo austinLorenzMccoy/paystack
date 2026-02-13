@@ -29,12 +29,12 @@ const steps = [
   {
     title: "Install",
     description: "Install the SDK and import the Paywall primitives.",
-    code: "pnpm add @paystack/sdk",
+    code: "pnpm add @x402pay/sdk",
   },
   {
     title: "Configure",
     description: "Register content + assets in Supabase or via Edge Functions.",
-    code: "paystack.register({ contentId, asset, price })",
+    code: "x402pay.register({ contentId, asset, price })",
   },
   {
     title: "Launch",
@@ -56,7 +56,7 @@ export default function DocsPage() {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(
-      `import { PaywallButton } from '@paystack/sdk'\n\n<PaywallButton\n  contentId="${selectedAsset.label.toLowerCase()}-drop"\n  asset="${selectedAsset.label}"\n  price={0.001}\n/>`
+      `import { PaywallButton } from '@x402pay/sdk'\n\n<PaywallButton\n  contentId="${selectedAsset.label.toLowerCase()}-drop"\n  asset="${selectedAsset.label}"\n  price={0.001}\n/>`
     );
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
@@ -154,7 +154,7 @@ export default function DocsPage() {
               Drop-in Component
             </div>
             <pre className="relative px-4 py-4 font-mono text-[13px] leading-6 text-success-green">
-{`import { PaywallButton } from '@paystack/sdk'
+{`import { PaywallButton } from '@x402pay/sdk'
 
 <PaywallButton
   contentId="${selectedAsset.label.toLowerCase()}-drop"

@@ -1,16 +1,16 @@
 # Product Requirements Document (PRD)
 ## Bitcoin Creator Monetization SDK
-### "PayStack" - The x402-Stacks Content Monetization API
+### "x402Pay" - The x402-Stacks Content Monetization API
 
 ---
 
 ## 1. EXECUTIVE SUMMARY
 
-**Product Name:** PayStack SDK  
+**Product Name:** x402Pay SDK  
 **Tagline:** *"One Line of Code. Bitcoin-Native Payments. Creator-First Monetization."*
 
 **Vision Statement:**  
-PayStack is the first Bitcoin-native content monetization SDK that enables creators to monetize ANY digital content with x402-stacks micropayments in under 5 minutes. Unlike generic payment APIs, PayStack uniquely combines Stacks' Clarity smart contracts with x402 protocol to provide creator-owned revenue streams, AI agent compatibility, and Bitcoin-secured settlements.
+x402Pay is the first Bitcoin-native content monetization SDK that enables creators to monetize ANY digital content with x402-stacks micropayments in under 5 minutes. Unlike generic payment APIs, x402Pay uniquely combines Stacks' Clarity smart contracts with x402 protocol to provide creator-owned revenue streams, AI agent compatibility, and Bitcoin-secured settlements.
 
 **The 10/10 Unique Angle:**
 1. **Bitcoin-Native First**: Only SDK optimized for sBTC, STX, and USDCx on Stacks - bringing Bitcoin's security to creator economy
@@ -56,7 +56,7 @@ PayStack is the first Bitcoin-native content monetization SDK that enables creat
 
 ### What We're Building:
 
-**PayStack SDK** - A developer toolkit that makes it trivially easy to:
+**x402Pay SDK** - A developer toolkit that makes it trivially easy to:
 1. Add x402-stacks micropayments to ANY content (articles, APIs, videos, courses, datasets)
 2. Deploy Clarity smart contracts for revenue management (splits, royalties, subscriptions)
 3. Accept payments from both humans AND AI agents
@@ -65,7 +65,7 @@ PayStack is the first Bitcoin-native content monetization SDK that enables creat
 ### Core Value Propositions:
 
 **For Creators:**
-- **5-Minute Setup**: Add `<PayStack />` component or 3 lines of backend code
+- **5-Minute Setup**: Add `<x402Pay />` component or 3 lines of backend code
 - **Bitcoin Payments**: Accept sBTC with Bitcoin's security guarantees
 - **Programmable Revenue**: Set splits, royalties, tipping via Clarity contracts
 - **AI Agent Revenue**: Tap into agentic economy - agents pay automatically for your content
@@ -350,12 +350,12 @@ const paymentConfig = {
 
 ```bash
 # Step 1: Install SDK
-npm install @paystack/sdk
+npm install @x402pay/sdk
 
 # Step 2: Initialize in code
-import { paystackMiddleware } from '@paystack/sdk';
+import { x402payMiddleware } from '@x402pay/sdk';
 
-app.use(paystackMiddleware({
+app.use(x402payMiddleware({
   contentMap: {
     '/api/premium-data': {
       price: '0.10',
@@ -367,7 +367,7 @@ app.use(paystackMiddleware({
 }));
 
 # Step 3: Deploy revenue contract (optional)
-npx paystack deploy-contract --splits creator:80,platform:20
+npx x402pay deploy-contract --splits creator:80,platform:20
 
 # Done! Endpoints are now monetized
 ```
@@ -409,7 +409,7 @@ npx paystack deploy-contract --splits creator:80,platform:20
 ### Post-Hackathon Success (6 Months):
 
 - **Adoption**: 50+ creators integrate SDK
-- **Volume**: $10K+ in creator revenue via PayStack
+- **Volume**: $10K+ in creator revenue via x402Pay
 - **Agent Payments**: 20%+ of transactions from AI agents
 - **Open Source**: 100+ GitHub stars, 10+ contributors
 - **Stacks Ecosystem**: Featured in Stacks newsletter, conference talks
@@ -418,7 +418,7 @@ npx paystack deploy-contract --splits creator:80,platform:20
 
 ## 9. COMPETITIVE ANALYSIS
 
-| Feature | PayStack (Us) | Coinbase x402 | Unlock Protocol | Substack |
+| Feature | x402Pay (Us) | Coinbase x402 | Unlock Protocol | Substack |
 |---------|---------------|---------------|-----------------|----------|
 | **Bitcoin Settlement** | ✅ sBTC | ❌ | ❌ | ❌ |
 | **Smart Contract Revenue** | ✅ Clarity | ❌ | ⚠️ Ethereum | ❌ |
@@ -602,7 +602,7 @@ export function PaywallButton({ contentId, price, asset = 'STX' }) {
 
 ### "BitBlog" - Demo Blog Platform
 
-**Purpose:** Showcase PayStack SDK in action with real content monetization
+**Purpose:** Showcase x402Pay SDK in action with real content monetization
 
 **Features:**
 1. **Homepage**
@@ -630,7 +630,7 @@ export function PaywallButton({ contentId, price, asset = 'STX' }) {
    - Next.js 14 (App Router)
    - TailwindCSS
    - Stacks.js for wallet
-   - PayStack SDK integrated
+   - x402Pay SDK integrated
    - Deployed on Vercel
 
 ---
@@ -679,7 +679,7 @@ export function PaywallButton({ contentId, price, asset = 'STX' }) {
 **License:** MIT  
 **Repository Structure:**
 ```
-paystack-sdk/
+x402pay-sdk/
 ├── packages/
 │   ├── core/           # x402 logic
 │   ├── react/          # React components
@@ -705,7 +705,7 @@ paystack-sdk/
 
 **6 Months After Launch:**
 
-*"Sarah, a Bitcoin educator, used to earn $2,000/month on Substack after their 10% fee. She switched to PayStack and now:*
+*"Sarah, a Bitcoin educator, used to earn $2,000/month on Substack after their 10% fee. She switched to x402Pay and now:*
 
 - *Earns $2,400/month (no platform fee)*
 - *Accepts sBTC directly from her global audience*
@@ -721,9 +721,9 @@ paystack-sdk/
 ## 16. DELIVERABLES CHECKLIST
 
 ### Code:
-- [ ] `@paystack/core` package
-- [ ] `@paystack/react` package
-- [ ] `@paystack/express` package
+- [ ] `@x402pay/core` package
+- [ ] `@x402pay/react` package
+- [ ] `@x402pay/express` package
 - [ ] Clarity revenue-split contract
 - [ ] BitBlog demo application
 - [ ] Unit tests (80%+ coverage)
@@ -854,7 +854,7 @@ paystack-sdk/
 
 ### Sample Pitch (30 seconds):
 
-*"Creators lose 30% to platforms and risk deplatforming. PayStack is the first Bitcoin-native SDK that lets creators monetize ANY content with 5 lines of code. Accept sBTC, set revenue splits via Clarity smart contracts, and tap into the AI agent economy. We're bringing content creators to Bitcoin—and proving x402-stacks can power the future of micropayments."*
+*"Creators lose 30% to platforms and risk deplatforming. x402Pay is the first Bitcoin-native SDK that lets creators monetize ANY content with 5 lines of code. Accept sBTC, set revenue splits via Clarity smart contracts, and tap into the AI agent economy. We're bringing content creators to Bitcoin—and proving x402-stacks can power the future of micropayments."*
 
 ---
 
@@ -862,7 +862,7 @@ paystack-sdk/
 **Last Updated:** February 9, 2026  
 **Status:** Ready for Implementation  
 **Confidence Level:** 10/10 - This wins. 🚀🏆
-# PayStack System Design & Architecture (Part 2)
+# x402Pay System Design & Architecture (Part 2)
 ## Continued from Part 1
 
 ---
@@ -873,10 +873,10 @@ paystack-sdk/
 
 ```typescript
 // ═══════════════════════════════════════════════════════════
-//  @paystack/express - Express Middleware (CONTINUED)
+//  @x402pay/express - Express Middleware (CONTINUED)
 // ═══════════════════════════════════════════════════════════
 
-export function paystackMiddleware(config: PayStackMiddlewareConfig) {
+export function x402payMiddleware(config: x402PayMiddlewareConfig) {
   return async (req: Request, res: Response, next: NextFunction) => {
     // 1. Determine content ID
     const contentId = config.getContentId 
@@ -933,7 +933,7 @@ export function paystackMiddleware(config: PayStackMiddlewareConfig) {
       }
       
       // 5. Store payment info in request
-      req.paystack = {
+      req.x402pay = {
         verified: true,
         payment: verification.transaction,
         userId: verification.transaction.sender
@@ -962,13 +962,13 @@ export function paystackMiddleware(config: PayStackMiddlewareConfig) {
 // ───────────────────────────────────────────────────────────
 
 import express from 'express';
-import { PayStackClient } from '@paystack/core';
-import { paystackMiddleware } from '@paystack/express';
+import { x402PayClient } from '@x402pay/core';
+import { x402payMiddleware } from '@x402pay/express';
 
 const app = express();
 
-// Initialize PayStack client
-const paystack = new PayStackClient({
+// Initialize x402Pay client
+const x402pay = new x402PayClient({
   network: 'testnet',
   apiKey: process.env.PAYSTACK_API_KEY,
   contractAddress: 'SP2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKNRV9EJ7.revenue-split',
@@ -977,8 +977,8 @@ const paystack = new PayStackClient({
 });
 
 // Apply middleware
-app.use(paystackMiddleware({
-  client: paystack,
+app.use(x402payMiddleware({
+  client: x402pay,
   contentMap: {
     '/api/premium-data': {
       price: '0.10',
@@ -1010,7 +1010,7 @@ app.get('/api/premium-data', (req, res) => {
   // Only reachable after payment verification
   res.json({
     data: getPremiumData(),
-    user: req.paystack.userId
+    user: req.x402pay.userId
   });
 });
 ```
@@ -1019,7 +1019,7 @@ app.get('/api/premium-data', (req, res) => {
 
 ```typescript
 // ═══════════════════════════════════════════════════════════
-//  @paystack/react - React Components
+//  @x402pay/react - React Components
 // ═══════════════════════════════════════════════════════════
 
 import React, { useState } from 'react';
@@ -1058,7 +1058,7 @@ export const PaywallButton: React.FC<PaywallButtonProps> = ({
   
   // Check if already unlocked (from localStorage)
   React.useEffect(() => {
-    const accessToken = localStorage.getItem(`paystack_access_${contentId}`);
+    const accessToken = localStorage.getItem(`x402pay_access_${contentId}`);
     if (accessToken) {
       // Verify token is still valid
       verifyAccessToken(accessToken).then(valid => {
@@ -1095,7 +1095,7 @@ export const PaywallButton: React.FC<PaywallButtonProps> = ({
           if (verified) {
             // Store access token
             const accessToken = await fetchAccessToken(data.txId, contentId);
-            localStorage.setItem(`paystack_access_${contentId}`, accessToken);
+            localStorage.setItem(`x402pay_access_${contentId}`, accessToken);
             
             setUnlocked(true);
             setLoading(false);
@@ -1123,7 +1123,7 @@ export const PaywallButton: React.FC<PaywallButtonProps> = ({
   
   if (unlocked) {
     return (
-      <div className={`paystack-unlocked ${className || ''}`}>
+      <div className={`x402pay-unlocked ${className || ''}`}>
         ✓ Content Unlocked
       </div>
     );
@@ -1133,7 +1133,7 @@ export const PaywallButton: React.FC<PaywallButtonProps> = ({
     <button
       onClick={handlePayment}
       disabled={loading}
-      className={`paystack-button ${className || ''}`}
+      className={`x402pay-button ${className || ''}`}
     >
       {loading ? 'Processing...' : `Pay ${price} ${asset} to Unlock`}
     </button>
@@ -1141,32 +1141,32 @@ export const PaywallButton: React.FC<PaywallButtonProps> = ({
 };
 
 // ───────────────────────────────────────────────────────────
-// PayStackProvider Component
+// x402PayProvider Component
 // ───────────────────────────────────────────────────────────
 
-export interface PayStackConfig {
+export interface x402PayConfig {
   network: 'mainnet' | 'testnet';
   apiUrl?: string;
   contractAddress: string;
 }
 
-const PayStackContext = React.createContext<PayStackConfig | null>(null);
+const x402PayContext = React.createContext<x402PayConfig | null>(null);
 
-export const PayStackProvider: React.FC<{
-  config: PayStackConfig;
+export const x402PayProvider: React.FC<{
+  config: x402PayConfig;
   children: React.ReactNode;
 }> = ({ config, children }) => {
   return (
-    <PayStackContext.Provider value={config}>
+    <x402PayContext.Provider value={config}>
       {children}
-    </PayStackContext.Provider>
+    </x402PayContext.Provider>
   );
 };
 
-export const usePayStack = () => {
-  const context = React.useContext(PayStackContext);
+export const usex402Pay = () => {
+  const context = React.useContext(x402PayContext);
   if (!context) {
-    throw new Error('usePayStack must be used within PayStackProvider');
+    throw new Error('usex402Pay must be used within x402PayProvider');
   }
   return context;
 };
@@ -1178,7 +1178,7 @@ export const usePayStack = () => {
 export const usePayment = (contentId: string) => {
   const [hasAccess, setHasAccess] = useState(false);
   const [loading, setLoading] = useState(true);
-  const config = usePayStack();
+  const config = usex402Pay();
   
   React.useEffect(() => {
     checkAccess();
@@ -1188,7 +1188,7 @@ export const usePayment = (contentId: string) => {
     setLoading(true);
     
     // Check localStorage
-    const accessToken = localStorage.getItem(`paystack_access_${contentId}`);
+    const accessToken = localStorage.getItem(`x402pay_access_${contentId}`);
     
     if (accessToken) {
       // Verify token
@@ -1358,7 +1358,7 @@ services:
       - "4000:3000"
     environment:
       - NODE_ENV=development
-      - DATABASE_URL=postgresql://postgres:password@postgres:5432/paystack
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/x402pay
       - REDIS_URL=redis://redis:6379
       - STACKS_API_URL=https://api.testnet.hiro.so
       - JWT_SECRET=dev-secret-change-in-production
@@ -1402,7 +1402,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=paystack
+      - POSTGRES_DB=x402pay
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql
@@ -1464,7 +1464,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: payment-service
-  namespace: paystack-prod
+  namespace: x402pay-prod
   labels:
     app: payment-service
     version: v1
@@ -1481,7 +1481,7 @@ spec:
     spec:
       containers:
       - name: payment-service
-        image: registry.paystack.xyz/payment-service:latest
+        image: registry.x402pay.xyz/payment-service:latest
         ports:
         - containerPort: 3000
           name: http
@@ -1491,17 +1491,17 @@ spec:
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
-              name: paystack-secrets
+              name: x402pay-secrets
               key: database-url
         - name: REDIS_URL
           valueFrom:
             secretKeyRef:
-              name: paystack-secrets
+              name: x402pay-secrets
               key: redis-url
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
-              name: paystack-secrets
+              name: x402pay-secrets
               key: jwt-secret
         resources:
           requests:
@@ -1528,7 +1528,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: payment-service
-  namespace: paystack-prod
+  namespace: x402pay-prod
 spec:
   selector:
     app: payment-service
@@ -1543,7 +1543,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: payment-service-hpa
-  namespace: paystack-prod
+  namespace: x402pay-prod
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -1573,7 +1573,7 @@ spec:
 #  GITHUB ACTIONS - CI/CD Pipeline
 # ═══════════════════════════════════════════════════════════
 
-name: PayStack CI/CD
+name: x402Pay CI/CD
 
 on:
   push:
@@ -1633,7 +1633,7 @@ jobs:
       - name: Login to Container Registry
         uses: docker/login-action@v2
         with:
-          registry: registry.paystack.xyz
+          registry: registry.x402pay.xyz
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       
@@ -1643,8 +1643,8 @@ jobs:
           context: ./services/payment
           push: true
           tags: |
-            registry.paystack.xyz/payment-service:latest
-            registry.paystack.xyz/payment-service:${{ github.sha }}
+            registry.x402pay.xyz/payment-service:latest
+            registry.x402pay.xyz/payment-service:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -1657,7 +1657,7 @@ jobs:
     if: github.ref == 'refs/heads/develop'
     environment:
       name: staging
-      url: https://staging.paystack.xyz
+      url: https://staging.x402pay.xyz
     steps:
       - name: Deploy to Railway (Staging)
         run: |
@@ -1672,7 +1672,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     environment:
       name: production
-      url: https://paystack.xyz
+      url: https://x402pay.xyz
     steps:
       - uses: actions/checkout@v3
       
@@ -1682,11 +1682,11 @@ jobs:
       - name: Deploy to Kubernetes
         run: |
           kubectl set image deployment/payment-service \
-            payment-service=registry.paystack.xyz/payment-service:${{ github.sha }} \
-            --namespace=paystack-prod
+            payment-service=registry.x402pay.xyz/payment-service:${{ github.sha }} \
+            --namespace=x402pay-prod
           
           kubectl rollout status deployment/payment-service \
-            --namespace=paystack-prod
+            --namespace=x402pay-prod
         env:
           KUBECONFIG: ${{ secrets.KUBECONFIG }}
       
@@ -1725,7 +1725,7 @@ jobs:
 │     └────┬─────────┘                                        │
 │          │                                                  │
 │          │ 3. Sign message:                                 │
-│          │    "PayStack Login\nTimestamp: 1675..."          │
+│          │    "x402Pay Login\nTimestamp: 1675..."          │
 │          ▼                                                  │
 │     ┌──────────────┐                                        │
 │     │  Frontend    │                                        │
@@ -1964,7 +1964,7 @@ async function rotateJwtSecret() {
   const newSecret = crypto.randomBytes(64).toString('hex');
   
   // Store in Vault
-  await vault.write('secret/paystack/jwt', {
+  await vault.write('secret/x402pay/jwt', {
     value: newSecret,
     rotatedAt: new Date().toISOString()
   });
@@ -2175,7 +2175,7 @@ app.post('/api/auth/login', async (req, res) => {
 
 ```sql
 -- ═══════════════════════════════════════════════════════════
---  POSTGRESQL SCHEMA - PayStack
+--  POSTGRESQL SCHEMA - x402Pay
 -- ═══════════════════════════════════════════════════════════
 
 -- ───────────────────────────────────────────────────────────
@@ -2515,24 +2515,24 @@ SELECT add_retention_policy('revenue_hourly', INTERVAL '1 year');
 
 ```yaml
 # ═══════════════════════════════════════════════════════════
-#  OPENAPI SPECIFICATION - PayStack API v1
+#  OPENAPI SPECIFICATION - x402Pay API v1
 # ═══════════════════════════════════════════════════════════
 
 openapi: 3.0.3
 info:
-  title: PayStack API
+  title: x402Pay API
   version: 1.0.0
   description: |
-    PayStack SDK API for Bitcoin-native content monetization
+    x402Pay SDK API for Bitcoin-native content monetization
   contact:
-    email: dev@paystack.xyz
+    email: dev@x402pay.xyz
   license:
     name: MIT
 
 servers:
-  - url: https://api.paystack.xyz/v1
+  - url: https://api.x402pay.xyz/v1
     description: Production
-  - url: https://api.testnet.paystack.xyz/v1
+  - url: https://api.testnet.x402pay.xyz/v1
     description: Testnet
 
 # ───────────────────────────────────────────────────────────
@@ -2916,9 +2916,9 @@ class WebhookService {
       const response = await axios.post(subscription.url, payload, {
         headers: {
           'Content-Type': 'application/json',
-          'X-PayStack-Signature': signature,
-          'X-PayStack-Event': event.type,
-          'X-PayStack-Delivery': event.id
+          'X-x402Pay-Signature': signature,
+          'X-x402Pay-Event': event.type,
+          'X-x402Pay-Delivery': event.id
         },
         timeout: 10000 // 10 second timeout
       });
@@ -3191,7 +3191,7 @@ REFRESH MATERIALIZED VIEW CONCURRENTLY content_revenue_summary;
 
 -- PgBouncer configuration
 [databases]
-paystack = host=localhost port=5432 dbname=paystack
+x402pay = host=localhost port=5432 dbname=x402pay
 
 [pgbouncer]
 pool_mode = transaction
@@ -3283,7 +3283,7 @@ app.get('/metrics', async (req, res) => {
 # ═══════════════════════════════════════════════════════════
 
 groups:
-  - name: paystack_alerts
+  - name: x402pay_alerts
     interval: 30s
     rules:
       # High error rate
@@ -3497,7 +3497,7 @@ If issues detected:
 
 ## CONCLUSION
 
-This complete system architecture provides a production-ready blueprint for building PayStack. Key highlights:
+This complete system architecture provides a production-ready blueprint for building x402Pay. Key highlights:
 
 ✅ **Comprehensive Coverage**: Frontend, backend, blockchain, database, SDK
 ✅ **Security-First**: Authentication, authorization, input validation, audit logging
@@ -3513,5 +3513,5 @@ This complete system architecture provides a production-ready blueprint for buil
 
 **Document Status**: Complete ✓  
 **Last Updated**: February 9, 2026  
-**Architects**: PayStack Engineering Team  
+**Architects**: x402Pay Engineering Team  
 **Version**: 1.0.0

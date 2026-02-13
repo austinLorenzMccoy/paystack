@@ -1,4 +1,4 @@
-# PayStack Video Demo Script
+# x402Pay Video Demo Script
 
 Use this script to record a natural, high-energy walkthrough (~4–5 minutes). The tone is confident, slightly edgy, and aligned with the Bitcoin Brutalist aesthetic.
 
@@ -6,13 +6,13 @@ Use this script to record a natural, high-energy walkthrough (~4–5 minutes). T
 
 ## 0:00 – Cold Open (10s)
 - Shot: Close-up of the dashboard hero section with live ticker.
-- Voiceover: “This is PayStack—the Bitcoin-native SDK that lets creators and AI agents stream payments in one line of code.”
+- Voiceover: “This is x402Pay—the Bitcoin-native SDK that lets creators and AI agents stream payments in one line of code.”
 - Quick zoom on the ticker strip glowing “Realtime x402 Feed: Online.”
 
 ## 0:10 – Context (30s)
 - On-camera or voiceover over B-roll of the landing page hero.
 - Script:
-  > “If you publish premium essays, run a members-only Discord, or operate an AI agent that consumes content, PayStack gives you instant Bitcoin-enabled paywalls. No chasing invoices, no centralized intermediaries. Just brutalist UI, programmable contracts, and live analytics.”
+  > “If you publish premium essays, run a members-only Discord, or operate an AI agent that consumes content, x402Pay gives you instant Bitcoin-enabled paywalls. No chasing invoices, no centralized intermediaries. Just brutalist UI, programmable contracts, and live analytics.”
 
 ## 0:40 – Product Tour Intro (10s)
 - Transition into the Next.js dashboard.
@@ -52,7 +52,7 @@ Use this script to record a natural, high-energy walkthrough (~4–5 minutes). T
 ## 4:45 – Closing CTA (15s)
 - Back to dashboard hero.
 - Voiceover:
-  > “PayStack is open-source and production-ready. Clone it, plug in your Supabase project, deploy the Clarity contract, and start stacking sats for your content. Bitcoin-native monetization is brutalist, fast, and live today.”
+  > “x402Pay is open-source and production-ready. Clone it, plug in your Supabase project, deploy the Clarity contract, and start stacking sats for your content. Bitcoin-native monetization is brutalist, fast, and live today.”
 
 ---
 

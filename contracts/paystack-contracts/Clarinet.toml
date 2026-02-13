@@ -1,5 +1,5 @@
 [project]
-name = "paystack-contracts"
+name = "x402pay-contracts"
 description = ""
 authors = []
 telemetry = true

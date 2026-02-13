@@ -5,7 +5,7 @@ import { Features } from "@/components/landing/features";
 describe("Features", () => {
   it("renders the section heading", () => {
     render(<Features />);
-    expect(screen.getByText("Why PayStack Wins")).toBeInTheDocument();
+    expect(screen.getByText("Why x402Pay Wins")).toBeInTheDocument();
   });
 
   it("renders all three feature cards", () => {

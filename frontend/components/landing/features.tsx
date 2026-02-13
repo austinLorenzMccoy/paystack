@@ -32,7 +32,7 @@ export function Features() {
   return (
     <section className="bg-charcoal px-6 py-24 lg:px-8">
       <h2 className="mb-16 text-center font-mono text-3xl font-extrabold uppercase tracking-wider text-foreground md:text-4xl">
-        Why PayStack Wins
+        Why x402Pay Wins
       </h2>
 
       <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">

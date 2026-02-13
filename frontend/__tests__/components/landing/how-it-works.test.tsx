@@ -24,8 +24,8 @@ describe("HowItWorks", () => {
 
   it("renders code snippets for each step", () => {
     render(<HowItWorks />);
-    expect(screen.getByText("$ npm install @paystack/sdk")).toBeInTheDocument();
-    expect(screen.getByText("app.use(paystackMiddleware())")).toBeInTheDocument();
+    expect(screen.getByText("$ npm install @x402pay/sdk")).toBeInTheDocument();
+    expect(screen.getByText("app.use(x402payMiddleware())")).toBeInTheDocument();
     expect(screen.getByText("// Revenue flows to your wallet")).toBeInTheDocument();
   });
 });

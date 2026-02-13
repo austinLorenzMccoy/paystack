@@ -78,13 +78,13 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
         <div className="flex h-16 items-center justify-between border-b-2 border-border px-4">
           {!collapsed && (
             <Link href="/" className="flex items-center gap-2 font-mono text-lg font-extrabold uppercase tracking-widest text-bitcoin-orange">
-              <Image src="/paystack-logo.svg" alt="PayStack logo" width={28} height={28} className="h-7 w-7" />
-              PayStack
+              <Image src="/x402pay-logo.svg" alt="x402Pay logo" width={28} height={28} className="h-7 w-7" />
+              x402Pay
             </Link>
           )}
           {collapsed && (
             <Link href="/" className="mx-auto">
-              <Image src="/paystack-logo.svg" alt="PayStack logo" width={28} height={28} className="h-7 w-7" />
+              <Image src="/x402pay-logo.svg" alt="x402Pay logo" width={28} height={28} className="h-7 w-7" />
             </Link>
           )}
           <button

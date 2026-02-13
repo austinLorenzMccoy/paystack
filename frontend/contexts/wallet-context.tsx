@@ -26,9 +26,9 @@ export function useWallet() {
   return context;
 }
 
-const STORAGE_KEY = "paystack_wallet_address";
-const STORAGE_KEY_PK = "paystack_wallet_pk";
-const STORAGE_KEY_TYPE = "paystack_wallet_type";
+const STORAGE_KEY = "x402pay_wallet_address";
+const STORAGE_KEY_PK = "x402pay_wallet_pk";
+const STORAGE_KEY_TYPE = "x402pay_wallet_type";
 
 export function WalletProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<WalletState>({
@@ -65,7 +65,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
       const { request, AddressPurpose } = await import("sats-connect");
 
       const response: any = await (request as any)("wallet_connect", {
-        message: "Connect to PayStack for Bitcoin-native content monetization",
+        message: "Connect to x402Pay for Bitcoin-native content monetization",
       } as any);
 
       // Handle error response

@@ -61,7 +61,7 @@ const config: Config = {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // PayStack custom colors
+        // x402Pay custom colors
         "bitcoin-orange": "var(--bitcoin-orange)",
         "stacks-purple": "var(--stacks-purple)",
         charcoal: "var(--charcoal)",
