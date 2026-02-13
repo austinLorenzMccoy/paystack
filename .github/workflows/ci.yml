@@ -41,7 +41,7 @@ jobs:
       - name: Install Clarinet
         working-directory: /tmp
         run: |
-          wget -nv https://github.com/stx-labs/clarinet/releases/download/v3.14.0/clarinet-linux-x64-glibc.tar.gz -O clarinet-linux-x64.tar.gz
+          wget -nv https://github.com/stx-labs/clarinet/releases/download/v3.3.0/clarinet-linux-x64-glibc.tar.gz -O clarinet-linux-x64.tar.gz
           tar -xf clarinet-linux-x64.tar.gz
           chmod +x ./clarinet
           sudo mv ./clarinet /usr/local/bin/
