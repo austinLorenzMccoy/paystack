@@ -3,28 +3,50 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { detectAgent } from "./agent-bridge.ts";
 
 /**
- * x402 Payment Gateway
+ * x402 Payment Gateway — Coinbase x402 Protocol Compatible
  *
- * Implements the HTTP 402 Payment Required protocol:
+ * Implements the HTTP 402 Payment Required protocol (x402 v2):
  *
  * 1. GET  /x402-gateway?contentId=X  → checks access, returns 402 if unpaid
  * 2. POST /x402-gateway              → submits payment receipt, verifies, grants access
  *
- * 402 Response Headers:
- *   X-Payment-Address   — creator wallet to pay
- *   X-Payment-Amount    — price in smallest unit
- *   X-Payment-Asset     — STX | sBTC | USDCx
- *   X-Payment-Contract  — Clarity contract address
- *   X-Payment-Token     — challenge token to include in receipt
- *   X-Payment-Expires   — ISO timestamp when challenge expires
+ * Standard x402 Headers (v2):
+ *   PAYMENT-REQUIRED  — base64-encoded PaymentRequirements (402 response)
+ *   PAYMENT-SIGNATURE — base64-encoded PaymentPayload (client request)
+ *   PAYMENT-RESPONSE  — base64-encoded SettlementResponse (200 response)
+ *
+ * Legacy Headers (backward-compatible):
+ *   X-Payment-Address, X-Payment-Amount, X-Payment-Asset,
+ *   X-Payment-Contract, X-Payment-Token, X-Payment-Expires
+ *
+ * CAIP-2 Network IDs:
+ *   stacks:1          — Stacks mainnet
+ *   stacks:2147483648  — Stacks testnet
  */
+
+// CAIP-2 network identifiers for Stacks
+const STACKS_MAINNET = "stacks:1";
+const STACKS_TESTNET = "stacks:2147483648";
+
+function getNetworkId(): string {
+  const network = Deno.env.get("STACKS_NETWORK") ?? "testnet";
+  return network === "mainnet" ? STACKS_MAINNET : STACKS_TESTNET;
+}
+
+function toBase64(obj: unknown): string {
+  return btoa(JSON.stringify(obj));
+}
+
+function fromBase64(str: string): unknown {
+  return JSON.parse(atob(str));
+}
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-agent-id, x-agent-signature, x-payment-receipt",
+    "authorization, x-client-info, apikey, content-type, x-agent-id, x-agent-signature, x-payment-receipt, payment-signature",
   "Access-Control-Expose-Headers":
-    "X-Payment-Address, X-Payment-Amount, X-Payment-Asset, X-Payment-Contract, X-Payment-Token, X-Payment-Expires",
+    "Payment-Required, Payment-Response, X-Payment-Address, X-Payment-Amount, X-Payment-Asset, X-Payment-Contract, X-Payment-Token, X-Payment-Expires",
 };
 
 serve(async (req: Request) => {
@@ -114,24 +136,54 @@ async function handleAccessCheck(req: Request, supabase: any) {
     expires_at: expiresAt,
   });
 
-  // Return 402 Payment Required with payment instructions in headers
+  // Build x402 v2 standard PaymentRequirements
+  const asset = content.asset ?? "STX";
+  const paymentRequirements = {
+    x402Version: 2,
+    scheme: "exact",
+    network: getNetworkId(),
+    resource: {
+      url: `/x402-gateway?contentId=${contentId}`,
+      description: content.title,
+    },
+    accepts: [
+      {
+        scheme: "exact",
+        network: getNetworkId(),
+        amount: String(content.price),
+        asset,
+        payTo: creatorAddress,
+        ...(content.contract_address
+          ? { extra: { contractAddress: content.contract_address } }
+          : {}),
+      },
+    ],
+    extra: {
+      challengeToken,
+      expires: expiresAt,
+    },
+  };
+
+  const paymentRequiredB64 = toBase64(paymentRequirements);
+
+  // Return 402 Payment Required with both standard and legacy headers
   return new Response(
     JSON.stringify({
-      status: 402,
-      message: "Payment required to access this content",
+      ...paymentRequirements,
+      // Legacy fields for backward compatibility
       contentId,
       title: content.title,
       payment: {
         address: creatorAddress,
         amount: content.price,
-        asset: content.asset ?? "STX",
+        asset,
         contract: content.contract_address ?? null,
         token: challengeToken,
         expires: expiresAt,
       },
       instructions: {
         human: "Sign a pay-for-content transaction using your Stacks wallet and POST the txId back.",
-        agent: "POST to this endpoint with { token, txId } to submit payment receipt.",
+        agent: "Submit PAYMENT-SIGNATURE header with base64-encoded { scheme, network, payload: { txId, token } }.",
       },
     }),
     {
@@ -139,9 +191,12 @@ async function handleAccessCheck(req: Request, supabase: any) {
       headers: {
         ...corsHeaders,
         "Content-Type": "application/json",
+        // x402 v2 standard header
+        "Payment-Required": paymentRequiredB64,
+        // Legacy headers (backward-compatible)
         "X-Payment-Address": creatorAddress,
         "X-Payment-Amount": String(content.price),
-        "X-Payment-Asset": content.asset ?? "STX",
+        "X-Payment-Asset": asset,
         "X-Payment-Contract": content.contract_address ?? "",
         "X-Payment-Token": challengeToken,
         "X-Payment-Expires": expiresAt,
@@ -153,11 +208,38 @@ async function handleAccessCheck(req: Request, supabase: any) {
 // ── POST: Submit payment receipt ────────────────────────────────────
 
 async function handlePaymentReceipt(req: Request, supabase: any) {
-  const body = await req.json();
-  const { token, txId } = body;
+  let token: string | undefined;
+  let txId: string | undefined;
+
+  // x402 v2: Accept PAYMENT-SIGNATURE header (base64-encoded PaymentPayload)
+  const paymentSigHeader = req.headers.get("payment-signature");
+  if (paymentSigHeader) {
+    try {
+      const payload = fromBase64(paymentSigHeader) as {
+        scheme?: string;
+        network?: string;
+        payload?: { txId?: string; token?: string };
+      };
+      token = payload.payload?.token;
+      txId = payload.payload?.txId;
+    } catch {
+      return jsonResponse({ error: "Invalid PAYMENT-SIGNATURE header" }, 400);
+    }
+  }
+
+  // Legacy: Accept JSON body { token, txId }
+  if (!token || !txId) {
+    try {
+      const body = await req.json();
+      token = token ?? body.token;
+      txId = txId ?? body.txId;
+    } catch {
+      // body may already be consumed or empty
+    }
+  }
 
   if (!token || !txId) {
-    return jsonResponse({ error: "token and txId are required" }, 400);
+    return jsonResponse({ error: "token and txId are required. Use PAYMENT-SIGNATURE header or JSON body." }, 400);
   }
 
   // Look up challenge
@@ -253,12 +335,41 @@ async function handlePaymentReceipt(req: Request, supabase: any) {
     });
   }
 
-  return jsonResponse({
+  // Build x402 v2 SettlementResponse
+  const settlementResponse = {
+    x402Version: 2,
+    scheme: "exact",
+    network: getNetworkId(),
+    settlement: {
+      txId,
+      status: "confirmed",
+      amount: String(challenge.amount),
+      asset: challenge.asset,
+      payTo: challenge.recipient,
+      settledAt: new Date().toISOString(),
+    },
+  };
+
+  const paymentResponseB64 = toBase64(settlementResponse);
+
+  const responseBody = {
     success: true,
     access: true,
     contentId: challenge.content_id,
     paymentId: payment?.id,
     txId,
+    // x402 v2 settlement info
+    settlement: settlementResponse.settlement,
+  };
+
+  return new Response(JSON.stringify(responseBody), {
+    status: 200,
+    headers: {
+      ...corsHeaders,
+      "Content-Type": "application/json",
+      // x402 v2 standard header
+      "Payment-Response": paymentResponseB64,
+    },
   });
 }
 
