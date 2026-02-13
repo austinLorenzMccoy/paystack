@@ -2,6 +2,7 @@
 
 import React from "react"
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { Menu, X, SignalHigh, Activity } from "lucide-react";
@@ -22,8 +23,8 @@ export function Header() {
     <header className="sticky top-0 z-50 border-b-2 border-border bg-background/90 backdrop-blur-md">
       <div className="grid-overlay">
         <div className="flex items-center justify-between px-6 py-4 lg:px-8">
-          <Link href="/" className="flex items-center gap-2 font-mono text-2xl font-black uppercase tracking-[0.6em] text-bitcoin-orange">
-            <span className="h-4 w-4 border-2 border-bitcoin-orange" aria-hidden />
+          <Link href="/" className="flex items-center gap-3 font-mono text-2xl font-black uppercase tracking-[0.6em] text-bitcoin-orange">
+            <Image src="/paystack-logo.svg" alt="PayStack logo" width={32} height={32} className="h-8 w-8" />
             PAYSTACK
           </Link>
 

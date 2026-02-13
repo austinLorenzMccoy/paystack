@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -76,13 +77,14 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
         {/* Logo area */}
         <div className="flex h-16 items-center justify-between border-b-2 border-border px-4">
           {!collapsed && (
-            <Link href="/" className="font-mono text-lg font-extrabold uppercase tracking-widest text-bitcoin-orange">
+            <Link href="/" className="flex items-center gap-2 font-mono text-lg font-extrabold uppercase tracking-widest text-bitcoin-orange">
+              <Image src="/paystack-logo.svg" alt="PayStack logo" width={28} height={28} className="h-7 w-7" />
               PayStack
             </Link>
           )}
           {collapsed && (
-            <Link href="/" className="mx-auto font-mono text-lg font-extrabold text-bitcoin-orange">
-              P
+            <Link href="/" className="mx-auto">
+              <Image src="/paystack-logo.svg" alt="PayStack logo" width={28} height={28} className="h-7 w-7" />
             </Link>
           )}
           <button

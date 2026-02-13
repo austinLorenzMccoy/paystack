@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const footerLinks = {
@@ -20,7 +21,8 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
           {/* Brand */}
           <div>
-            <div className="mb-4 font-mono text-xl font-extrabold uppercase tracking-widest text-bitcoin-orange">
+            <div className="mb-4 flex items-center gap-2 font-mono text-xl font-extrabold uppercase tracking-widest text-bitcoin-orange">
+              <Image src="/paystack-logo.svg" alt="PayStack logo" width={28} height={28} className="h-7 w-7" />
               PayStack
             </div>
             <p className="text-sm leading-relaxed text-fog">

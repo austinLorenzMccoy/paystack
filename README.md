@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/paystack-logo.svg" alt="PayStack Logo" width="120" height="120" />
+</p>
+
 # ⚡ PayStack — Bitcoin-Native Creator Monetization SDK
 
 > **One line of code. Bitcoin-native payments. Creator-first monetization.**
