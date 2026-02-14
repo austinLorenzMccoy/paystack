@@ -10,6 +10,31 @@ path = "contracts/revenue-split.clar"
 clarity_version = 2
 epoch = 2.4
 
+[contracts.subscription-manager]
+path = "contracts/subscription-manager.clar"
+clarity_version = 2
+epoch = 2.4
+
+[contracts.escrow-refund]
+path = "contracts/escrow-refund.clar"
+clarity_version = 2
+epoch = 2.4
+
+[contracts.time-gated-access]
+path = "contracts/time-gated-access.clar"
+clarity_version = 2
+epoch = 2.4
+
+[contracts.royalty-cascade]
+path = "contracts/royalty-cascade.clar"
+clarity_version = 2
+epoch = 2.4
+
+[contracts.tiered-pricing]
+path = "contracts/tiered-pricing.clar"
+clarity_version = 2
+epoch = 2.4
+
 [repl.analysis]
 passes = ["check_checker"]
 check_checker = { trusted_sender = false, trusted_caller = false, callee_filter = false }

@@ -21,10 +21,10 @@ x402Pay is the first Bitcoin-native SDK for content monetization, built on [Stac
 ├──────────────┬───────────────────┬───────────────────────────┤
 │  frontend/   │  backend/         │  contracts/               │
 │  Next.js 16  │  Supabase Edge    │  Clarity v2 Smart         │
-│  React 19    │  Functions (Deno) │  Contracts (epoch 2.4)    │
-│  TailwindCSS │  x402 Gateway     │  Revenue Splits           │
-│  Recharts    │  Agent Detection  │  Payment Processing       │
-│  shadcn/ui   │  Realtime Subs    │  Testnet Deployed         │
+│  TailwindCSS │  x402 Gateway     │  Contracts (epoch 2.4)    │
+│  Recharts    │  Agent Detection  │  6-Contract Suite         │
+│  shadcn/ui   │  Realtime Subs    │  Payment Processing       │
+│              │                   │  Testnet Deployed         │
 └──────────────┴───────────────────┴───────────────────────────┘
 ```
 
@@ -32,7 +32,7 @@ x402Pay is the first Bitcoin-native SDK for content monetization, built on [Stac
 |-------|-------|---------|
 | **Frontend** | Next.js 16, React 19, TailwindCSS, shadcn/ui, Recharts | Dashboard, landing page, SDK docs, wallet connect, x402 hook |
 | **Backend** | Supabase (Edge Functions, Auth, Realtime, Postgres) | x402 gateway, AI agent detection, payment verification, analytics, notifications |
-| **Contracts** | Clarity v2 (Stacks L2, epoch 2.4) | Revenue splitting, content registration, payment processing |
+| **Contracts** | Clarity v2 (Stacks L2, epoch 2.4) | 6-contract suite: revenue splits, subscriptions, escrow, time-gated access, royalties, tiered pricing |
 
 ---
 
@@ -49,10 +49,13 @@ x402Pay is the first Bitcoin-native SDK for content monetization, built on [Stac
 - **Groq-powered classification**: LLM-based agent identification via Groq API
 - **Agent-aware analytics**: Separate tracking for human vs. AI agent payments
 
-### Revenue Splitting
-- **On-chain splits**: Creator, platform, and collaborator shares via Clarity contract
-- **Configurable**: Per-content split percentages (must sum to 100%)
-- **Atomic**: Payment + split + access grant in a single transaction
+### 6-Contract Clarity Suite
+- **Revenue Split**: Creator/platform/collaborator shares per content
+- **Subscription Manager**: Recurring monthly/annual billing with auto-renew
+- **Escrow with Refunds**: Refundable payments with dispute resolution
+- **Time-Gated Access**: Paywall window that expires to free (journalism model)
+- **Royalty Cascade**: Perpetual creator royalties on every resale
+- **Tiered Pricing**: Dynamic pricing by buyer tier (student, business, nonprofit)
 
 ---
 
@@ -92,8 +95,14 @@ x402Pay/
 │       └── migrations/      # SQL schema (analytics, agent, x402 tables)
 ├── contracts/
 │   └── paystack-contracts/
-│       ├── contracts/       # Clarity v2 .clar files
-│       ├── tests/           # Clarinet + Vitest contract tests
+│       ├── contracts/       # 6 Clarity v2 .clar contracts
+│       │   ├── revenue-split.clar
+│       │   ├── subscription-manager.clar
+│       │   ├── escrow-refund.clar
+│       │   ├── time-gated-access.clar
+│       │   ├── royalty-cascade.clar
+│       │   └── tiered-pricing.clar
+│       ├── tests/           # Clarinet + Vitest contract tests (43 tests)
 │       └── deployments/     # Testnet deployment plans
 ├── docs/                    # PRDs, architecture docs, wireframes
 └── .gitignore               # Covers .env, secrets, build artifacts
@@ -159,7 +168,7 @@ npm install && npm test            # Run contract test suite
 ```
 Frontend:  15 test files, 80 tests passing
 Backend:    7 Deno tests passing (agent detection)
-Contracts:  6 tests passing (revenue-split)
+Contracts:  6 test files, 43 tests passing (6-contract suite)
 ```
 
 ---

@@ -64,8 +64,33 @@ plan:
     - id: 0
       transactions:
         - emulated-contract-publish:
+            contract-name: escrow-refund
+            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            path: contracts/escrow-refund.clar
+            clarity-version: 2
+        - emulated-contract-publish:
             contract-name: revenue-split
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             path: contracts/revenue-split.clar
+            clarity-version: 2
+        - emulated-contract-publish:
+            contract-name: royalty-cascade
+            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            path: contracts/royalty-cascade.clar
+            clarity-version: 2
+        - emulated-contract-publish:
+            contract-name: subscription-manager
+            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            path: contracts/subscription-manager.clar
+            clarity-version: 2
+        - emulated-contract-publish:
+            contract-name: tiered-pricing
+            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            path: contracts/tiered-pricing.clar
+            clarity-version: 2
+        - emulated-contract-publish:
+            contract-name: time-gated-access
+            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            path: contracts/time-gated-access.clar
             clarity-version: 2
       epoch: "2.4"
