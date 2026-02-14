@@ -9,7 +9,13 @@
 x402Pay is the first Bitcoin-native SDK for content monetization, built on [Stacks](https://www.stacks.co/) and powered by the [Coinbase x402 payment protocol](https://github.com/coinbase/x402). It lets creators, publishers, and AI agents stream micropayments through programmable Clarity smart contracts — with zero intermediaries.
 
 **Live**: [x402pay.vercel.app](https://x402pay.vercel.app)
-**Contract**: [`STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-split`](https://explorer.hiro.so/txid/STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-split?chain=testnet) (Stacks testnet)
+**Contracts**: 6-contract suite deployed to Stacks testnet
+- [`revenue-split`](https://explorer.hiro.so/txid/STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-split?chain=testnet)
+- [`subscription-manager`](https://explorer.hiro.so/txid/0x7f0f6181f3f026e1349e7a1d3d51ed72f0d9828f74a9f5f18567f925eaf94155?chain=testnet)
+- [`escrow-refund`](https://explorer.hiro.so/txid/0x4698b9114d00dcc8adacfe6befdd6bac6739c106e2c78b3b9375be116f199227?chain=testnet)
+- [`time-gated-access`](https://explorer.hiro.so/txid/0x365a6e601c50070890e45558bb75e4c6f023ba3a3c7dcf79a1c3f141a44c1f31?chain=testnet)
+- [`royalty-cascade`](https://explorer.hiro.so/txid/0xad620a2cc3886b79673bead37112f5929488e5d88984d354bcdcd2941866198e?chain=testnet)
+- [`tiered-pricing`](https://explorer.hiro.so/txid/0xe74ec60f13a95200e5f251408cbe5af736d5066e1be95c439a476563f7ca48da?chain=testnet)
 
 ---
 
@@ -191,6 +197,7 @@ SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOi...   # Never expose to frontend
 STACKS_API_URL=https://api.testnet.hiro.so
 GROQ_API_KEY=gsk_...                      # For AI agent classification
+RESEND_API_KEY=re_...                     # For email notifications
 FRONTEND_URL=http://localhost:3000
 ```
 

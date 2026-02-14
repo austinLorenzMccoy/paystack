@@ -9,10 +9,38 @@ plan:
     - id: 0
       transactions:
         - contract-publish:
-            contract-name: revenue-split
+            contract-name: subscription-manager
             expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
-            cost: 532502
-            path: contracts/revenue-split.clar
+            cost: 750000
+            path: contracts/subscription-manager.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: escrow-refund
+            expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
+            cost: 800000
+            path: contracts/escrow-refund.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: time-gated-access
+            expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
+            cost: 700000
+            path: contracts/time-gated-access.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: royalty-cascade
+            expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
+            cost: 780000
+            path: contracts/royalty-cascade.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: tiered-pricing
+            expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
+            cost: 720000
+            path: contracts/tiered-pricing.clar
             anchor-block-only: true
             clarity-version: 2
       epoch: "2.4"

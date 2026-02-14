@@ -195,25 +195,25 @@ async function sendAIAgentNotification(data: any) {
   }
 }
 
-// Send email via SendGrid
+// Send email via Resend
 async function sendEmail({ to, subject, html }: { to: string; subject: string; html: string }) {
   try {
-    const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
+    const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${Deno.env.get('SENDGRID_API_KEY')}`,
+        'Authorization': `Bearer ${Deno.env.get('RESEND_API_KEY')}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        personalizations: [{ to: [{ email: to }] }],
-        from: { email: 'noreply@x402pay.xyz' },
+        from: 'x402Pay <noreply@x402pay.xyz>',
+        to: [to],
         subject,
-        content: [{ type: 'text/html', value: html }],
+        html,
       }),
     })
 
     if (!response.ok) {
-      console.error('SendGrid error:', await response.text())
+      console.error('Resend error:', await response.text())
     }
   } catch (error) {
     console.error('Email send failed:', error)
