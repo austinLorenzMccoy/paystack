@@ -10,6 +10,7 @@ import { WalletConnectButton } from "@/components/wallet-connect-button";
 import { useWallet } from "@/contexts/wallet-context";
 
 const navLinks = [
+  { href: "/contracts", label: "Contracts" },
   { href: "/docs", label: "Docs" },
   { href: "/pricing", label: "Pricing" },
   { href: "https://github.com", label: "GitHub", external: true },
