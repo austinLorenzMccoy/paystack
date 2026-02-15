@@ -241,21 +241,6 @@ Internal design docs, PRDs, and video scripts now live outside this repo to keep
 
 ---
 
-## 🌐 Ecosystem Compatibility
-
-| Feature | Coinbase x402 | x402-stacks | StacksPay | MoltMarket | **x402Pay** |
-|---------|---------------|-------------|-----------|------------|--------------|
-| x402 v2 | ✅ | ✅ | ✅ | ✅ | ✅ |
-| CAIP-2 network | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `PAYMENT-REQUIRED` | ✅ | ✅ | — | — | ✅ |
-| `PAYMENT-SIGNATURE` | ✅ | ✅ | — | — | ✅ |
-| `PAYMENT-RESPONSE` | ✅ | ✅ | — | — | ✅ |
-| AI agent detection | — | — | — | — | ✅ |
-| Revenue splitting | — | — | — | ✅ | ✅ |
-| Multi-asset | ✅ | ✅ | USDCx | STX+sBTC | STX+sBTC |
-
----
-
 ## 📜 License
 
 MIT — Built on Stacks. Hardened for Agents. Stacked for Creators.
