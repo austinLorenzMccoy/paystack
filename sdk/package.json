@@ -1,0 +1,44 @@
+{
+  "name": "@x402pay/sdk",
+  "version": "0.9.4",
+  "description": "Production-ready Bitcoin payment SDK implementing Coinbase x402 v2 protocol on Stacks",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "bitcoin",
+    "stacks",
+    "x402",
+    "payment",
+    "sdk",
+    "clarity",
+    "creator-economy",
+    "web3"
+  ],
+  "author": "Austin Lorenz McCoy",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/austinLorenzMccoy/paystack.git"
+  },
+  "homepage": "https://paystack-six.vercel.app",
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "dependencies": {
+    "@stacks/transactions": "^6.13.0",
+    "@stacks/connect": "^7.8.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "@types/react": "^18.2.0"
+  }
+}
