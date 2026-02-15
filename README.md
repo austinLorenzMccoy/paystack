@@ -8,7 +8,8 @@
 
 x402Pay is the first Bitcoin-native SDK for content monetization, built on [Stacks](https://www.stacks.co/) and powered by the [Coinbase x402 payment protocol](https://github.com/coinbase/x402). It lets creators, publishers, and AI agents stream micropayments through programmable Clarity smart contracts — with zero intermediaries.
 
-**Live**: [x402pay.vercel.app](https://x402pay.vercel.app)
+**Live**: [x402pay.vercel.app](https://x402pay.vercel.app)  
+**npm**: [@x402pay/sdk](https://www.npmjs.com/package/@x402pay/sdk) - `npm install @x402pay/sdk`  
 **Contracts**: 6-contract suite deployed to Stacks testnet
 - [`revenue-split`](https://explorer.hiro.so/txid/STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-split?chain=testnet)
 - [`subscription-manager`](https://explorer.hiro.so/txid/0x7f0f6181f3f026e1349e7a1d3d51ed72f0d9828f74a9f5f18567f925eaf94155?chain=testnet)
