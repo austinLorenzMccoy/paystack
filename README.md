@@ -144,11 +144,27 @@ pnpm dev                           # → http://localhost:3000
 
 ### 3. Backend (Supabase Edge Functions)
 
+**Local Development:**
 ```bash
 cd backend/supabase
 cp .env.example .env               # Add Supabase, Groq, Stacks API keys
 supabase start                     # Local Supabase instance
 supabase functions serve           # Serve Edge Functions locally
+```
+
+**Deploy to Production:**
+```bash
+# Login to Supabase
+supabase login
+
+# Add secrets to Supabase Vault (Dashboard → Integrations → Vault)
+# Required: RESEND_API_KEY, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, 
+#           STACKS_API_URL, GROQ_API_KEY, FRONTEND_URL
+
+# Deploy functions
+cd /path/to/PayStack
+supabase functions deploy task-completion-notification --workdir backend/supabase --use-api
+# Repeat for other functions as needed
 ```
 
 ### 4. Contracts
