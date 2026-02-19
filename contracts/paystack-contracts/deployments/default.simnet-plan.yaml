@@ -69,6 +69,11 @@ plan:
             path: contracts/escrow-refund.clar
             clarity-version: 2
         - emulated-contract-publish:
+            contract-name: revenue-optimizer
+            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            path: contracts/revenue-optimizer.clar
+            clarity-version: 2
+        - emulated-contract-publish:
             contract-name: revenue-split
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             path: contracts/revenue-split.clar
@@ -77,6 +82,11 @@ plan:
             contract-name: royalty-cascade
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             path: contracts/royalty-cascade.clar
+            clarity-version: 2
+        - emulated-contract-publish:
+            contract-name: subscription-autopay
+            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            path: contracts/subscription-autopay.clar
             clarity-version: 2
         - emulated-contract-publish:
             contract-name: subscription-manager
