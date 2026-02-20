@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: paystack-relayer
+    runtime: node
+    region: oregon
+    plan: starter
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 18.17.0
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: STACKS_RPC_URL
+        value: https://api.testnet.hiro.so
+      - key: RELAYER_PRIVATE_KEY
+        sync: false
+      - key: SUBSCRIPTION_CONTRACT_ADDRESS
+        value: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.subscription-autopay
+      - key: RESEND_API_KEY
+        sync: false
+      - key: NOTIFICATION_FROM_EMAIL
+        value: noreply@paystack.app
+      - key: POLL_INTERVAL_MS
+        value: 60000

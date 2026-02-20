@@ -1,0 +1,25 @@
+---
+id: 1
+name: New Subscription Contracts - Testnet
+network: testnet
+stacks-node: "https://api.testnet.hiro.so"
+bitcoin-node: "http://blockstack:blockstacksystem@bitcoind.testnet.stacks.co:18332"
+plan:
+  batches:
+    - id: 0
+      transactions:
+        - contract-publish:
+            contract-name: subscription-autopay
+            expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
+            cost: 850000
+            path: contracts/subscription-autopay.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: revenue-optimizer
+            expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
+            cost: 900000
+            path: contracts/revenue-optimizer.clar
+            anchor-block-only: true
+            clarity-version: 2
+      epoch: "2.4"
