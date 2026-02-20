@@ -6,10 +6,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  turbopack: {},
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
 }
 
 export default nextConfig
