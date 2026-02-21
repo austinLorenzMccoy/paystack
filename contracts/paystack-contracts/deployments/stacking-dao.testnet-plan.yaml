@@ -1,0 +1,18 @@
+---
+id: 2
+name: StackingDAO Adapter - Testnet
+network: testnet
+stacks-node: "https://api.testnet.hiro.so"
+bitcoin-node: "http://blockstack:blockstacksystem@bitcoind.testnet.stacks.co:18332"
+plan:
+  batches:
+    - id: 0
+      transactions:
+        - contract-publish:
+            contract-name: stacking-dao-adapter
+            expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
+            cost: 750000
+            path: contracts/stacking-dao-adapter.clar
+            anchor-block-only: true
+            clarity-version: 2
+      epoch: "2.4"

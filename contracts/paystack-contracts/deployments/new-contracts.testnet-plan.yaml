@@ -22,4 +22,11 @@ plan:
             path: contracts/revenue-optimizer.clar
             anchor-block-only: true
             clarity-version: 2
+        - contract-publish:
+            contract-name: stacking-dao-adapter
+            expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
+            cost: 750000
+            path: contracts/stacking-dao-adapter.clar
+            anchor-block-only: true
+            clarity-version: 2
       epoch: "2.4"
