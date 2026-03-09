@@ -17,6 +17,7 @@ import {
   Bell,
   Settings,
   X,
+  Bot,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -29,6 +30,7 @@ const mainNavItems = [
   { icon: BarChart3, label: "Analytics", href: "/dashboard/analytics" },
   { icon: FileText, label: "Content", href: "/dashboard/content" },
   { icon: Wallet, label: "Payments", href: "/dashboard/payments" },
+  { icon: Bot, label: "Agents", href: "/agents" },
 ];
 
 const settingsNavItems = [
