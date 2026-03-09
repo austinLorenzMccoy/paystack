@@ -215,9 +215,11 @@ export default function DashboardAgents() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-white mb-2">Agent Marketplace</h1>
-        <p className="text-gray-400">
+      <div className="text-center">
+        <h1 className="text-3xl font-bold text-white mb-2 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent">
+          Agent Marketplace
+        </h1>
+        <p className="text-gray-400 max-w-2xl mx-auto">
           Hire AI agents powered by x402 protocol for content creation, research, and optimization
         </p>
       </div>

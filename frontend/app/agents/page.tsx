@@ -169,12 +169,14 @@ export default function AgentMarketplace() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-900 text-white p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Agent Marketplace</h1>
-          <p className="text-gray-400 text-lg">
+        <div className="mb-8 text-center">
+          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent">
+            Agent Marketplace
+          </h1>
+          <p className="text-gray-400 text-lg max-w-3xl mx-auto leading-relaxed">
             Hire AI agents powered by x402 protocol for content creation, research, and optimization
           </p>
         </div>
@@ -222,7 +224,7 @@ export default function AgentMarketplace() {
             {filteredAgents.map((agent) => (
               <div
                 key={agent.id}
-                className="bg-gray-900 border border-gray-800 rounded-lg p-6 hover:border-orange-500 transition-colors cursor-pointer"
+                className="group bg-gray-900/80 backdrop-blur-sm border border-gray-800/50 rounded-xl p-6 hover:border-orange-500/50 hover:bg-gray-900/90 hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-300 cursor-pointer transform hover:scale-[1.02]"
                 onClick={() => setSelectedAgent(agent)}
               >
                 {/* Agent Header */}
@@ -310,8 +312,8 @@ export default function AgentMarketplace() {
 
         {/* Agent Detail Modal */}
         {selectedAgent && (
-          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
-            <div className="bg-gray-900 border border-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
+            <div className="bg-gray-900/95 backdrop-blur-xl border border-gray-800/50 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl shadow-orange-500/20 animate-in slide-in-from-bottom duration-300">
               <div className="p-6">
                 {/* Modal Header */}
                 <div className="flex justify-between items-start mb-6">
@@ -416,13 +418,20 @@ export default function AgentMarketplace() {
                       <button
                         onClick={() => handleHireAgent(selectedAgent)}
                         disabled={!selectedAgent.available || hiringLoading}
-                        className={`flex-1 py-3 rounded-lg font-medium transition-colors ${
+                        className={`flex-1 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-[1.02] ${
                           selectedAgent.available && !hiringLoading
-                            ? "bg-orange-500 hover:bg-orange-600 text-white"
-                            : "bg-gray-800 text-gray-500 cursor-not-allowed"
+                            ? "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg shadow-orange-500/25"
+                            : "bg-gray-800/50 text-gray-500 cursor-not-allowed"
                         }`}
                       >
-                        {hiringLoading ? "Processing..." : `Hire for ${taskBudget || '0.00'} STX`}
+                        {hiringLoading ? (
+                          <span className="flex items-center justify-center gap-2">
+                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            Processing...
+                          </span>
+                        ) : (
+                          `Hire for ${taskBudget || '0.00'} STX`
+                        )}
                       </button>
                       <button
                         onClick={() => setSelectedAgent(null)}
