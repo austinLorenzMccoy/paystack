@@ -1,18 +1,18 @@
-// PayStack WordPress Plugin JavaScript
+// x402Pay WordPress Plugin JavaScript
 (function($) {
     'use strict';
 
-    // Initialize PayStack on document ready
+    // Initialize x402Pay on document ready
     $(document).ready(function() {
-        initializePayStack();
+        initializex402Pay();
     });
 
-    function initializePayStack() {
+    function initializex402Pay() {
         // Get config from localized script
-        const config = window.paystackConfig || {};
+        const config = window.x402payConfig || {};
 
         // Handle subscribe button clicks
-        $('.paystack-subscribe-btn').on('click', function(e) {
+        $('.x402pay-subscribe-btn').on('click', function(e) {
             e.preventDefault();
             
             const $btn = $(this);
@@ -38,20 +38,20 @@
     async function openSubscriptionModal(plan, amount, config) {
         // Create modal overlay
         const modal = $(`
-            <div class="paystack-modal-overlay">
-                <div class="paystack-modal">
-                    <div class="paystack-modal-header">
+            <div class="x402pay-modal-overlay">
+                <div class="x402pay-modal">
+                    <div class="x402pay-modal-header">
                         <h2>Subscribe to ${plan} Plan</h2>
-                        <button class="paystack-modal-close">&times;</button>
+                        <button class="x402pay-modal-close">&times;</button>
                     </div>
-                    <div class="paystack-modal-body">
+                    <div class="x402pay-modal-body">
                         <p>Amount: ${amount} STX per ${plan === 'monthly' ? 'month' : 'year'}</p>
                         <p>Merchant: ${config.merchantPrincipal}</p>
-                        <div class="paystack-modal-actions">
-                            <button class="paystack-connect-wallet">Connect Wallet</button>
-                            <button class="paystack-magic-link">Sign in with Email</button>
+                        <div class="x402pay-modal-actions">
+                            <button class="x402pay-connect-wallet">Connect Wallet</button>
+                            <button class="x402pay-magic-link">Sign in with Email</button>
                         </div>
-                        <div class="paystack-status"></div>
+                        <div class="x402pay-status"></div>
                     </div>
                 </div>
             </div>
@@ -60,14 +60,14 @@
         $('body').append(modal);
 
         // Handle close
-        modal.find('.paystack-modal-close').on('click', function() {
+        modal.find('.x402pay-modal-close').on('click', function() {
             modal.remove();
         });
 
         // Handle wallet connection
-        modal.find('.paystack-connect-wallet').on('click', async function() {
+        modal.find('.x402pay-connect-wallet').on('click', async function() {
             try {
-                const status = modal.find('.paystack-status');
+                const status = modal.find('.x402pay-status');
                 status.html('<p>Connecting to Stacks wallet...</p>');
 
                 // Use Stacks Connect to open wallet
@@ -76,8 +76,8 @@
                 if (!userSession.isUserSignedIn()) {
                     await window.StacksConnect.showConnect({
                         appDetails: {
-                            name: 'PayStack WordPress',
-                            icon: window.location.origin + '/wp-content/plugins/paystack-subscriptions/assets/icon.png'
+                            name: 'x402Pay WordPress',
+                            icon: window.location.origin + '/wp-content/plugins/x402pay-subscriptions/assets/icon.png'
                         },
                         onFinish: () => {
                             status.html('<p>Wallet connected! Creating subscription...</p>');
@@ -92,16 +92,16 @@
                 }
             } catch (error) {
                 console.error('Wallet connection error:', error);
-                modal.find('.paystack-status').html('<p class="error">Failed to connect wallet</p>');
+                modal.find('.x402pay-status').html('<p class="error">Failed to connect wallet</p>');
             }
         });
 
         // Handle magic link
-        modal.find('.paystack-magic-link').on('click', function() {
+        modal.find('.x402pay-magic-link').on('click', function() {
             const email = prompt('Enter your email address:');
             if (email) {
-                modal.find('.paystack-status').html('<p>Sending magic link to ' + email + '...</p>');
-                // Redirect to PayStack app for magic link flow
+                modal.find('.x402pay-status').html('<p>Sending magic link to ' + email + '...</p>');
+                // Redirect to x402Pay app for magic link flow
                 window.location.href = config.apiUrl + '/auth/magic-link?email=' + encodeURIComponent(email) + 
                     '&redirect=' + encodeURIComponent(window.location.href);
             }
@@ -115,7 +115,7 @@
 
     async function createSubscription(plan, amount, config, modal) {
         try {
-            const status = modal.find('.paystack-status');
+            const status = modal.find('.x402pay-status');
             status.html('<p>Creating subscription on-chain...</p>');
 
             // Call WordPress AJAX to create subscription
@@ -123,7 +123,7 @@
                 url: '/wp-admin/admin-ajax.php',
                 method: 'POST',
                 data: {
-                    action: 'paystack_create_subscription',
+                    action: 'x402pay_create_subscription',
                     plan: plan,
                     amount: amount,
                     nonce: config.nonce
@@ -142,7 +142,7 @@
             }
         } catch (error) {
             console.error('Subscription creation error:', error);
-            modal.find('.paystack-status').html('<p class="error">Failed to create subscription: ' + error.message + '</p>');
+            modal.find('.x402pay-status').html('<p class="error">Failed to create subscription: ' + error.message + '</p>');
             modal.data('reject')(error);
         }
     }

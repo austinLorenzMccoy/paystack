@@ -1,4 +1,4 @@
-;; PayStack Revenue Split Contract
+;; x402Pay Revenue Split Contract
 ;; Clarity smart contract for programmable revenue distribution
 ;; Built for Stacks blockchain - Bitcoin-native creator monetization
 

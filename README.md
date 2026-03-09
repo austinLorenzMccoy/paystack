@@ -2,15 +2,15 @@
   <img src="frontend/public/x402pay-logo.svg" alt="x402Pay Logo" width="120" height="120" />
 </p>
 
-# ⚡ PayStack — Bitcoin-Native Subscriptions with DeFi Yield
+# ⚡ x402Pay — Bitcoin-Native Subscriptions with DeFi Yield
 
 > **Automated recurring payments. DeFi yield optimization. Zero intermediaries.**
 
-PayStack is the first Bitcoin-native subscription platform with automated DeFi yield optimization, built on [Stacks](https://www.stacks.co/). Creators earn BTC rewards on idle subscription funds while subscribers enjoy automated billing — all powered by programmable Clarity smart contracts and off-chain relayer infrastructure.
+x402Pay is the first Bitcoin-native subscription platform with automated DeFi yield optimization, built on [Stacks](https://www.stacks.co/). Creators earn BTC rewards on idle subscription funds while subscribers enjoy automated billing — all powered by programmable Clarity smart contracts and off-chain relayer infrastructure.
 
 **Live**: [x402pay.vercel.app](https://x402pay.vercel.app)  
 **npm**: [@x402pay/sdk](https://www.npmjs.com/package/@x402pay/sdk) - `npm install @x402pay/sdk`  
-**WordPress Plugin**: `wordpress-plugin/paystack-subscriptions.zip`
+**WordPress Plugin**: `wordpress-plugin/x402pay-subscriptions.zip`
 
 **Deployed Contracts** (9 contracts, 2,163 lines of Clarity):
 - [`revenue-split`](https://explorer.hiro.so/txid/STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-split?chain=testnet) - Multi-party payment distribution

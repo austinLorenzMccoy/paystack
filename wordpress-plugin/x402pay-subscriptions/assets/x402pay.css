@@ -1,6 +1,6 @@
-/* PayStack WordPress Plugin Styles */
+/* x402Pay WordPress Plugin Styles */
 
-.paystack-subscribe-btn {
+.x402pay-subscribe-btn {
   background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
   color: white;
   border: none;
@@ -14,22 +14,22 @@
   letter-spacing: 0.5px;
 }
 
-.paystack-subscribe-btn:hover {
+.x402pay-subscribe-btn:hover {
   background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
 }
 
-.paystack-subscribe-btn:disabled {
+.x402pay-subscribe-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.paystack-subscribe-btn.subscribed {
+.x402pay-subscribe-btn.subscribed {
   background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
 }
 
-.paystack-modal-overlay {
+.x402pay-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -42,7 +42,7 @@
   z-index: 999999;
 }
 
-.paystack-modal {
+.x402pay-modal {
   background: #13141A;
   border: 2px solid rgba(255, 255, 255, 0.1);
   max-width: 500px;
@@ -51,7 +51,7 @@
   overflow-y: auto;
 }
 
-.paystack-modal-header {
+.x402pay-modal-header {
   padding: 20px;
   border-bottom: 2px solid rgba(255, 255, 255, 0.1);
   display: flex;
@@ -59,13 +59,13 @@
   align-items: center;
 }
 
-.paystack-modal-header h2 {
+.x402pay-modal-header h2 {
   margin: 0;
   color: white;
   font-size: 20px;
 }
 
-.paystack-modal-close {
+.x402pay-modal-close {
   background: none;
   border: none;
   color: white;
@@ -77,23 +77,23 @@
   line-height: 1;
 }
 
-.paystack-modal-body {
+.x402pay-modal-body {
   padding: 24px;
   color: rgba(255, 255, 255, 0.7);
 }
 
-.paystack-modal-body p {
+.x402pay-modal-body p {
   margin: 0 0 16px;
 }
 
-.paystack-modal-actions {
+.x402pay-modal-actions {
   display: flex;
   flex-direction: column;
   gap: 12px;
   margin: 24px 0;
 }
 
-.paystack-modal-actions button {
+.x402pay-modal-actions button {
   padding: 12px 24px;
   font-size: 16px;
   font-weight: 600;
@@ -104,32 +104,32 @@
   transition: all 0.2s;
 }
 
-.paystack-modal-actions button:hover {
+.x402pay-modal-actions button:hover {
   border-color: #f97316;
   background: rgba(249, 115, 22, 0.1);
 }
 
-.paystack-connect-wallet {
+.x402pay-connect-wallet {
   background: linear-gradient(135deg, #f97316 0%, #ea580c 100%) !important;
   border: none !important;
 }
 
-.paystack-status {
+.x402pay-status {
   margin-top: 16px;
   padding: 12px;
   border-radius: 0;
   background: rgba(255, 255, 255, 0.05);
 }
 
-.paystack-status .error {
+.x402pay-status .error {
   color: #ef4444;
 }
 
-.paystack-status .success {
+.x402pay-status .success {
   color: #22c55e;
 }
 
-.paystack-paywall {
+.x402pay-paywall {
   padding: 24px;
   border: 2px solid rgba(249, 115, 22, 0.3);
   background: rgba(249, 115, 22, 0.05);
@@ -137,7 +137,7 @@
   margin: 20px 0;
 }
 
-.paystack-paywall p {
+.x402pay-paywall p {
   margin: 0 0 16px;
   color: #666;
 }
