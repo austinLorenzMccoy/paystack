@@ -1,4 +1,4 @@
--- Analytics tables for PayStack Supabase backend
+-- Analytics tables for x402Pay Supabase backend
 -- Tracks raw payment events and daily aggregates for creator dashboards
 
 create extension if not exists "pgcrypto";

@@ -1,6 +1,6 @@
 {
-  "name": "PayStack - Bitcoin Subscriptions",
-  "short_name": "PayStack",
+  "name": "x402Pay - Bitcoin Subscriptions",
+  "short_name": "x402Pay",
   "description": "Bitcoin-native subscription platform with automated recurring payments and DeFi yield optimization",
   "start_url": "/",
   "display": "standalone",

@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: paystack-relayer
+    name: x402pay-relayer
     runtime: node
     region: oregon
     plan: starter

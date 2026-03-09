@@ -29,7 +29,7 @@ x402Pay is the first Bitcoin-native subscription platform with automated DeFi yi
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                      PayStack Full-Stack Platform                   │
+│                      x402Pay Full-Stack Platform                   │
 ├──────────────┬───────────────────┬──────────────────┬──────────────┤
 │  frontend/   │  backend/         │  contracts/      │  relayer/    │
 │  Next.js 16  │  Supabase Edge    │  Clarity v2      │  Node.js     │
@@ -71,7 +71,7 @@ x402Pay is the first Bitcoin-native subscription platform with automated DeFi yi
 - **Magic Link Authentication**: Email-based onboarding, no wallet required
 - **Custodial Wallet Auto-Creation**: Automatic wallet generation with 5 STX airdrop
 - **Progressive Web App (PWA)**: Install on mobile, offline support, push notifications
-- **WordPress Plugin**: One-click integration with shortcodes `[paystack_subscribe]` and `[paystack_paywall]`
+- **WordPress Plugin**: One-click integration with shortcodes `[x402pay_subscribe]` and `[x402pay_paywall]`
 - **Multi-Platform**: Web SDK, WordPress, mobile PWA
 
 ### 🔐 9-Contract Clarity Suite (2,163 lines)
@@ -108,7 +108,7 @@ x402Pay is the first Bitcoin-native subscription platform with automated DeFi yi
 ## 📂 Project Structure
 
 ```
-PayStack/
+x402Pay/
 ├── frontend/                # Next.js app (20,498 lines TypeScript)
 │   ├── app/                 # App Router pages
 │   │   ├── subscribe/       # Subscription enrollment UI
@@ -142,7 +142,7 @@ PayStack/
 │       │   └── x402-gateway/
 │       └── migrations/      # 4 SQL migrations (analytics, subscriptions, custodial wallets)
 ├── contracts/
-│   └── paystack-contracts/  # 9 Clarity v2 contracts (2,163 lines)
+│   └── x402pay-contracts/  # 9 Clarity v2 contracts (2,163 lines)
 │       ├── contracts/
 │       │   ├── subscription-manager.clar
 │       │   ├── subscription-autopay.clar      # NEW: Relayer integration
@@ -156,12 +156,12 @@ PayStack/
 │       ├── tests/           # Clarinet + Vitest (404 tests)
 │       └── deployments/     # Testnet deployment plans
 ├── wordpress-plugin/
-│   └── paystack-subscriptions/
-│       ├── paystack-subscriptions.php    # Main plugin file
+│   └── x402pay-subscriptions/
+│       ├── x402pay-subscriptions.php    # Main plugin file
 │       ├── assets/
-│       │   ├── paystack.js               # Frontend integration
-│       │   └── paystack.css              # Brutalist styling
-│       └── paystack-subscriptions.zip    # Ready to distribute
+│       │   ├── x402pay.js               # Frontend integration
+│       │   └── x402pay.css              # Brutalist styling
+│       └── x402pay-subscriptions.zip    # Ready to distribute
 └── .gitignore               # Covers .env, secrets, build artifacts
 ```
 
@@ -179,8 +179,8 @@ PayStack/
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/austinLorenzMccoy/paystack.git
-cd paystack
+git clone https://github.com/austinLorenzMccoy/x402pay.git
+cd x402pay
 ```
 
 ### 2. Frontend
@@ -212,7 +212,7 @@ supabase login
 #           STACKS_API_URL, GROQ_API_KEY, FRONTEND_URL
 
 # Deploy functions
-cd /path/to/PayStack
+cd /path/to/x402Pay
 supabase functions deploy task-completion-notification --workdir backend/supabase --use-api
 # Repeat for other functions as needed
 ```
@@ -220,7 +220,7 @@ supabase functions deploy task-completion-notification --workdir backend/supabas
 ### 4. Contracts
 
 ```bash
-cd contracts/paystack-contracts
+cd contracts/x402pay-contracts
 clarinet check                     # Validate Clarity v2 syntax
 npm install && npm test            # Run contract test suite
 ```
@@ -233,7 +233,7 @@ npm install && npm test            # Run contract test suite
 |------|--------|---------|
 | **Frontend** | Vitest + React Testing Library | `cd frontend && pnpm test` |
 | **Frontend Coverage** | Vitest + v8 | `cd frontend && pnpm test:coverage` |
-| **Contracts** | Clarinet + Vitest | `cd contracts/paystack-contracts && npm test` |
+| **Contracts** | Clarinet + Vitest | `cd contracts/x402pay-contracts && npm test` |
 | **Backend** | Deno test | `deno test backend/supabase/functions/` |
 | **Relayer** | Jest | `cd backend/relayer && npm test` |
 

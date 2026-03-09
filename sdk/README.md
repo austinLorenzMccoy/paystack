@@ -36,11 +36,11 @@ function App() {
 
 ## Documentation
 
-Full documentation: https://paystack-six.vercel.app/docs
+Full documentation: https://x402pay-six.vercel.app/docs
 
 ## Live Demo
 
-https://paystack-six.vercel.app
+https://x402pay-six.vercel.app
 
 ## Contracts
 
@@ -52,7 +52,7 @@ https://paystack-six.vercel.app
 - Royalty Cascade
 - Tiered Pricing
 
-View all contracts: https://paystack-six.vercel.app/contracts
+View all contracts: https://x402pay-six.vercel.app/contracts
 
 ## License
 

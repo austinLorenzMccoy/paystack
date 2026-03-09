@@ -12,7 +12,7 @@ x402Pay's on-chain layer uses [Clarity v2](https://docs.stacks.co/clarity/overvi
 
 ```
 contracts/
-└── paystack-contracts/
+└── x402pay-contracts/
     ├── contracts/
     │   └── revenue-split.clar       # Main Clarity v2 smart contract
     ├── tests/
@@ -38,7 +38,7 @@ contracts/
 ### Setup
 
 ```bash
-cd contracts/paystack-contracts
+cd contracts/x402pay-contracts
 
 # Validate Clarity syntax
 clarinet check
@@ -159,7 +159,7 @@ The test file at `tests/revenue-split.test.ts` uses **Clarinet simnet** with **V
 ### Running Tests
 
 ```bash
-cd contracts/paystack-contracts
+cd contracts/x402pay-contracts
 
 # Full test suite
 npm test
