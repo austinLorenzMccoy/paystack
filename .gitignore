@@ -46,3 +46,4 @@ backend/supabase/.temp/
 
 # Documentation (kept local only)
 docs/
+.vercel

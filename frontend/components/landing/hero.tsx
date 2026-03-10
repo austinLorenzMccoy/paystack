@@ -67,7 +67,7 @@ export function Hero() {
 
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row" style={{ animation: "fade-in-up 0.6s ease-out 0.6s backwards" }}>
           <Link href="/contracts" className="btn-brutalist border-success-green bg-success-green text-background">
-            View 6 Live Contracts
+            View 9 Live Contracts
           </Link>
           <Link href="/dashboard" className="btn-brutalist border-bitcoin-orange bg-bitcoin-orange text-background">
             Launch Dashboard
