@@ -1,8 +1,8 @@
 # ⚡ x402Pay Backend
 
-> Supabase Edge Functions · Deno Runtime · x402 v2 Gateway · AI Agent Detection · Postgres + RLS · Realtime Subscriptions
+> Supabase Edge Functions · Deno Runtime · x402 v2 Gateway · AI Agent Marketplace · AI Agent Detection · Postgres + RLS · Realtime Subscriptions
 
-The x402Pay backend runs entirely on [Supabase](https://supabase.com/) — Edge Functions handle the x402 payment gateway, AI agent detection, wallet authentication, payment verification, analytics processing, and notifications. The database layer uses Postgres with Row-Level Security and realtime change feeds.
+The x402Pay backend runs entirely on [Supabase](https://supabase.com/) — Edge Functions handle the x402 payment gateway, AI agent marketplace, AI agent detection, wallet authentication, payment verification, analytics processing, and notifications. The database layer uses Postgres with Row-Level Security and realtime change feeds.
 
 ---
 

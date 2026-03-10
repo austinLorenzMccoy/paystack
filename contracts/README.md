@@ -1,10 +1,10 @@
 # ⚡ x402Pay Smart Contracts
 
-> Clarity v2 · Stacks L2 (epoch 2.4) · Revenue Splitting · Programmable Payments
+> Clarity v2 · Stacks L2 (epoch 2.4) · 9-Contract Suite · Revenue Splitting · DeFi Yield · AI Agent Marketplace · Programmable Payments
 
-x402Pay's on-chain layer uses [Clarity v2](https://docs.stacks.co/clarity/overview) smart contracts deployed on the Stacks blockchain. The primary contract — `revenue-split` — handles content registration, configurable revenue splits, and atomic payment processing with built-in event logging.
+x402Pay's on-chain layer uses [Clarity v2](https://docs.stacks.co/clarity/overview) smart contracts deployed on the Stacks blockchain. The 9-contract suite handles content registration, configurable revenue splits, automated subscriptions, DeFi yield optimization, and AI agent marketplace payments with built-in event logging.
 
-**Deployed (Testnet)**: [`STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-split`](https://explorer.hiro.so/txid/STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-split?chain=testnet)
+**Deployed (Testnet)**: 9 contracts live (2,163 lines total)
 
 ---
 
@@ -14,16 +14,24 @@ x402Pay's on-chain layer uses [Clarity v2](https://docs.stacks.co/clarity/overvi
 contracts/
 └── x402pay-contracts/
     ├── contracts/
-    │   └── revenue-split.clar       # Main Clarity v2 smart contract
+    │   ├── revenue-split.clar           # Multi-party payment distribution
+    │   ├── subscription-manager.clar    # Recurring billing management
+    │   ├── subscription-autopay.clar    # Automated charges with 3-strike system
+    │   ├── revenue-optimizer.clar       # DeFi yield routing and rebalancing
+    │   ├── stacking-dao-adapter.clar    # Liquid staking integration (stSTX)
+    │   ├── escrow-refund.clar           # Refundable payments with dispute resolution
+    │   ├── time-gated-access.clar       # Time-based paywalls (journalism model)
+    │   ├── royalty-cascade.clar         # Perpetual creator royalties
+    │   └── tiered-pricing.clar         # Dynamic pricing by buyer tier
     ├── tests/
-    │   └── revenue-split.test.ts    # Clarinet + Vitest test suite (6 tests)
+    │   └── *.test.ts                    # Clarinet + Vitest test suite (404 tests total)
     ├── deployments/
-    │   ├── default.simnet-plan.yaml # Simnet deployment plan
-    │   └── default.testnet-plan.yaml # Testnet deployment plan (Clarity v2, epoch 2.4)
+    │   ├── default.simnet-plan.yaml     # Simnet deployment plan
+    │   └── default.testnet-plan.yaml    # Testnet deployment plan (Clarity v2, epoch 2.4)
     ├── settings/
-    │   └── Devnet.toml              # Clarinet devnet configuration
-    ├── Clarinet.toml                # Project manifest (clarity_version = 2, epoch = 2.4)
-    └── package.json                 # Test dependencies
+    │   └── Devnet.toml                  # Clarinet devnet configuration
+    ├── Clarinet.toml                    # Project manifest (clarity_version = 2, epoch = 2.4)
+    └── package.json                     # Test dependencies
 ```
 
 ---

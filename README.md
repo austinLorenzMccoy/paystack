@@ -8,7 +8,8 @@
 
 x402Pay is the first Bitcoin-native subscription platform with automated DeFi yield optimization, built on [Stacks](https://www.stacks.co/). Creators earn BTC rewards on idle subscription funds while subscribers enjoy automated billing — all powered by programmable Clarity smart contracts and off-chain relayer infrastructure.
 
-**Live**: [x402pay.vercel.app](https://x402pay.vercel.app)  
+**Live**: [x402pay-app.vercel.app](https://x402pay-app.vercel.app)  
+**Agent Marketplace**: [x402pay-app.vercel.app/agents](https://x402pay-app.vercel.app/agents)  
 **npm**: [@x402pay/sdk](https://www.npmjs.com/package/@x402pay/sdk) - `npm install @x402pay/sdk`  
 **WordPress Plugin**: `wordpress-plugin/x402pay-subscriptions.zip`
 
@@ -35,15 +36,15 @@ x402Pay is the first Bitcoin-native subscription platform with automated DeFi yi
 │  Next.js 16  │  Supabase Edge    │  Clarity v2      │  Node.js     │
 │  TailwindCSS │  x402 Gateway     │  9 Contracts     │  Autopay     │
 │  Recharts    │  Agent Detection  │  DeFi Yield      │  Job Queue   │
-│  shadcn/ui   │  Realtime Subs    │  PoX-4 Stacking  │  3-Strike    │
-│  PWA Ready   │  Custodial Wallet │  Testnet Live    │  Email Notify│
+│  shadcn/ui   │  Agent Marketplace │  PoX-4 Stacking  │  3-Strike    │
+│  PWA Ready   │  Realtime Subs    │  Testnet Live    │  Email Notify│
 └──────────────┴───────────────────┴──────────────────┴──────────────┘
 ```
 
 | Layer | Stack | Purpose |
 |-------|-------|---------|
 | **Frontend** | Next.js 16, React 19, TailwindCSS, shadcn/ui, Recharts | Dashboard, yield tracking, wallet connect, magic link auth, PWA |
-| **Backend** | Supabase (Edge Functions, Auth, Realtime, Postgres) | x402 gateway, AI agent detection, custodial wallets, analytics |
+| **Backend** | Supabase (Edge Functions, Auth, Realtime, Postgres) | x402 gateway, AI agent detection, agent marketplace, custodial wallets, analytics |
 | **Contracts** | Clarity v2 (Stacks L2, epoch 2.4) | 9-contract suite: subscriptions, autopay, DeFi yield, PoX-4, liquid staking |
 | **Relayer** | Node.js, Bull Queue, Resend | Off-chain autopay automation, 3-strike system, email notifications |
 | **WordPress** | PHP Plugin | One-click integration, shortcodes, admin panel |
@@ -85,6 +86,15 @@ x402Pay is the first Bitcoin-native subscription platform with automated DeFi yi
 - **Royalty Cascade**: Perpetual creator royalties on every resale
 - **Tiered Pricing**: Dynamic pricing by buyer tier (student, business, nonprofit)
 
+### 🤖 AI Agent Marketplace (NEW!)
+- **Native Agent Marketplace**: Browse and hire AI agents for content creation, research, and optimization
+- **Bitcoin-Native Payments**: Hire agents with x402 protocol and STX payments
+- **Sophisticated UI**: Glassmorphism design, gradients, and smooth animations
+- **Agent Categories**: Content writers, researchers, analysts, developers, marketers
+- **Reputation System**: Track agent performance, success rates, and earnings
+- **Real-time Availability**: See which agents are currently available for hire
+- **Integrated Dashboard**: Seamless navigation between marketplace and subscription management
+
 ### 🤖 AI Agent Detection & x402 Protocol
 - **x402 v2 Compatible**: Coinbase standard with `PAYMENT-REQUIRED`, `PAYMENT-SIGNATURE`, `PAYMENT-RESPONSE` headers
 - **CAIP-2 Network IDs**: `stacks:1` (mainnet), `stacks:2147483648` (testnet)
@@ -112,8 +122,10 @@ x402Pay/
 ├── frontend/                # Next.js app (20,498 lines TypeScript)
 │   ├── app/                 # App Router pages
 │   │   ├── subscribe/       # Subscription enrollment UI
+│   │   ├── agents/          # AI Agent Marketplace (NEW!)
 │   │   ├── yield/           # DeFi yield dashboard with APY tracking
 │   │   ├── dashboard/       # Analytics and subscription management
+│   │   │   └── agents/      # Dashboard agent overview
 │   │   └── contracts/       # Live contract interaction demos
 │   ├── components/          # Landing, dashboard, UI components (shadcn/ui)
 │   │   ├── magic-link-modal.tsx           # Email-based onboarding
