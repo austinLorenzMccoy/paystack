@@ -90,6 +90,45 @@ const contracts: Contract[] = [
       "Tier verification system"
     ],
     useCase: "Educational content, software licenses, API access"
+  },
+  {
+    name: "Subscription Autopay",
+    description: "Automated charges with 3-strike system",
+    txid: "STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.subscription-autopay",
+    address: "STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.subscription-autopay",
+    features: [
+      "Automated recurring charges",
+      "3-strike failure system",
+      "Relayer integration",
+      "Email notifications"
+    ],
+    useCase: "Automated subscription billing with failure handling"
+  },
+  {
+    name: "Revenue Optimizer",
+    description: "DeFi yield routing and rebalancing",
+    txid: "STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-optimizer",
+    address: "STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-optimizer",
+    features: [
+      "DeFi yield optimization",
+      "Automated rebalancing",
+      "PoX-4 stacking integration",
+      "APY tracking"
+    ],
+    useCase: "Maximize returns on idle subscription funds"
+  },
+  {
+    name: "StackingDAO Adapter",
+    description: "Liquid staking integration for stSTX",
+    txid: "STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.stacking-dao-adapter",
+    address: "STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.stacking-dao-adapter",
+    features: [
+      "Liquid staking",
+      "stSTX token support",
+      "BTC reward earning",
+      "StackingDAO integration"
+    ],
+    useCase: "Liquid staking for subscription funds"
   }
 ];
 
@@ -108,8 +147,8 @@ export default function ContractsPage() {
             </h1>
           </div>
           <p className="mb-6 max-w-3xl font-mono text-lg text-fog">
-            6 production-ready Clarity smart contracts deployed on Stacks testnet.
-            All contracts tested (43 tests passing) and ready for mainnet.
+            9 production-ready Clarity smart contracts deployed on Stacks testnet.
+            All contracts tested (404 tests passing) and ready for mainnet.
           </p>
           <div className="flex flex-wrap gap-4">
             <div className="border-2 border-success-green bg-success-green/10 px-4 py-2">
@@ -119,7 +158,7 @@ export default function ContractsPage() {
             </div>
             <div className="border-2 border-bitcoin-orange bg-bitcoin-orange/10 px-4 py-2">
               <span className="font-mono text-sm font-bold uppercase text-bitcoin-orange">
-                43 Tests Passing
+                404 Tests Passing
               </span>
             </div>
             <div className="border-2 border-stacks-purple bg-stacks-purple/10 px-4 py-2">
@@ -270,13 +309,13 @@ export default function ContractsPage() {
           </h2>
           <div className="grid gap-6 md:grid-cols-4">
             <div className="border-2 border-border bg-background p-6">
-              <div className="mb-2 font-mono text-4xl font-bold text-bitcoin-orange">6</div>
+              <div className="mb-2 font-mono text-4xl font-bold text-bitcoin-orange">9</div>
               <div className="font-mono text-sm uppercase text-slate-custom">
                 Production Contracts
               </div>
             </div>
             <div className="border-2 border-border bg-background p-6">
-              <div className="mb-2 font-mono text-4xl font-bold text-success-green">43</div>
+              <div className="mb-2 font-mono text-4xl font-bold text-success-green">404</div>
               <div className="font-mono text-sm uppercase text-slate-custom">
                 Tests Passing
               </div>
