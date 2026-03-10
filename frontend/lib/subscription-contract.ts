@@ -10,7 +10,11 @@ import {
   noneCV,
 } from "@stacks/transactions";
 import { StacksTestnet as TestnetNetwork, StacksMainnet as MainnetNetwork } from "@stacks/network";
-import { openContractCall } from "@stacks/connect";
+
+// Only import @stacks/connect on client side
+const openContractCall = typeof window !== 'undefined' 
+  ? require("@stacks/connect").openContractCall 
+  : null;
 
 const network =
   process.env.NEXT_PUBLIC_STACKS_NETWORK === "mainnet"
@@ -49,6 +53,11 @@ export async function createSubscription(
   ];
 
   return new Promise((resolve, reject) => {
+    if (!openContractCall) {
+      reject(new Error("Contract calls are only available on the client side"));
+      return;
+    }
+    
     openContractCall({
       network,
       anchorMode: AnchorMode.Any,
@@ -75,6 +84,11 @@ export async function topUpSubscription(
   const functionArgs = [uintCV(amount)];
 
   return new Promise((resolve, reject) => {
+    if (!openContractCall) {
+      reject(new Error("Contract calls are only available on the client side"));
+      return;
+    }
+    
     openContractCall({
       network,
       anchorMode: AnchorMode.Any,
@@ -98,6 +112,11 @@ export async function cancelSubscription(
   userAddress: string
 ): Promise<{ txId: string }> {
   return new Promise((resolve, reject) => {
+    if (!openContractCall) {
+      reject(new Error("Contract calls are only available on the client side"));
+      return;
+    }
+    
     openContractCall({
       network,
       anchorMode: AnchorMode.Any,
@@ -124,6 +143,11 @@ export async function toggleAutoStack(
   const functionArgs = [boolCV(enabled)];
 
   return new Promise((resolve, reject) => {
+    if (!openContractCall) {
+      reject(new Error("Contract calls are only available on the client side"));
+      return;
+    }
+    
     openContractCall({
       network,
       anchorMode: AnchorMode.Any,
