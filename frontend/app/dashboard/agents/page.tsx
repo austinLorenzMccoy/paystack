@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Bot, TrendingUp, DollarSign, Clock, Star, CheckCircle, AlertCircle, Search, Filter } from "lucide-react";
+import { Bot, TrendingUp, DollarSign, Clock, Star, CheckCircle, AlertCircle, Search, Filter, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 interface Agent {
@@ -216,6 +216,15 @@ export default function DashboardAgents() {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
+        <div className="flex items-center justify-between mb-6">
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Return to Dashboard
+          </Link>
+        </div>
         <h1 className="text-3xl font-bold text-white mb-2 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent">
           Agent Marketplace
         </h1>

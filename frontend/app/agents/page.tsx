@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Filter, TrendingUp, Star, Clock, DollarSign, CheckCircle, AlertCircle } from "lucide-react";
+import { Search, Filter, TrendingUp, Star, Clock, DollarSign, CheckCircle, AlertCircle, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/auth-context";
 
@@ -173,6 +174,15 @@ export default function AgentMarketplace() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8 text-center">
+          <div className="flex items-center justify-between mb-6">
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Return to Dashboard
+            </Link>
+          </div>
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent">
             Agent Marketplace
           </h1>
