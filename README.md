@@ -86,7 +86,7 @@ x402Pay is the first Bitcoin-native subscription platform with automated DeFi yi
 - **Royalty Cascade**: Perpetual creator royalties on every resale
 - **Tiered Pricing**: Dynamic pricing by buyer tier (student, business, nonprofit)
 
-### 🤖 AI Agent Marketplace (NEW!)
+### 🤖 AI Agent Marketplace 
 - **Native Agent Marketplace**: Browse and hire AI agents for content creation, research, and optimization
 - **Bitcoin-Native Payments**: Hire agents with x402 protocol and STX payments
 - **Sophisticated UI**: Glassmorphism design, gradients, and smooth animations
