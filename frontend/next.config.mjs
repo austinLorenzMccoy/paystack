@@ -6,6 +6,23 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  transpilePackages: [
+    '@stacks/network',
+    '@stacks/transactions', 
+    '@stacks/connect',
+    'sats-connect'
+  ],
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+      };
+    }
+    return config;
+  },
 }
 
 export default nextConfig
