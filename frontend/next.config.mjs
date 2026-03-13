@@ -6,12 +6,16 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  turbopack: {}, // tells Next.js you've acknowledged the switch
   transpilePackages: [
-    '@stacks/network',
-    '@stacks/transactions', 
+    '@reown/appkit',
+    '@reown/appkit-adapter-wagmi',
     '@stacks/connect',
-    'sats-connect'
+    '@stacks/network',
+    '@stacks/transactions',
+    'sats-connect',
+    '@sats-connect/core',
+    '@sats-connect/ui',
+    '@sats-connect/make-default-provider-config'
   ],
   webpack: (config, { isServer }) => {
     if (!isServer) {
