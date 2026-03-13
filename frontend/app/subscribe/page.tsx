@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { CheckCircle2, Sparkles, Zap, Loader2 } from "lucide-react";
+import { CheckCircle2, Sparkles, Zap, Loader2, ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { MagicLinkModal } from "@/components/magic-link-modal";
@@ -233,17 +233,29 @@ export default function SubscribePage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <section className="border-b border-border bg-gradient-to-br from-[#0B0B0C] via-[#0F1115] to-[#1B1E24] px-6 py-20">
-        <div className="mx-auto max-w-5xl text-center">
-          <Badge className="mb-4 border border-orange-500/40 bg-transparent text-xs uppercase tracking-[0.3em] text-orange-400">
-            Autopay + PoX Rewards
-          </Badge>
-          <h1 className="text-4xl font-semibold tracking-tight text-white md:text-5xl">
-            Subscribe Monthly. Auto-Stack BTC Rewards.
-          </h1>
-          <p className="mt-4 text-lg text-muted-foreground">
-            Zero-friction autopay for creator memberships. Magic link onboarding, escrow safety,
-            and automatic stacking yields.
-          </p>
+        <div className="mx-auto max-w-5xl">
+          <div className="mb-8">
+            <Button 
+              variant="ghost" 
+              className="mb-6 text-gray-400 hover:text-white hover:bg-white/10"
+              onClick={() => window.location.href = '/'}
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Home
+            </Button>
+          </div>
+          <div className="text-center">
+            <Badge className="mb-4 border border-orange-500/40 bg-transparent text-xs uppercase tracking-[0.3em] text-orange-400">
+              Autopay + PoX Rewards
+            </Badge>
+            <h1 className="text-4xl font-semibold tracking-tight text-white md:text-5xl">
+              Subscribe Monthly. Auto-Stack BTC Rewards.
+            </h1>
+            <p className="mt-4 text-lg text-muted-foreground">
+              Zero-friction autopay for creator memberships. Magic link onboarding, escrow safety,
+              and automatic stacking yields.
+            </p>
+          </div>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Button 
               size="lg" 
