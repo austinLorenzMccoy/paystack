@@ -9,52 +9,59 @@ plan:
     - id: 0
       transactions:
         - contract-publish:
-            contract-name: subscription-manager
-            expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
-            cost: 750000
-            path: contracts/subscription-manager.clar
-            anchor-block-only: true
-            clarity-version: 2
-        - contract-publish:
             contract-name: escrow-refund
             expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
-            cost: 800000
+            cost: 69500
             path: contracts/escrow-refund.clar
-            anchor-block-only: true
-            clarity-version: 2
-        - contract-publish:
-            contract-name: time-gated-access
-            expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
-            cost: 700000
-            path: contracts/time-gated-access.clar
-            anchor-block-only: true
-            clarity-version: 2
-        - contract-publish:
-            contract-name: royalty-cascade
-            expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
-            cost: 780000
-            path: contracts/royalty-cascade.clar
-            anchor-block-only: true
-            clarity-version: 2
-        - contract-publish:
-            contract-name: tiered-pricing
-            expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
-            cost: 720000
-            path: contracts/tiered-pricing.clar
-            anchor-block-only: true
-            clarity-version: 2
-        - contract-publish:
-            contract-name: subscription-autopay
-            expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
-            cost: 850000
-            path: contracts/subscription-autopay.clar
             anchor-block-only: true
             clarity-version: 2
         - contract-publish:
             contract-name: revenue-optimizer
             expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
-            cost: 900000
+            cost: 105690
             path: contracts/revenue-optimizer.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: revenue-split
+            expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
+            cost: 60930
+            path: contracts/revenue-split.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: royalty-cascade
+            expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
+            cost: 53450
+            path: contracts/royalty-cascade.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: subscription-autopay
+            expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
+            cost: 88200
+            path: contracts/subscription-autopay.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: subscription-manager
+            expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
+            cost: 87490
+            path: contracts/subscription-manager.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: tiered-pricing
+            expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
+            cost: 67510
+            path: contracts/tiered-pricing.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: time-gated-access
+            expected-sender: STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
+            cost: 55750
+            path: contracts/time-gated-access.clar
             anchor-block-only: true
             clarity-version: 2
       epoch: "2.4"

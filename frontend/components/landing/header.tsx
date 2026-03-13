@@ -11,6 +11,8 @@ import { useWallet } from "@/contexts/wallet-context";
 
 const navLinks = [
   { href: "/contracts", label: "Contracts" },
+  { href: "/agents", label: "Agents" },
+  { href: "/subscribe", label: "Subscribe" },
   { href: "/docs", label: "Docs" },
   { href: "/pricing", label: "Pricing" },
   { href: "https://github.com", label: "GitHub", external: true },
