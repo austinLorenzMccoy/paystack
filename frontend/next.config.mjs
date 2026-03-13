@@ -6,6 +6,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  turbopack: {}, // tells Next.js you've acknowledged the switch
   transpilePackages: [
     '@stacks/network',
     '@stacks/transactions', 
