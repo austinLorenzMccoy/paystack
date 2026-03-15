@@ -42,7 +42,7 @@ export function MagicLinkModal({
       const { error: signInError } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/subscribe`,
+          emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/subscribe`,
         },
       });
 
