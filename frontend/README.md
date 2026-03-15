@@ -4,7 +4,7 @@
 
 The x402Pay frontend delivers the creator dashboard, landing page, SDK documentation, and wallet integration — all styled with the **Bitcoin Brutalist** design language: zero radii, heavy borders, mono typography, and angular micro-interactions.
 
-**Live**: [x402pay.vercel.app](https://x402pay.vercel.app)
+**Live**: [x402pay-app.vercel.app](https://x402pay-app.vercel.app)
 
 ---
 
@@ -15,18 +15,24 @@ frontend/
 ├── app/
 │   ├── page.tsx                 # Landing page (Hero, Features, HowItWorks, RealtimePanel, Stats, CTA)
 │   ├── not-found.tsx            # Custom 404 page
+│   ├── subscribe/page.tsx       # Subscription page with magic link auth and wallet connect
+│   ├── agents/page.tsx          # AI Agent Marketplace
+│   ├── contracts/page.tsx       # Smart contracts showcase
 │   ├── dashboard/
 │   │   ├── page.tsx             # Creator Overview (stats, charts, SDK callout, x402 flow)
 │   │   ├── layout.tsx           # Dashboard shell (sidebar + header)
 │   │   ├── analytics/           # Analytics deep-dive
 │   │   ├── content/             # Content management
 │   │   ├── payments/            # Payment history
+│   │   ├── agents/              # Agent management
 │   │   └── settings/            # Profile, API Keys, Notifications
 │   └── docs/
 │       └── page.tsx             # SDK documentation (quickstart, asset selector, code snippets)
 ├── components/
 │   ├── landing/                 # Hero, Header, Features, HowItWorks, RealtimePanel, Stats, CTA, Footer
 │   ├── dashboard/               # Sidebar, DashboardHeader
+│   ├── magic-link-modal.tsx      # Email authentication modal
+│   ├── subscription-enrollment-dialog.tsx # Subscription enrollment flow
 │   ├── ui/                      # shadcn/ui primitives (50+ components)
 │   └── wallet-connect-button.tsx
 ├── hooks/
@@ -35,7 +41,7 @@ frontend/
 │   └── use-realtime-analytics.ts # Supabase realtime subscription for analytics events
 ├── contexts/
 │   ├── auth-context.tsx         # Supabase auth state provider
-│   └── wallet-context.tsx       # Stacks wallet connection provider
+│   └── wallet-context.tsx       # Stacks wallet connection provider (Xverse/Leather)
 ├── lib/
 │   ├── supabase.ts              # Browser Supabase client (null-safe for SSG)
 │   └── utils.ts                 # cn() utility
@@ -68,10 +74,33 @@ cp .env.local.example .env.local
 ```
 
 ```env
+# Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOi...
+SUPABASE_SERVICE_KEY=eyJhbGciOi...
+
+# Deployed Contracts (Stacks testnet)
 NEXT_PUBLIC_CONTRACT_ADDRESS=STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-split
+NEXT_PUBLIC_SUBSCRIPTION_CONTRACT_ADDRESS=STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.subscription-autopay
+NEXT_PUBLIC_REVENUE_OPTIMIZER_CONTRACT=STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-optimizer
+NEXT_PUBLIC_STACKING_DAO_ADAPTER_CONTRACT=STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.stacking-dao-adapter
+
+# App Configuration (for magic link redirects)
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_APP_NAME=x402pay
+NEXT_PUBLIC_APP_DESCRIPTION=Bitcoin-native creator monetization platform
+
+# Magic Link Authentication (Resend)
+RESEND_API_KEY=re_your_resend_api_key
+RESEND_FROM_EMAIL=noreply@yourdomain.com
+
+# WalletConnect (optional - for mobile wallet support)
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_walletconnect_project_id
+
+# Stacks Network
 NEXT_PUBLIC_STACKS_NETWORK=testnet
+NEXT_PUBLIC_STACKS_API_URL=https://api.testnet.hiro.so
+NEXT_PUBLIC_MERCHANT_PRINCIPAL=STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF
 ```
 
 > The Supabase client is null-safe — the app builds and renders even when env vars are missing (e.g. during Vercel SSG). Features requiring Supabase simply degrade gracefully.
@@ -198,12 +227,65 @@ pnpm test:coverage     # Run with coverage report
 | Route | Description |
 |-------|-------------|
 | `/` | Landing page — Hero, Features, HowItWorks, RealtimePanel, Stats, CTA |
+| `/subscribe` | Subscription page — Magic link authentication, wallet connect, plan selection |
+| `/agents` | AI Agent Marketplace — Browse and hire AI agents for content creation |
+| `/contracts` | Smart contracts showcase — 9 deployed contracts with live stats |
 | `/dashboard` | Creator Overview — Stats, revenue chart, top content, recent payments, SDK callout |
 | `/dashboard/analytics` | Analytics deep-dive |
 | `/dashboard/content` | Content management |
 | `/dashboard/payments` | Payment history |
+| `/dashboard/agents` | Agent management dashboard |
 | `/dashboard/settings/*` | Profile, API Keys, Notifications |
 | `/docs` | SDK documentation — Quickstart, asset selector, code snippets, security checklist |
+
+---
+
+## 🔐 Authentication & Wallet Flow
+
+### Magic Link Authentication
+1. **Email Signup**: Users enter email → receive magic link via Resend
+2. **Auto-Redirect**: Magic link redirects to `NEXT_PUBLIC_APP_URL/subscribe`
+3. **Session Creation**: Supabase creates authenticated session
+4. **Status**: User can now access subscription features
+
+### Wallet Connection (Required for Payments)
+1. **Install Wallet**: Xverse or Leather (MetaMask not supported)
+2. **Connect Button**: Click "Connect Wallet" → sats-connect opens wallet
+3. **Address Selection**: User selects Stacks address
+4. **Session Storage**: Wallet info stored in sessionStorage
+5. **Ready**: User can now subscribe and make payments
+
+**Flow Order**: Connect wallet → Magic link auth → Subscribe
+
+---
+
+## 🛠️ Build Configuration
+
+### Webpack vs Turbopack
+- **Default**: Uses Webpack for better ESM/CJS compatibility
+- **Turbopack**: Available via `pnpm dev:turbo` (experimental)
+- **Issue**: Turbopack has ESM compatibility issues with Stacks packages
+
+### ESM Package Transpilation
+The following packages are transpiled for browser compatibility:
+```js
+transpilePackages: [
+  '@reown/appkit',
+  '@reown/appkit-adapter-wagmi', 
+  '@stacks/connect',
+  '@stacks/network',
+  '@stacks/transactions',
+  'sats-connect',
+  '@sats-connect/core',
+  '@sats-connect/ui',
+  '@sats-connect/make-default-provider-config'
+]
+```
+
+### Build Troubleshooting
+- **Module factory errors**: Use webpack (`pnpm dev` instead of `pnpm dev:turbo`)
+- **ESM/CJS conflicts**: Ensure all blockchain packages are in `transpilePackages`
+- **Magic link localhost**: Set `NEXT_PUBLIC_APP_URL` correctly for production
 
 ---
 
