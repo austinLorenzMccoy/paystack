@@ -112,19 +112,22 @@ export function MagicLinkModal({
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="border-white/10 bg-[#13141A] sm:max-w-md">
         <DialogHeader>
+          <DialogDescription className="text-center">
+            {step === "email" && (
+              <>
+                Connect your wallet first (Xverse/Leather), then enter your email for magic link onboarding.
+                <br /><br />
+                <strong>Note:</strong> MetaMask is not supported. Use Xverse or Leather wallet.
+              </>
+            )}
+            {step === "verify" && "Check your email for the magic link"}
+            {step === "success" && "You're all set! Your wallet is now connected."}
+          </DialogDescription>
           <DialogTitle className="text-white">
             {step === "email" && "Magic Link Onboarding"}
             {step === "verify" && "Check Your Email"}
             {step === "success" && "Welcome!"}
           </DialogTitle>
-          <DialogDescription>
-            {step === "email" &&
-              "Enter your email to receive a magic link for instant access."}
-            {step === "verify" &&
-              "Click the link in your email to complete sign-in."}
-            {step === "success" &&
-              "You're all set! Your custodial wallet is ready."}
-          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
