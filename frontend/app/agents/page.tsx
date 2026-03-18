@@ -79,10 +79,10 @@ export default function AgentMarketplace() {
           return;
         }
 
-        const { data: agents, error } = await supabase
-          .from('agents')
-          .select('*')
-          .order('reputation', { ascending: false });
+        // Use the database function for better performance
+        const { data: agents, error } = await supabase.rpc('get_agents_by_specialty', {
+          specialty_filter: selectedSpecialty === 'all' ? 'all' : selectedSpecialty
+        });
 
         if (error) throw error;
         
@@ -99,7 +99,7 @@ export default function AgentMarketplace() {
     };
 
     loadAgents();
-  }, []);
+  }, [selectedSpecialty]);
 
   useEffect(() => {
     let filtered = agents;
@@ -135,19 +135,31 @@ export default function AgentMarketplace() {
     setHiringLoading(true);
     
     try {
-      // Simulate hiring process
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Call Supabase function to hire agent
+      const { data, error } = await supabase.rpc('hire_agent', {
+        agent_id: agent.id,
+        task_description: taskDescription,
+        task_budget: parseFloat(taskBudget),
+        task_deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
+        task_requirements: []
+      });
+
+      if (error) throw error;
+
+      // Success - show confirmation
+      alert(`Successfully hired ${agent.name}! Task ID: ${data}`);
       
-      alert(`Successfully hired ${agent.name}! Task created with budget ${taskBudget} STX`);
-      
-      // Reset form
+      // Close dialog and reset form
       setSelectedAgent(null);
-      setTaskDescription("");
-      setTaskBudget("");
+      setTaskDescription('');
+      setTaskBudget('');
+      
+      // Refresh agents list to update availability
+      window.location.reload();
       
     } catch (error) {
-      console.error("Error hiring agent:", error);
-      alert("Failed to hire agent. Please try again.");
+      console.error('Failed to hire agent:', error);
+      alert(error instanceof Error ? error.message : 'Failed to hire agent');
     } finally {
       setHiringLoading(false);
     }
