@@ -276,8 +276,15 @@ export default function SubscribePage() {
               size="lg"
               variant="outline"
               className="border-white/20 text-white hover:border-white hover:bg-white/5"
+              asChild
             >
-              View Autopay Contract
+              <a
+                href="https://explorer.hiro.so/txid/STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.subscription-autopay?chain=testnet"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View Autopay Contract
+              </a>
             </Button>
           </div>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
