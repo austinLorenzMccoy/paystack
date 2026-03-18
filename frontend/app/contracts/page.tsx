@@ -93,11 +93,11 @@ const contracts: Contract[] = [
   },
   {
     name: "Subscription Autopay",
-    description: "Automated charges with 3-strike system",
-    txid: "STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.subscription-autopay",
-    address: "STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.subscription-autopay",
+    description: "Escrow-based recurring payments with 3-strike system",
+    txid: "STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.subscription-manager", // Use working contract
+    address: "STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.subscription-manager", // Use working contract
     features: [
-      "Automated recurring charges",
+      "Escrow-based recurring payments",
       "3-strike failure system",
       "Relayer integration",
       "Email notifications"
