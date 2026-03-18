@@ -10,6 +10,8 @@ x402Pay is the first Bitcoin-native subscription platform with automated DeFi yi
 
 **Live**: [x402pay-app.vercel.app](https://x402pay-app.vercel.app)  
 **Agent Marketplace**: [x402pay-app.vercel.app/agents](https://x402pay-app.vercel.app/agents)  
+**Subscription**: [x402pay-app.vercel.app/subscribe](https://x402pay-app.vercel.app/subscribe)  
+**Contracts**: [x402pay-app.vercel.app/contracts](https://x402pay-app.vercel.app/contracts)  
 **npm**: [@x402pay/sdk](https://www.npmjs.com/package/@x402pay/sdk) - `npm install @x402pay/sdk`  
 **WordPress Plugin**: `wordpress-plugin/x402pay-subscriptions.zip`
 
@@ -310,7 +312,56 @@ RESEND_API_KEY=re_...                        # For payment failure emails
 
 ---
 
-## 🔄 x402 Protocol Flow
+## � Deployment & Authentication
+
+### Vercel Deployment Setup
+
+1. **Frontend Environment Variables** (Vercel → Settings → Environment Variables):
+```env
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOi...
+SUPABASE_SERVICE_KEY=eyJhbGciOi...
+
+# App Configuration (critical for magic links)
+NEXT_PUBLIC_APP_URL=https://x402pay-app.vercel.app
+NEXT_PUBLIC_APP_NAME=x402pay
+NEXT_PUBLIC_APP_DESCRIPTION=Bitcoin-native creator monetization platform
+
+# Magic Link Authentication
+RESEND_API_KEY=re_your_resend_api_key
+RESEND_FROM_EMAIL=noreply@x402pay.com
+
+# WalletConnect (optional)
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_walletconnect_project_id
+
+# Stacks Contracts
+NEXT_PUBLIC_CONTRACT_ADDRESS=STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-split
+NEXT_PUBLIC_SUBSCRIPTION_CONTRACT_ADDRESS=STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.subscription-autopay
+# ... other contracts
+```
+
+2. **User Authentication Flow**:
+   - **Step 1**: Connect Bitcoin wallet (Xverse/Leather, not MetaMask)
+   - **Step 2**: Enter email for magic link authentication
+   - **Step 3**: Click magic link in email → redirects to live site
+   - **Step 4**: Subscribe with automated billing
+
+3. **Build Configuration**:
+   - Uses **Webpack** (not Turbopack) for ESM/CJS compatibility
+   - Transpiles Stacks packages for browser compatibility
+   - See `frontend/README.md` for troubleshooting
+
+### Common Issues & Fixes
+
+- **Magic link redirects to localhost**: Set `NEXT_PUBLIC_APP_URL` to live site
+- **MetaMask connection errors**: Use Xverse or Leather wallet instead
+- **Module factory errors**: Use webpack build (`pnpm dev` not `pnpm dev:turbo`)
+- **Email not sending**: Configure Resend API keys in Vercel environment
+
+---
+
+## �🔄 x402 Protocol Flow
 
 ```
 ┌──────────┐  1. GET /resource    ┌──────────────┐
