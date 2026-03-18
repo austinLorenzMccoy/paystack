@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Download, ExternalLink, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Search, Download, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Payment {
   id: string;
@@ -14,26 +14,67 @@ interface Payment {
   date: string;
 }
 
-const mockPayments: Payment[] = [
-  { id: "1", txHash: "0x1a3f...8b2d", from: "0x9d2b...5e3c", amount: "0.10", asset: "STX", content: "Bitcoin Deep Dive", status: "confirmed", date: "2026-02-10 14:32" },
-  { id: "2", txHash: "0x4c7e...1f9a", from: "0x6f1a...4d8e", amount: "0.50", asset: "sBTC", content: "API Tutorial", status: "confirmed", date: "2026-02-10 14:27" },
-  { id: "3", txHash: "0x7b9d...3c4f", from: "0x3e5c...7a2f", amount: "0.25", asset: "USDCx", content: "Masterclass", status: "confirmed", date: "2026-02-10 14:20" },
-  { id: "4", txHash: "0x2e6a...9d1b", from: "0xa1c4...8f3e", amount: "1.20", asset: "STX", content: "Newsletter #12", status: "pending", date: "2026-02-10 14:15" },
-  { id: "5", txHash: "0x5f8c...2a7d", from: "0xb3d7...6e2a", amount: "0.08", asset: "sBTC", content: "Bitcoin Deep Dive", status: "confirmed", date: "2026-02-10 13:58" },
-  { id: "6", txHash: "0x8a1d...4b6e", from: "0xc5e9...1d4b", amount: "0.30", asset: "STX", content: "API Tutorial", status: "confirmed", date: "2026-02-10 13:45" },
-  { id: "7", txHash: "0x3c9e...7f2a", from: "0xd8a2...3c5f", amount: "0.15", asset: "USDCx", content: "Masterclass", status: "confirmed", date: "2026-02-10 13:30" },
-  { id: "8", txHash: "0x6d4b...1e8c", from: "0xe2f6...9a7d", amount: "0.45", asset: "STX", content: "Newsletter #12", status: "confirmed", date: "2026-02-10 13:12" },
-];
+const mockPayments: Payment[] = [];
 
 export default function PaymentsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterAsset, setFilterAsset] = useState("all");
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredPayments = mockPayments.filter((p) => {
-    const matchesSearch = p.txHash.includes(searchQuery) || p.content.toLowerCase().includes(searchQuery.toLowerCase());
+  useEffect(() => {
+    const loadPayments = async () => {
+      try {
+        // Get real payments from blockchain
+        const response = await fetch('/api/payments');
+        const data = await response.json();
+        setPayments(data || []);
+      } catch (error) {
+        console.error('Failed to load payments:', error);
+        setPayments([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadPayments();
+  }, []);
+
+  const filteredPayments = payments.filter((p) => {
+    const matchesSearch = p.txHash?.includes(searchQuery) || p.content?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesAsset = filterAsset === "all" || p.asset === filterAsset;
     return matchesSearch && matchesAsset;
   });
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-bitcoin-orange"></div>
+      </div>
+    );
+  }
+
+  if (filteredPayments.length === 0) {
+    return (
+      <div className="text-center py-20">
+        <div className="mb-6">
+          <div className="mx-auto w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center">
+            <Search className="w-8 h-8 text-gray-600" />
+          </div>
+        </div>
+        <h3 className="text-lg font-semibold text-white mb-2">No Payment History</h3>
+        <p className="text-gray-400 mb-6">
+          Your payment history will appear here once you start receiving payments.
+        </p>
+        <button
+          onClick={() => window.location.href = '/subscribe'}
+          className="bg-bitcoin-orange text-background px-6 py-3 rounded-lg font-semibold hover:bg-bitcoin-orange/90 transition-colors"
+        >
+          Start Earning
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div>

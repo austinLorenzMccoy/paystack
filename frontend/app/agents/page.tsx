@@ -39,6 +39,27 @@ export default function AgentMarketplace() {
   const [taskBudget, setTaskBudget] = useState("");
   const [hiringLoading, setHiringLoading] = useState(false);
 
+  // Empty state component
+  const EmptyState = () => (
+    <div className="text-center py-20">
+      <div className="mb-6">
+        <div className="mx-auto w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center">
+          <Search className="w-10 h-10 text-gray-600" />
+        </div>
+      </div>
+      <h3 className="text-xl font-semibold text-white mb-2">No Agents Available Yet</h3>
+      <p className="text-gray-400 mb-6 max-w-md mx-auto">
+        The AI Agent Marketplace is launching soon. Connect your wallet to be notified when agents become available.
+      </p>
+      <button
+        onClick={() => window.location.href = '/subscribe'}
+        className="bg-orange-500 text-black px-6 py-3 rounded-lg font-semibold hover:bg-orange-400 transition-colors"
+      >
+        Get Notified at Launch
+      </button>
+    </div>
+  );
+
   const specialties = [
     "all",
     "research",
@@ -49,64 +70,35 @@ export default function AgentMarketplace() {
     "data-analysis"
   ];
 
-  const placeholderAgents: Agent[] = [
-    {
-      id: "1",
-      name: "ResearchGPT",
-      specialty: "research",
-      reputation: 4.8,
-      hourlyRate: 0.05,
-      totalEarnings: 1250,
-      successRate: 96,
-      available: true,
-      description: "Specialized in market research, trend analysis, and data gathering for creators",
-      skills: ["Market Research", "Data Analysis", "Trend Identification", "Competitive Analysis"]
-    },
-    {
-      id: "2", 
-      name: "ContentWriter Pro",
-      specialty: "writing",
-      reputation: 4.9,
-      hourlyRate: 0.04,
-      totalEarnings: 2100,
-      successRate: 98,
-      available: true,
-      description: "Professional content creation for articles, scripts, and social media",
-      skills: ["Article Writing", "Script Writing", "SEO Optimization", "Social Media Content"]
-    },
-    {
-      id: "3",
-      name: "DataAnalyzer X",
-      specialty: "analysis", 
-      reputation: 4.7,
-      hourlyRate: 0.06,
-      totalEarnings: 980,
-      successRate: 94,
-      available: true,
-      description: "Advanced data analysis and financial modeling for creator businesses",
-      skills: ["Financial Analysis", "Data Modeling", "Performance Analytics", "Revenue Optimization"]
-    },
-    {
-      id: "4",
-      name: "GrowthOptimizer",
-      specialty: "optimization",
-      reputation: 4.6,
-      hourlyRate: 0.045,
-      totalEarnings: 1560,
-      successRate: 95,
-      available: false,
-      description: "A/B testing, conversion optimization, and growth strategies",
-      skills: ["A/B Testing", "Conversion Optimization", "Growth Hacking", "User Analytics"]
-    }
-  ];
-
   useEffect(() => {
-    // Simulate loading agents
-    setTimeout(() => {
-      setAgents(placeholderAgents);
-      setFilteredAgents(placeholderAgents);
-      setLoading(false);
-    }, 1000);
+    // Load real agents from Supabase
+    const loadAgents = async () => {
+      try {
+        if (!supabase) {
+          setLoading(false);
+          return;
+        }
+
+        const { data: agents, error } = await supabase
+          .from('agents')
+          .select('*')
+          .order('reputation', { ascending: false });
+
+        if (error) throw error;
+        
+        setAgents(agents || []);
+        setFilteredAgents(agents || []);
+      } catch (error) {
+        console.error('Failed to load agents:', error);
+        // Show empty state on error
+        setAgents([]);
+        setFilteredAgents([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadAgents();
   }, []);
 
   useEffect(() => {
@@ -173,6 +165,22 @@ export default function AgentMarketplace() {
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-900 text-white p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
+        <div className="mb-8">
+          <button
+            onClick={() => window.location.href = '/'}
+            className="flex items-center text-gray-400 hover:text-white mb-6"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Home
+          </button>
+          <h1 className="text-4xl font-bold text-white mb-4">AI Agent Marketplace</h1>
+          <p className="text-gray-400">Hire AI agents for content creation, research, and optimization</p>
+        </div>
+
+        {/* Empty State */}
+        {filteredAgents.length === 0 && !loading && <EmptyState />}
+
+        {/* Main Content */}
         <div className="mb-8 text-center">
           <div className="flex items-center justify-between mb-6">
             <Link
@@ -435,10 +443,12 @@ export default function AgentMarketplace() {
                         }`}
                       >
                         {hiringLoading ? (
-                          <span className="flex items-center justify-center gap-2">
-                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                            Processing...
-                          </span>
+                          <div className="min-h-screen bg-black text-white flex items-center justify-center">
+                            <div className="text-center">
+                              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+                              <p>Loading agents...</p>
+                            </div>
+                          </div>
                         ) : (
                           `Hire for ${taskBudget || '0.00'} STX`
                         )}

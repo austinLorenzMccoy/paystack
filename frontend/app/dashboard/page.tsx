@@ -121,77 +121,76 @@ export default function DashboardOverview() {
     try {
       setLoading(true);
 
-      if (!supabase) {
-        applyPlaceholderData();
+      if (!supabase || !user) {
+        // Show empty state instead of mock data
+        setStats([
+          { value: 'No Data', label: 'Subscription Status', trend: 'Connect wallet', trendLabel: 'Connect wallet' },
+          { value: '0 STX', label: 'Escrow Balance', trend: 'Subscribe to get started', trendLabel: 'Subscribe to get started' },
+          { value: '0', label: 'Total Payments', trend: 'No payments yet', trendLabel: 'No payments yet' },
+          { value: 'Disabled', label: 'Auto-Stacking', trend: 'Subscribe to enable', trendLabel: 'Subscribe to enable' },
+        ]);
+        setRevenueData([]);
+        setTopContent([]);
+        setRecentPayments([]);
         return;
       }
 
-      // Fetch payments for current user (creator)
-      const { data: payments, error: paymentsError } = await supabase
-        .from('payments')
-        .select(`
-          *,
-          content:content_id (
-            title
-          )
-        `)
-        .eq('creator_id', user?.id)
-        .order('processed_at', { ascending: false })
-        .limit(50);
+      // Get real subscription data
+      const { data: subscription } = await supabase
+        .from('subscriptions')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
 
-      if (paymentsError) throw paymentsError;
+      // Get real payment data from blockchain
+      const response = await fetch(`/api/payments?user=${user.id}`);
+      const payments = await response.json();
 
-      // Calculate stats
-      const totalRevenue = payments?.reduce((sum, p) => sum + p.amount, 0) || 0;
-      const totalPayments = payments?.length || 0;
-      const aiAgentPayments = payments?.filter(p => p.is_ai_agent).length || 0;
-      const aiPercentage = totalPayments > 0 ? Math.round((aiAgentPayments / totalPayments) * 100) : 0;
-
-      setStats([
+      // Process real data
+      const stats = [
         {
-          value: `$${totalRevenue.toLocaleString()}`,
-          label: "Total Revenue",
-          trend: "+12%", // Would calculate from previous period
-          trendLabel: "from last month",
+          value: subscription?.status === 'active' ? 'Active' : 'Inactive',
+          label: 'Subscription Status',
+          trend: subscription?.status === 'active' ? 'Active' : 'Inactive',
+          trendLabel: subscription?.status === 'active' ? 'Active' : 'Inactive',
         },
         {
-          value: totalPayments.toString(),
-          label: "Total Payments",
-          trend: "+8%",
-          trendLabel: "from last month",
+          value: subscription?.escrow_balance ? `${subscription.escrow_balance} STX` : '0 STX',
+          label: 'Escrow Balance',
+          trend: 'Available',
+          trendLabel: 'Available',
         },
         {
-          value: `${aiPercentage}%`,
-          label: "AI Agent Traffic",
-          trend: "+5%",
-          trendLabel: "from last month",
+          value: payments?.length || '0',
+          label: 'Total Payments',
+          trend: 'All time',
+          trendLabel: 'All time',
         },
-      ]);
+        {
+          value: subscription?.auto_stack ? 'Enabled' : 'Disabled',
+          label: 'Auto-Stacking',
+          trend: subscription?.auto_stack ? 'Active' : 'Inactive',
+          trendLabel: subscription?.auto_stack ? 'Active' : 'Inactive',
+        },
+      ];
 
-      // Generate revenue chart data (would be aggregated by month)
-      const chartData = generateRevenueChartData(payments || []);
-      setRevenueData(chartData);
-
-      // Top content (would aggregate by content)
-      const contentRevenue = aggregateContentRevenue(payments || []);
-      setTopContent(contentRevenue.slice(0, 5).map((item, index) => ({
-        rank: index + 1,
-        title: item.title || `Content ${item.content_id}`,
-        revenue: `$${item.revenue.toFixed(2)}`,
-      })));
-
-      // Recent payments
-      const recent = (payments || []).slice(0, 5).map(payment => ({
-        address: `${payment.payer_address.slice(0, 6)}...${payment.payer_address.slice(-4)}`,
-        amount: `${payment.amount} ${payment.asset}`,
-        time: new Date(payment.processed_at).toLocaleString(),
-      }));
-      setRecentPayments(recent);
+      setStats(stats);
+      setRevenueData([]);
+      setTopContent([]);
+      setRecentPayments(payments?.slice(0, 10) || []);
 
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
-      // Fallback to mock data if Supabase fails
-      applyPlaceholderData();
+      // Show empty state instead of mock data
+      setStats([
+        { value: 'No Data', label: 'Subscription Status', trend: 'Connect wallet', trendLabel: 'Connect wallet' },
+        { value: '0 STX', label: 'Escrow Balance', trend: 'Subscribe to get started', trendLabel: 'Subscribe to get started' },
+        { value: '0', label: 'Total Payments', trend: 'No payments yet', trendLabel: 'No payments yet' },
+        { value: 'Disabled', label: 'Auto-Stacking', trend: 'Subscribe to enable', trendLabel: 'Subscribe to enable' },
+      ]);
+      setRevenueData([]);
+      setTopContent([]);
+      setRecentPayments([]);
     } finally {
       setLoading(false);
     }
