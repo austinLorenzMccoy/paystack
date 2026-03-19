@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, CheckCircle2, Lock, Unlock, Zap } from "lucide-react";
+import { Loader2, CheckCircle2, Lock, Unlock, Zap, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -378,6 +378,27 @@ export default function X402DemoPage() {
                 </p>
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Recursive Demo CTA */}
+        <Card className="bg-[#1A1A1A] border-purple-500/20 mt-8">
+          <CardContent className="py-8 text-center">
+            <Badge className="mb-4 border-purple-500/40 bg-transparent text-purple-400">
+              Advanced Demo
+            </Badge>
+            <h3 className="text-2xl font-bold mb-4">
+              Experience <span className="text-purple-500">Recursive</span> Payments
+            </h3>
+            <p className="text-gray-400 mb-6 max-w-2xl mx-auto">
+              Take it to the next level with our recursive demo where each payment unlocks content that contains another paywall. Watch payments chain together infinitely.
+            </p>
+            <Button asChild className="bg-purple-500 hover:bg-purple-400">
+              <a href="/recursive-demo">
+                Try Recursive Demo
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
           </CardContent>
         </Card>
       </div>

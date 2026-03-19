@@ -1,181 +1,52 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-import { cookies } from "next/headers";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+// Mock subscription data for demo purposes
+const mockSubscription = {
+  status: "inactive",
+  escrowBalance: 0,
+  intervalBlocks: 4320,
+  strikes: 0,
+  autoStack: false,
+  nextChargeBlock: null,
+  lastChargeBlock: null,
+  walletAddress: null,
+};
 
 export async function GET(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-      global: {
-        headers: {
-          cookie: cookieStore.toString(),
-        },
-      },
+    // Get wallet address from headers for demo
+    const walletAddress = request.headers.get('x-wallet-address');
+    
+    // Return mock subscription data
+    return NextResponse.json({
+      ...mockSubscription,
+      walletAddress,
     });
-
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    // For now, return mock data without calling edge function
-    // This prevents the page from hanging
-    return NextResponse.json(
-      {
-        subscription: {
-          status: "inactive",
-          escrowBalance: 0,
-          intervalBlocks: 4320,
-          strikes: 0,
-          autoStack: true,
-          nextChargeBlock: null,
-          lastChargeBlock: null,
-        },
-      },
-      { status: 200 }
-    );
-
-    // TODO: Uncomment when edge function is deployed
-    /*
-    if (!session) {
-      return NextResponse.json(
-        {
-          subscription: {
-            status: "inactive",
-            escrowBalance: 0,
-            intervalBlocks: 4320,
-            strikes: 0,
-            autoStack: true,
-            nextChargeBlock: null,
-            lastChargeBlock: null,
-          },
-        },
-        { status: 200 }
-      );
-    }
-
-    const response = await fetch(
-      `${supabaseUrl}/functions/v1/subscription-manage`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`Edge function failed: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    return NextResponse.json(data);
-    */
   } catch (error) {
-    console.error("Subscription fetch error:", error);
+    console.error('Subscription fetch error:', error);
     return NextResponse.json(
-      {
-        subscription: {
-          status: "inactive",
-          escrowBalance: 0,
-          intervalBlocks: 4320,
-          strikes: 0,
-          autoStack: true,
-          nextChargeBlock: null,
-          lastChargeBlock: null,
-        },
-      },
-      { status: 200 }
+      { error: "Failed to fetch subscription" },
+      { status: 500 }
     );
   }
 }
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-      global: {
-        headers: {
-          cookie: cookieStore.toString(),
-        },
-      },
+    const { action, ...data } = await request.json();
+    
+    // For demo purposes, just return success
+    // In production, this would handle subscription actions
+    console.log('Subscription action:', action, data);
+    
+    return NextResponse.json({
+      success: true,
+      message: `${action} action completed successfully`,
     });
-
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const body = await request.json();
-    const { action } = body;
-
-    // For now, return mock responses without calling edge function
-    // This prevents the page from hanging
-    switch (action) {
-      case 'create':
-        return NextResponse.json({ 
-          success: true, 
-          message: 'Subscription created successfully',
-          subscriptionId: 'demo-subscription-id'
-        });
-      
-      case 'cancel':
-        return NextResponse.json({ 
-          success: true, 
-          message: 'Subscription cancelled successfully' 
-        });
-      
-      case 'topup':
-        return NextResponse.json({ 
-          success: true, 
-          message: 'Escrow topped up successfully' 
-        });
-      
-      default:
-        return NextResponse.json(
-          { error: 'Invalid action' },
-          { status: 400 }
-        );
-    }
-
-    // TODO: Uncomment when edge function is deployed
-    /*
-    const url = new URL(request.url);
-    const queryParams = action ? `?action=${action}` : "";
-
-    const response = await fetch(
-      `${supabaseUrl}/functions/v1/subscription-manage${queryParams}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      }
-    );
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      return NextResponse.json(
-        { error: errorData.error || "Request failed" },
-        { status: response.status }
-      );
-    }
-
-    const data = await response.json();
-    return NextResponse.json(data);
-    */
   } catch (error) {
-    console.error("Subscription action error:", error);
+    console.error('Subscription action error:', error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Failed to update subscription" },
       { status: 500 }
     );
   }

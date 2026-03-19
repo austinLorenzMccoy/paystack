@@ -9,7 +9,8 @@
 x402Pay implements the long-awaited HTTP 402 Payment Required status code with Bitcoin-native micropayments. Built on [Stacks](https://www.stacks.co/), it enables direct creator-to-consumer payments without email, passwords, or traditional payment processors.
 
 **Live Demo**: [x402pay-app.vercel.app](https://x402pay-app.vercel.app)  
-**Interactive x402 Demo**: [x402pay-app.vercel.app/x402-demo](https://x402pay-app.vercel.app/x402-demo)  
+**Standard x402 Demo**: [x402pay-app.vercel.app/x402-demo](https://x402pay-app.vercel.app/x402-demo)  
+**Recursive x402 Demo**: [x402pay-app.vercel.app/recursive-demo](https://x402pay-app.vercel.app/recursive-demo)  
 **Subscriptions**: [x402pay-app.vercel.app/subscribe](https://x402pay-app.vercel.app/subscribe)  
 **Contracts**: [x402pay-app.vercel.app/contracts](https://x402pay-app.vercel.app/contracts)  
 **npm**: [@x402pay/sdk](https://www.npmjs.com/package/@x402pay/sdk) - `npm install @x402pay/sdk`
@@ -60,18 +61,20 @@ x402Pay implements the long-awaited HTTP 402 Payment Required status code with B
 - **Protected Content**: APIs that return 402 until payment is verified
 
 ### 🎯 Interactive Demo Experience
-- **Step-by-Step Flow**: Visual 5-step payment process
+- **Standard Demo**: Step-by-step HTTP 402 payment flow
+- **Recursive Demo**: Infinite payment chain where each payment unlocks another paywall
 - **Real-Time Stats**: Transaction tracking and revenue dashboard
 - **Professional UI**: Loading states, error handling, user feedback
-- **Educational**: Learn about HTTP 402 and micropayments
+- **Educational**: Learn about HTTP 402 and recursive micropayments
 ### 🚀 Quick Start
 
 #### Experience HTTP 402 in Action
-1. **Visit Demo**: [x402pay-app.vercel.app/x402-demo](https://x402pay-app.vercel.app/x402-demo)
-2. **Request Protected Content**: See HTTP 402 Payment Required
-3. **Simulate Payment**: Submit transaction hash for verification
-4. **Access Content**: Receive JWT token and unlock protected resources
-5. **View Stats**: Real-time transaction tracking and revenue
+1. **Standard Demo**: [x402pay-app.vercel.app/x402-demo](https://x402pay-app.vercel.app/x402-demo) - Basic payment flow
+2. **Recursive Demo**: [x402pay-app.vercel.app/recursive-demo](https://x402pay-app.vercel.app/recursive-demo) - Infinite payment chain
+3. **Request Protected Content**: See HTTP 402 Payment Required
+4. **Simulate Payment**: Submit transaction hash for verification
+5. **Access Content**: Receive JWT token and unlock protected resources
+6. **View Stats**: Real-time transaction tracking and revenue
 
 #### API Usage Example
 ```javascript

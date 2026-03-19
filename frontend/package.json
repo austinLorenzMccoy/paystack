@@ -46,8 +46,6 @@
     "@stacks/connect": "^8.2.5",
     "@stacks/network": "^6.11.0",
     "@stacks/transactions": "^7.0.0",
-    "@supabase/ssr": "^0.8.0",
-    "@supabase/supabase-js": "^2.95.3",
     "autoprefixer": "^10.4.20",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
