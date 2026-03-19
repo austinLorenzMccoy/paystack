@@ -1,18 +1,14 @@
-import { createBrowserClient } from '@supabase/ssr'
+import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
-let _client: ReturnType<typeof createBrowserClient> | null = null
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-export function createClient() {
-  if (!supabaseUrl || !supabaseAnonKey) {
-    return null
-  }
-  if (!_client) {
-    _client = createBrowserClient(supabaseUrl, supabaseAnonKey)
-  }
-  return _client
+// For server-side (API routes)
+export function createServerClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+  
+  return createClient(supabaseUrl, supabaseServiceKey)
 }
-
-export const supabase = createClient()
