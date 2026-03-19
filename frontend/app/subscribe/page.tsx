@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { CheckCircle2, Sparkles, Zap, Loader2, ArrowLeft } from "lucide-react";
+import { request, AddressPurpose } from 'sats-connect';
 
 import { Button } from "@/components/ui/button";
 import { MagicLinkModal } from "@/components/magic-link-modal";
@@ -14,8 +15,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useWallet } from "@/contexts/wallet-context";
-import { useAuth } from "@/contexts/auth-context";
 
 interface SubscriptionState {
   id?: string;
@@ -73,14 +72,118 @@ const autopayTimeline = [
 ];
 
 export default function SubscribePage() {
-  const { shortAddress, connectWallet, isConnecting } = useWallet();
-  const { user, loading: authLoading } = useAuth();
+  // Wallet state
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [walletError, setWalletError] = useState<string | null>(null);
+  
+  // Auth state
+  const [user, setUser] = useState<any>(null);
+  const [authLoading, setAuthLoading] = useState(true);
+  
+  // Subscription state
   const [loading, setLoading] = useState(true);
   const [subscription, setSubscription] = useState<SubscriptionState | null>(null);
   const [error, setError] = useState<string | null>(null);
+  
+  // Modal state
   const [magicLinkOpen, setMagicLinkOpen] = useState(false);
   const [enrollmentOpen, setEnrollmentOpen] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
+
+  // Computed values
+  const shortAddress = useMemo(() => {
+    if (!walletAddress) return null;
+    return `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
+  }, [walletAddress]);
+
+  // Check for existing wallet on mount
+  useEffect(() => {
+    const savedAddress = localStorage.getItem('walletAddress');
+    if (savedAddress) {
+      setWalletAddress(savedAddress);
+    }
+  }, []);
+
+  // Check auth status
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch('/api/auth/session');
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data.user);
+        }
+      } catch (err) {
+        console.error('Auth check failed:', err);
+      } finally {
+        setAuthLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  // Wallet connection function
+  const connectWallet = async () => {
+    setIsConnecting(true);
+    setWalletError(null);
+
+    try {
+      const response: any = await request('wallet_connect', {
+        message: 'Connect to x402Pay for subscription management'
+      } as any);
+
+      console.log('Wallet response:', response);
+
+      // Handle error response
+      if (response?.status === 'error') {
+        const errorMsg = response?.error?.message || 'Unknown error';
+        const errorCode = response?.error?.code;
+        
+        const error: any = new Error(errorMsg);
+        error.code = errorCode;
+        throw error;
+      }
+
+      // Handle success response
+      if (response?.status === 'success' && response?.result?.addresses) {
+        const addresses = response.result.addresses;
+        
+        // Find Stacks address
+        const stacksAddress = addresses.find((addr: any) => 
+          addr.purpose === AddressPurpose.Stacks || 
+          addr.addressType === 'stacks'
+        );
+
+        if (stacksAddress?.address) {
+          setWalletAddress(stacksAddress.address);
+          localStorage.setItem('walletAddress', stacksAddress.address);
+          return;
+        }
+      }
+
+      throw new Error('No Stacks addresses found in wallet');
+    } catch (err: any) {
+      console.error('Connection error:', err);
+      
+      // Handle specific errors
+      if (err.code === -32002) {
+        setWalletError('Connection cancelled. Please approve the request in your wallet.');
+      } else if (err.message?.includes('not installed')) {
+        setWalletError('Please install Xverse or Leather wallet extension.');
+      } else {
+        setWalletError(err.message || 'Failed to connect wallet');
+      }
+    } finally {
+      setIsConnecting(false);
+    }
+  };
+
+  const disconnectWallet = () => {
+    setWalletAddress(null);
+    localStorage.removeItem('walletAddress');
+  };
 
   const fetchSubscription = async () => {
     try {
@@ -97,15 +200,17 @@ export default function SubscribePage() {
   };
 
   useEffect(() => {
-    fetchSubscription();
-  }, [user]);
+    if (user || walletAddress) {
+      fetchSubscription();
+    }
+  }, [user, walletAddress]);
 
   const handleStartSubscription = () => {
     if (!user) {
       setMagicLinkOpen(true);
       return;
     }
-    if (!shortAddress) {
+    if (!walletAddress) {
       connectWallet();
       return;
     }
@@ -113,14 +218,14 @@ export default function SubscribePage() {
   };
 
   const handleTopUp = async () => {
-    if (!subscription?.id || !shortAddress) return;
+    if (!subscription?.id || !walletAddress) return;
     setActionLoading(true);
     try {
       const { topUpSubscription, waitForTransaction } = await import("@/lib/subscription-contract");
       const amount = parseFloat(prompt("Enter top-up amount (STX):", "5") || "0");
       if (amount <= 0) return;
 
-      const { txId } = await topUpSubscription(amount * 1_000_000, shortAddress);
+      const { txId } = await topUpSubscription(amount * 1_000_000, walletAddress);
       await waitForTransaction(txId);
 
       const response = await fetch("/api/subscription", {
@@ -147,13 +252,13 @@ export default function SubscribePage() {
   };
 
   const handleCancel = async () => {
-    if (!subscription?.id || !shortAddress) return;
+    if (!subscription?.id || !walletAddress) return;
     if (!confirm("Are you sure you want to cancel your subscription? Remaining balance will be refunded.")) return;
     
     setActionLoading(true);
     try {
       const { cancelSubscription, waitForTransaction } = await import("@/lib/subscription-contract");
-      const { txId } = await cancelSubscription(shortAddress);
+      const { txId } = await cancelSubscription(walletAddress);
       await waitForTransaction(txId);
 
       const response = await fetch("/api/subscription", {
@@ -179,12 +284,12 @@ export default function SubscribePage() {
   };
 
   const handleToggleAutoStack = async () => {
-    if (!subscription?.id || !shortAddress) return;
+    if (!subscription?.id || !walletAddress) return;
     setActionLoading(true);
     try {
       const { toggleAutoStack, waitForTransaction } = await import("@/lib/subscription-contract");
       const newState = !subscription.autoStack;
-      const { txId } = await toggleAutoStack(newState, shortAddress);
+      const { txId } = await toggleAutoStack(newState, walletAddress);
       await waitForTransaction(txId);
 
       const response = await fetch("/api/subscription", {
@@ -224,24 +329,27 @@ export default function SubscribePage() {
       );
     }
     return (
-      <Badge className="bg-yellow-500/10 text-yellow-300 border-yellow-500/20">
-        Not Subscribed
+      <Badge className="bg-gray-500/10 text-gray-400 border-gray-500/20">
+        Inactive
       </Badge>
     );
   }, [subscription]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <section className="border-b border-border bg-gradient-to-br from-[#0B0B0C] via-[#0F1115] to-[#1B1E24] px-6 py-20">
-        <div className="mx-auto max-w-5xl">
-          <div className="mb-8">
-            <Button 
-              variant="ghost" 
-              className="mb-6 text-gray-400 hover:text-white hover:bg-white/10"
-              onClick={() => window.location.href = '/'}
+    <div className="min-h-screen bg-[#0A0A0A] text-white">
+      <section className="relative overflow-hidden border-b border-white/10 bg-gradient-to-b from-[#0A0A0A] via-[#101217] to-[#0A0A0A]">
+        <div className="container mx-auto flex flex-col items-center gap-8 px-6 py-20 text-center">
+          <div className="flex items-center gap-3">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-muted-foreground hover:text-white"
+              asChild
             >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Home
+              <a href="/">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Home
+              </a>
             </Button>
           </div>
           <div className="text-center">
@@ -406,6 +514,13 @@ export default function SubscribePage() {
                 <p>
                   Wallet: {shortAddress ?? "Connect wallet"} • Auth: {authLoading ? "Checking" : user ? "Magic link" : "Guest"}
                 </p>
+                
+                {walletError && (
+                  <div className="text-red-400 text-xs mt-2">
+                    {walletError}
+                  </div>
+                )}
+                
                 {!user ? (
                   <Button
                     variant="outline"
@@ -414,7 +529,7 @@ export default function SubscribePage() {
                   >
                     Sign In with Magic Link
                   </Button>
-                ) : !shortAddress ? (
+                ) : !walletAddress ? (
                   <Button
                     variant="outline"
                     className="w-full border-white/30 text-white"
@@ -423,28 +538,43 @@ export default function SubscribePage() {
                   >
                     {isConnecting ? "Connecting..." : "Connect Wallet"}
                   </Button>
-                ) : subscription?.status === "active" ? (
-                  <div className="flex gap-2">
+                ) : (
+                  <>
+                    <div className="text-xs text-green-400 mb-2">
+                      ✓ Wallet Connected: {shortAddress}
+                    </div>
+                    {subscription?.status === "active" ? (
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 border-white/30 text-white"
+                          onClick={handleTopUp}
+                          disabled={actionLoading}
+                        >
+                          Top Up
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 border-red-500/30 text-red-400"
+                          onClick={handleCancel}
+                          disabled={actionLoading}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    ) : null}
                     <Button
-                      variant="outline"
+                      variant="ghost"
                       size="sm"
-                      className="flex-1 border-white/30 text-white"
-                      onClick={handleTopUp}
-                      disabled={actionLoading}
+                      className="w-full text-xs text-muted-foreground hover:text-white"
+                      onClick={disconnectWallet}
                     >
-                      Top Up
+                      Disconnect Wallet
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex-1 border-red-500/30 text-red-400"
-                      onClick={handleCancel}
-                      disabled={actionLoading}
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                ) : null}
+                  </>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -457,12 +587,12 @@ export default function SubscribePage() {
         onSuccess={handleMagicLinkSuccess}
       />
 
-      {shortAddress && (
+      {walletAddress && (
         <SubscriptionEnrollmentDialog
           open={enrollmentOpen}
           onOpenChange={setEnrollmentOpen}
           onSuccess={fetchSubscription}
-          userAddress={shortAddress}
+          userAddress={walletAddress}
         />
       )}
     </div>
