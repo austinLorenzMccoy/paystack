@@ -1,10 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Loader2, Lock, Unlock, Layers, ArrowRight, RotateCcw } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Loader2, Lock, Unlock, Layers, ArrowRight, RotateCcw, Zap, TrendingUp } from "lucide-react";
 
 export default function RecursiveX402Demo() {
   const [sessionId] = useState(() => Math.random().toString(36).slice(2));
@@ -12,18 +9,36 @@ export default function RecursiveX402Demo() {
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState<any[]>([]);
   const [totalSpent, setTotalSpent] = useState(0);
+  const [stats, setStats] = useState({
+    totalTransactions: 0,
+    totalRevenue: 0,
+    usedHashesCount: 0,
+  });
 
-  // Load initial layer on mount
+  // Fetch stats on mount
   useEffect(() => {
+    fetchStats();
     loadLayer();
   }, []);
+
+  const fetchStats = async () => {
+    try {
+      const res = await fetch('/api/stats');
+      if (res.ok) {
+        const data = await res.json();
+        setStats(data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch stats:', err);
+    }
+  };
 
   const loadLayer = async (token?: string) => {
     setLoading(true);
     
     try {
       const url = token 
-        ? `/api/recursive?token=${token}&session=${sessionId}`
+        ? `/api/recursive?token=${token}&session=${sessionId}` 
         : `/api/recursive?session=${sessionId}`;
         
       const res = await fetch(url);
@@ -33,7 +48,6 @@ export default function RecursiveX402Demo() {
         setCurrentLayer(data);
         setTotalSpent(data.totalSpent || 0);
         
-        // Add to history
         setHistory(prev => [...prev, {
           depth: data.depth,
           title: data.title,
@@ -54,13 +68,13 @@ export default function RecursiveX402Demo() {
     setLoading(true);
     
     try {
-      // Simulate payment
+      // Generate fake transaction hash
       const fakeHash = Array.from({ length: 64 }, () => 
         Math.floor(Math.random() * 16).toString(16)
       ).join('');
       
       // Verify payment and get token
-      const verifyRes = await fetch('/api/x402/verify', {
+      const res = await fetch('/api/x402/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -70,11 +84,11 @@ export default function RecursiveX402Demo() {
         }),
       });
       
-      const verifyData = await verifyRes.json();
+      const data = await res.json();
       
-      if (verifyData.accessToken) {
-        // Load next layer with token
-        await loadLayer(verifyData.accessToken);
+      if (data.accessToken) {
+        await loadLayer(data.accessToken);
+        await fetchStats();
       }
     } catch (err) {
       console.error('Payment failed:', err);
@@ -97,129 +111,172 @@ export default function RecursiveX402Demo() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-white p-6">
-      <div className="max-w-5xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="text-center space-y-4">
-          <Badge className="border border-purple-500/40 bg-transparent text-xs uppercase tracking-[0.3em] text-purple-400">
-            Recursive x402 Payments
-          </Badge>
-          <h1 className="text-4xl font-bold">
-            The <span className="text-purple-500">Infinite</span> Payment Chain
+    <div className="min-h-screen bg-black text-white font-['IBM_Plex_Sans']">
+      {/* Header */}
+      <header className="sticky top-0 bg-black/90 backdrop-blur-md border-b-2 border-[#4A4A4A] z-50">
+        <div className="max-w-7xl mx-auto px-8 py-6 flex justify-between items-center">
+          <div className="font-['JetBrains_Mono'] text-2xl font-extrabold text-[#F7931A] uppercase tracking-[0.1em]">
+            X402PAY
+          </div>
+          <nav className="flex gap-8">
+            <a href="/" className="font-['JetBrains_Mono'] text-sm uppercase text-white hover:text-[#F7931A] transition-colors relative group">
+              HOME
+              <span className="absolute bottom-[-4px] left-0 w-0 h-[2px] bg-[#F7931A] group-hover:w-full transition-all duration-200"></span>
+            </a>
+            <a href="/dashboard" className="font-['JetBrains_Mono'] text-sm uppercase text-white hover:text-[#F7931A] transition-colors relative group">
+              DASHBOARD
+              <span className="absolute bottom-[-4px] left-0 w-0 h-[2px] bg-[#F7931A] group-hover:w-full transition-all duration-200"></span>
+            </a>
+            <a href="#" className="font-['JetBrains_Mono'] text-sm uppercase text-[#F7931A] relative">
+              RECURSIVE
+              <span className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-[#F7931A]"></span>
+            </a>
+          </nav>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-8 py-12">
+        {/* Hero Section */}
+        <div className="mb-16 text-center">
+          <div className="inline-block mb-6 px-4 py-2 border-2 border-[#5546FF] bg-transparent">
+            <span className="font-['JetBrains_Mono'] text-xs uppercase tracking-[0.3em] text-[#5546FF]">
+              RECURSIVE PAYMENTS
+            </span>
+          </div>
+          <h1 className="font-['JetBrains_Mono'] text-6xl font-extrabold uppercase mb-6 leading-tight">
+            THE <span className="text-[#F7931A]">INFINITE</span><br />
+            PAYMENT CHAIN
           </h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Each payment unlocks content that contains another paywall. Watch payments chain together autonomously.
+          <p className="text-xl text-[#E0E0E0] max-w-2xl mx-auto">
+            Each payment unlocks content that generates a new paywall.<br />
+            Watch payments chain themselves autonomously.
           </p>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-4">
-          <Card className="bg-[#1A1A1A] border-purple-500/20">
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <Layers className="h-8 w-8 text-purple-500 mx-auto mb-2" />
-                <div className="text-2xl font-bold">{currentLayer?.depth ?? 0}</div>
-                <div className="text-sm text-muted-foreground">Current Depth</div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="bg-[#1A1A1A] border-orange-500/20">
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-orange-500">{totalSpent.toFixed(1)} STX</div>
-                <div className="text-sm text-muted-foreground">Total Spent</div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="bg-[#1A1A1A] border-blue-500/20">
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-blue-500">{history.length}</div>
-                <div className="text-sm text-muted-foreground">Layers Unlocked</div>
-              </div>
-            </CardContent>
-          </Card>
+        {/* Stats Grid */}
+        <div className="grid grid-cols-3 gap-6 mb-12">
+          <div className="bg-[#1A1A1A] border-2 border-[#2D2D2D] p-8 transition-all duration-200 hover:border-[#F7931A] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[4px_4px_0_#F7931A]">
+            <div className="flex items-center gap-4 mb-4">
+              <Layers className="w-8 h-8 text-[#5546FF]" />
+              <span className="font-['JetBrains_Mono'] text-sm uppercase text-[#E0E0E0]">Depth</span>
+            </div>
+            <div className="font-['JetBrains_Mono'] text-4xl font-bold text-white">
+              {currentLayer?.depth ?? 0}
+            </div>
+            <div className="font-['JetBrains_Mono'] text-xs text-[#4A4A4A] mt-2">CURRENT LAYER</div>
+          </div>
+
+          <div className="bg-[#1A1A1A] border-2 border-[#2D2D2D] p-8 transition-all duration-200 hover:border-[#F7931A] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[4px_4px_0_#F7931A]">
+            <div className="flex items-center gap-4 mb-4">
+              <Zap className="w-8 h-8 text-[#F7931A]" />
+              <span className="font-['JetBrains_Mono'] text-sm uppercase text-[#E0E0E0]">Spent</span>
+            </div>
+            <div className="font-['JetBrains_Mono'] text-4xl font-bold text-[#F7931A]">
+              {totalSpent.toFixed(1)} STX
+            </div>
+            <div className="font-['JetBrains_Mono'] text-xs text-[#4A4A4A] mt-2">TOTAL INVESTED</div>
+          </div>
+
+          <div className="bg-[#1A1A1A] border-2 border-[#2D2D2D] p-8 transition-all duration-200 hover:border-[#F7931A] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[4px_4px_0_#F7931A]">
+            <div className="flex items-center gap-4 mb-4">
+              <TrendingUp className="w-8 h-8 text-[#00FF41]" />
+              <span className="font-['JetBrains_Mono'] text-sm uppercase text-[#E0E0E0]">Unlocked</span>
+            </div>
+            <div className="font-['JetBrains_Mono'] text-4xl font-bold text-white">
+              {history.length}
+            </div>
+            <div className="font-['JetBrains_Mono'] text-xs text-[#4A4A4A] mt-2">LAYERS ACCESSED</div>
+          </div>
         </div>
 
-        <div className="grid lg:grid-cols-[2fr,1fr] gap-6">
-          {/* Current Layer */}
-          <Card className="bg-[#1A1A1A] border-purple-500/20">
-            <CardHeader>
+        {/* Main Content Grid */}
+        <div className="grid lg:grid-cols-[2fr,1fr] gap-8">
+          {/* Current Layer Card */}
+          <div className="bg-[#1A1A1A] border-2 border-[#2D2D2D]">
+            <div className="p-8 border-b-2 border-[#2D2D2D]">
               <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2">
+                <div className="flex items-center gap-4">
                   {currentLayer?.depth === 0 ? (
-                    <Unlock className="h-5 w-5 text-green-500" />
+                    <Unlock className="w-6 h-6 text-[#00FF41]" />
                   ) : (
-                    <Unlock className="h-5 w-5 text-purple-500" />
+                    <Unlock className="w-6 h-6 text-[#5546FF]" />
                   )}
-                  {loading ? "Loading..." : currentLayer?.title || "Initializing..."}
-                </CardTitle>
-                <Badge variant="outline" className="border-purple-500/30">
-                  Layer {currentLayer?.depth ?? 0}
-                </Badge>
+                  <h2 className="font-['JetBrains_Mono'] text-2xl font-bold uppercase">
+                    {loading ? "LOADING..." : currentLayer?.title || "INITIALIZING..."}
+                  </h2>
+                </div>
+                <div className="px-4 py-2 border-2 border-[#5546FF] bg-transparent">
+                  <span className="font-['JetBrains_Mono'] text-xs uppercase text-[#5546FF]">
+                    LAYER {currentLayer?.depth ?? 0}
+                  </span>
+                </div>
               </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
+            </div>
+
+            <div className="p-8 space-y-6">
               {loading ? (
-                <div className="flex items-center justify-center py-12">
-                  <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
+                <div className="flex items-center justify-center py-24">
+                  <Loader2 className="w-12 h-12 animate-spin text-[#5546FF]" />
                 </div>
               ) : currentLayer ? (
                 <>
-                  <div className="bg-[#0A0A0A] rounded-lg p-6 border border-purple-500/10">
-                    <p className="text-muted-foreground leading-relaxed">
+                  {/* Content */}
+                  <div className="bg-black border-2 border-[#2D2D2D] p-8">
+                    <p className="text-[#E0E0E0] leading-relaxed text-lg">
                       {currentLayer.content}
                     </p>
                   </div>
 
+                  {/* Next Layer Payment */}
                   {currentLayer.nextLayer ? (
-                    <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-6 space-y-4">
-                      <div className="flex items-start gap-3">
-                        <Lock className="h-6 w-6 text-purple-500 flex-shrink-0 mt-1" />
+                    <div className="bg-[#5546FF]/10 border-2 border-[#5546FF]/30 p-8">
+                      <div className="flex items-start gap-6">
+                        <Lock className="w-12 h-12 text-[#5546FF] flex-shrink-0 mt-2" />
                         <div className="flex-1">
-                          <h3 className="font-semibold mb-2 text-purple-300">
-                            Next Layer Locked
+                          <h3 className="font-['JetBrains_Mono'] text-xl font-bold uppercase mb-4 text-[#5546FF]">
+                            NEXT LAYER LOCKED
                           </h3>
-                          <p className="text-sm text-muted-foreground mb-4">
+                          <p className="text-[#E0E0E0] mb-6 leading-relaxed">
                             {currentLayer.nextLayer.prompt}
                           </p>
                           <div className="flex items-center justify-between">
                             <div>
-                              <div className="text-2xl font-bold text-purple-400">
+                              <div className="font-['JetBrains_Mono'] text-4xl font-bold text-[#5546FF]">
                                 {currentLayer.nextLayer.price} STX
                               </div>
-                              <div className="text-xs text-muted-foreground">
-                                Payment required to unlock
+                              <div className="font-['JetBrains_Mono'] text-xs text-[#4A4A4A] mt-1 uppercase">
+                                Payment Required
                               </div>
                             </div>
-                            <Button
+                            <button
                               onClick={payForNextLayer}
                               disabled={loading}
-                              className="bg-purple-500 text-white hover:bg-purple-400"
+                              className="bg-[#5546FF] text-white px-8 py-4 font-['JetBrains_Mono'] text-sm uppercase font-bold border-2 border-[#5546FF] transition-all duration-200 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[4px_4px_0_#F7931A] disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               {loading ? (
-                                <>
-                                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                  Processing...
-                                </>
+                                <span className="flex items-center gap-3">
+                                  <Loader2 className="w-4 h-4 animate-spin" />
+                                  PROCESSING...
+                                </span>
                               ) : (
-                                <>
-                                  Pay & Unlock
-                                  <ArrowRight className="ml-2 h-4 w-4" />
-                                </>
+                                <span className="flex items-center gap-3">
+                                  PAY & UNLOCK
+                                  <ArrowRight className="w-4 h-4" />
+                                </span>
                               )}
-                            </Button>
+                            </button>
                           </div>
                         </div>
                       </div>
                     </div>
                   ) : currentLayer.message ? (
-                    <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-6 text-center">
-                      <Unlock className="h-12 w-12 text-green-500 mx-auto mb-4" />
-                      <h3 className="text-xl font-bold mb-2 text-green-400">
-                        Journey Complete!
+                    <div className="bg-[#00FF41]/10 border-2 border-[#00FF41]/30 p-8 text-center">
+                      <Unlock className="w-16 h-16 text-[#00FF41] mx-auto mb-6" />
+                      <h3 className="font-['JetBrains_Mono'] text-2xl font-bold uppercase mb-4 text-[#00FF41]">
+                        JOURNEY COMPLETE
                       </h3>
-                      <p className="text-muted-foreground">
+                      <p className="text-[#E0E0E0] text-lg">
                         {currentLayer.message}
                       </p>
                     </div>
@@ -227,95 +284,111 @@ export default function RecursiveX402Demo() {
                 </>
               ) : null}
 
-              <Button
+              <button
                 onClick={reset}
-                variant="outline"
-                className="w-full border-white/20 text-white"
+                className="w-full bg-transparent text-white px-6 py-4 font-['JetBrains_Mono'] text-sm uppercase font-bold border-2 border-[#4A4A4A] transition-all duration-200 hover:border-[#F7931A] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[4px_4px_0_#F7931A]"
               >
-                <RotateCcw className="mr-2 h-4 w-4" />
-                Start Over
-              </Button>
-            </CardContent>
-          </Card>
+                <span className="flex items-center justify-center gap-3">
+                  <RotateCcw className="w-4 h-4" />
+                  START OVER
+                </span>
+              </button>
+            </div>
+          </div>
 
           {/* History Sidebar */}
-          <Card className="bg-[#1A1A1A] border-white/10">
-            <CardHeader>
-              <CardTitle className="text-lg">Payment History</CardTitle>
-              <CardDescription>Your recursive journey</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {history.length === 0 ? (
-                  <p className="text-sm text-muted-foreground text-center py-8">
-                    No payments yet
-                  </p>
-                ) : (
-                  history.map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="bg-[#0A0A0A] rounded-lg p-3 border border-white/5"
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-semibold">
-                          Layer {item.depth}
+          <div className="bg-[#1A1A1A] border-2 border-[#2D2D2D]">
+            <div className="p-6 border-b-2 border-[#2D2D2D]">
+              <h3 className="font-['JetBrains_Mono'] text-lg uppercase font-bold">
+                PAYMENT HISTORY
+              </h3>
+              <p className="text-sm text-[#4A4A4A] mt-1">Your recursive journey</p>
+            </div>
+            <div className="p-6 space-y-4">
+              {history.length === 0 ? (
+                <p className="text-sm text-[#4A4A4A] text-center py-12 font-['JetBrains_Mono']">
+                  NO PAYMENTS YET
+                </p>
+              ) : (
+                history.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-black border-2 border-[#2D2D2D] p-4 transition-all duration-200 hover:border-[#5546FF]"
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="font-['JetBrains_Mono'] text-sm font-bold uppercase">
+                        LAYER {item.depth}
+                      </span>
+                      {item.spent > 0 && (
+                        <span className="px-2 py-1 border border-[#F7931A]/30 font-['JetBrains_Mono'] text-xs text-[#F7931A]">
+                          {item.spent} STX
                         </span>
-                        {item.spent > 0 && (
-                          <Badge variant="outline" className="text-xs border-orange-500/30 text-orange-400">
-                            {item.spent} STX
-                          </Badge>
-                        )}
-                      </div>
-                      <p className="text-xs text-muted-foreground line-clamp-2">
-                        {item.title}
-                      </p>
+                      )}
                     </div>
-                  ))
-                )}
-              </div>
-            </CardContent>
-          </Card>
+                    <p className="text-xs text-[#E0E0E0] line-clamp-2">
+                      {item.title}
+                    </p>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
         </div>
 
-        {/* Explanation */}
-        <Card className="bg-[#1A1A1A] border-white/10">
-          <CardHeader>
-            <CardTitle>How Recursive Payments Work</CardTitle>
-            <CardDescription>The innovation behind the infinite chain</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <div className="bg-purple-500/10 text-purple-400 rounded-full w-10 h-10 flex items-center justify-center font-bold mb-2">
-                  1
-                </div>
-                <h3 className="font-semibold">Pay for Content</h3>
-                <p className="text-sm text-muted-foreground">
-                  Submit payment to unlock current layer via x402 protocol
-                </p>
+        {/* Flow Explanation */}
+        <div className="mt-16 bg-[#1A1A1A] border-2 border-[#2D2D2D]">
+          <div className="p-8 border-b-2 border-[#2D2D2D]">
+            <h2 className="font-['JetBrains_Mono'] text-2xl font-bold uppercase">
+              HOW RECURSIVE PAYMENTS WORK
+            </h2>
+            <p className="text-[#4A4A4A] mt-2">The innovation behind the infinite chain</p>
+          </div>
+          <div className="p-8 grid md:grid-cols-3 gap-8">
+            <div>
+              <div className="w-12 h-12 bg-[#5546FF]/10 border-2 border-[#5546FF] flex items-center justify-center font-['JetBrains_Mono'] text-xl font-bold text-[#5546FF] mb-4">
+                1
               </div>
-              <div className="space-y-2">
-                <div className="bg-purple-500/10 text-purple-400 rounded-full w-10 h-10 flex items-center justify-center font-bold mb-2">
-                  2
-                </div>
-                <h3 className="font-semibold">Reveal New Paywall</h3>
-                <p className="text-sm text-muted-foreground">
-                  Content includes another HTTP 402 endpoint requiring new payment
-                </p>
-              </div>
-              <div className="space-y-2">
-                <div className="bg-purple-500/10 text-purple-400 rounded-full w-10 h-10 flex items-center justify-center font-bold mb-2">
-                  3
-                </div>
-                <h3 className="font-semibold">Chain Continues</h3>
-                <p className="text-sm text-muted-foreground">
-                  Process repeats infinitely - payments generate new paywalls
-                </p>
-              </div>
+              <h3 className="font-['JetBrains_Mono'] text-lg font-bold uppercase mb-3">PAY FOR CONTENT</h3>
+              <p className="text-sm text-[#E0E0E0] leading-relaxed">
+                Submit payment to unlock current layer via x402 protocol
+              </p>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+            <div>
+              <div className="w-12 h-12 bg-[#5546FF]/10 border-2 border-[#5546FF] flex items-center justify-center font-['JetBrains_Mono'] text-xl font-bold text-[#5546FF] mb-4">
+                2
+              </div>
+              <h3 className="font-['JetBrains_Mono'] text-lg font-bold uppercase mb-3">REVEAL NEW PAYWALL</h3>
+              <p className="text-sm text-[#E0E0E0] leading-relaxed">
+                Content includes another HTTP 402 endpoint requiring new payment
+              </p>
+            </div>
+            <div>
+              <div className="w-12 h-12 bg-[#5546FF]/10 border-2 border-[#5546FF] flex items-center justify-center font-['JetBrains_Mono'] text-xl font-bold text-[#5546FF] mb-4">
+                3
+              </div>
+              <h3 className="font-['JetBrains_Mono'] text-lg font-bold uppercase mb-3">CHAIN CONTINUES</h3>
+              <p className="text-sm text-[#E0E0E0] leading-relaxed">
+                Process repeats infinitely - payments generate new paywalls
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t-2 border-[#2D2D2D] mt-24">
+        <div className="max-w-7xl mx-auto px-8 py-12">
+          <div className="flex justify-between items-center">
+            <div className="font-['JetBrains_Mono'] text-sm text-[#4A4A4A]">
+              2026 X402PAY. BUILT ON STACKS. SECURED BY BITCOIN.
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#00FF41] rounded-full animate-pulse"></span>
+              <span className="font-['JetBrains_Mono'] text-sm text-[#00FF41]">TESTNET</span>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
