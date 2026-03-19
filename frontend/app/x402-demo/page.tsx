@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Loader2, CheckCircle2, Lock, Unlock, Zap, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,9 +21,9 @@ export default function X402DemoPage() {
   });
 
   // Fetch stats on mount
-  useState(() => {
+  useEffect(() => {
     fetchStats();
-  });
+  }, []);
 
   const fetchStats = async () => {
     try {
