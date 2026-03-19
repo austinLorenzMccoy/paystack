@@ -33,24 +33,33 @@ export function MagicLinkModal({
 
   const handleSendMagicLink = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !supabase) return;
+    if (!email) return;
 
     setLoading(true);
     setError(null);
 
     try {
-      const { error: signInError } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/subscribe`,
+      const response = await fetch("/api/auth/magic-link", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          email,
+          redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?redirect=/subscribe`,
+        }),
       });
 
-      if (signInError) throw signInError;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to send magic link");
+      }
 
       setStep("verify");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to send magic link");
+    } catch (error) {
+      console.error("Magic link error:", error);
+      setError(error instanceof Error ? error.message : "Failed to send magic link");
     } finally {
       setLoading(false);
     }
