@@ -62,18 +62,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-
-export async function DELETE(request: NextRequest) {
-  try {
-    const cookieStore = await cookies();
-    cookieStore.delete("x402pay_session");
-    
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error("Auth logout error:", error);
-    return NextResponse.json(
-      { error: "Failed to logout" },
-      { status: 500 }
-    );
-  }
-}

@@ -109,19 +109,35 @@ export default function SubscribePage() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch('/api/auth/session');
-        if (res.ok) {
-          const data = await res.json();
+        console.log('🔍 Checking authentication...');
+        
+        const res = await fetch('/api/auth/session', {
+          credentials: 'include', // Important: include cookies
+        });
+        
+        const data = await res.json();
+        console.log('📧 Auth response:', data);
+        
+        if (data.authenticated && data.user) {
           setUser(data.user);
+          console.log('✅ User authenticated:', data.user.email);
+        } else {
+          setUser(null);
+          console.log('❌ Not authenticated');
         }
       } catch (err) {
         console.error('Auth check failed:', err);
+        setUser(null);
       } finally {
         setAuthLoading(false);
       }
     };
 
     checkAuth();
+    
+    // Re-check auth every 30 seconds
+    const interval = setInterval(checkAuth, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   // Wallet connection function
@@ -187,9 +203,13 @@ export default function SubscribePage() {
 
   const fetchSubscription = async () => {
     try {
+      console.log('🔄 Fetching subscription...');
       setLoading(true);
-      const res = await fetch("/api/subscription");
+      const res = await fetch("/api/subscription", {
+        credentials: 'include',
+      });
       const json = await res.json();
+      console.log('📊 Subscription response:', json);
       setSubscription(json.subscription);
       setError(null);
     } catch (err) {
@@ -316,6 +336,18 @@ export default function SubscribePage() {
   };
 
   const handleMagicLinkSuccess = () => {
+    console.log('🎉 Magic link success - forcing auth re-check...');
+    // Force immediate re-check after magic link success
+    setTimeout(async () => {
+      const res = await fetch('/api/auth/session', {
+        credentials: 'include',
+      });
+      const data = await res.json();
+      if (data.authenticated && data.user) {
+        setUser(data.user);
+        console.log('✅ User authenticated after magic link:', data.user.email);
+      }
+    }, 1000);
     fetchSubscription();
   };
 
@@ -376,8 +408,12 @@ export default function SubscribePage() {
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Processing...
                 </>
+              ) : !user ? (
+                "Sign In to Subscribe"
+              ) : !walletAddress ? (
+                "Connect Wallet"
               ) : (
-                "Start Subscription"
+                `✅ Ready to subscribe: ${user.email}`
               )}
             </Button>
             <Button
@@ -510,9 +546,9 @@ export default function SubscribePage() {
                   ) : null}
                 </>
               )}
-              <div className="mt-4 space-y-2 text-xs text-muted-foreground">
+              <div className="mt-4 text-xs text-muted-foreground">
                 <p>
-                  Wallet: {shortAddress ?? "Connect wallet"} • Auth: {authLoading ? "Checking" : user ? "Magic link" : "Guest"}
+                  Wallet: {shortAddress ?? "Not connected"} • Auth: {authLoading ? "Checking" : user ? `✅ ${user.email}` : "❌ Not logged in"}
                 </p>
                 
                 {walletError && (

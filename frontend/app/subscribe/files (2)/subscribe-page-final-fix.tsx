@@ -80,6 +80,7 @@ export default function SubscribePage() {
   // Auth state
   const [user, setUser] = useState<any>(null);
   const [authLoading, setAuthLoading] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
   
   // Subscription state
   const [loading, setLoading] = useState(true);
@@ -105,24 +106,52 @@ export default function SubscribePage() {
     }
   }, []);
 
-  // Check auth status
+  // Check auth status on mount and after magic link success
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch('/api/auth/session');
-        if (res.ok) {
-          const data = await res.json();
+        setAuthLoading(true);
+        console.log('🔍 Checking authentication...');
+        
+        const res = await fetch('/api/auth/session', {
+          credentials: 'include', // Important: include cookies
+        });
+        
+        const data = await res.json();
+        console.log('📧 Auth response:', data);
+
+        if (res.ok && data.authenticated) {
           setUser(data.user);
+          setAuthenticated(true);
+          console.log('✅ User authenticated:', data.user.email);
+        } else {
+          setUser(null);
+          setAuthenticated(false);
+          console.log('❌ Not authenticated');
         }
       } catch (err) {
-        console.error('Auth check failed:', err);
+        console.error('❌ Auth check failed:', err);
+        setUser(null);
+        setAuthenticated(false);
       } finally {
         setAuthLoading(false);
       }
     };
 
     checkAuth();
+    
+    // Re-check auth every 30 seconds (in case of new login)
+    const interval = setInterval(checkAuth, 30000);
+    
+    return () => clearInterval(interval);
   }, []);
+
+  // Fetch subscription when user or wallet changes
+  useEffect(() => {
+    if (authenticated || walletAddress) {
+      fetchSubscription();
+    }
+  }, [authenticated, walletAddress]);
 
   // Wallet connection function
   const connectWallet = async () => {
@@ -159,6 +188,7 @@ export default function SubscribePage() {
         if (stacksAddress?.address) {
           setWalletAddress(stacksAddress.address);
           localStorage.setItem('walletAddress', stacksAddress.address);
+          console.log('✅ Wallet connected:', stacksAddress.address);
           return;
         }
       }
@@ -188,32 +218,41 @@ export default function SubscribePage() {
   const fetchSubscription = async () => {
     try {
       setLoading(true);
-      const res = await fetch("/api/subscription");
+      console.log('🔄 Fetching subscription...');
+      
+      const res = await fetch("/api/subscription", {
+        credentials: 'include',
+      });
+      
       const json = await res.json();
+      console.log('📊 Subscription response:', json);
+      
       setSubscription(json.subscription);
       setError(null);
     } catch (err) {
+      console.error('❌ Fetch subscription error:', err);
       setError((err as Error).message);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    if (user || walletAddress) {
-      fetchSubscription();
-    }
-  }, [user, walletAddress]);
-
   const handleStartSubscription = () => {
-    if (!user) {
+    console.log('🚀 Starting subscription...', { authenticated, walletAddress });
+    
+    if (!authenticated) {
+      console.log('👤 User not authenticated, opening magic link modal');
       setMagicLinkOpen(true);
       return;
     }
+    
     if (!walletAddress) {
+      console.log('💼 Wallet not connected, connecting...');
       connectWallet();
       return;
     }
+    
+    console.log('✅ Opening enrollment dialog');
     setEnrollmentOpen(true);
   };
 
@@ -231,6 +270,7 @@ export default function SubscribePage() {
       const response = await fetch("/api/subscription", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: 'include',
         body: JSON.stringify({
           action: "topup",
           subscriptionId: subscription.id,
@@ -264,6 +304,7 @@ export default function SubscribePage() {
       const response = await fetch("/api/subscription", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: 'include',
         body: JSON.stringify({
           action: "cancel",
           subscriptionId: subscription.id,
@@ -295,6 +336,7 @@ export default function SubscribePage() {
       const response = await fetch("/api/subscription", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: 'include',
         body: JSON.stringify({
           action: "toggle-autostack",
           subscriptionId: subscription.id,
@@ -316,7 +358,23 @@ export default function SubscribePage() {
   };
 
   const handleMagicLinkSuccess = () => {
-    fetchSubscription();
+    console.log('🎉 Magic link success! Re-checking auth...');
+    // Force re-check auth immediately
+    setTimeout(async () => {
+      const res = await fetch('/api/auth/session', {
+        credentials: 'include',
+      });
+      const data = await res.json();
+      
+      if (data.authenticated) {
+        setUser(data.user);
+        setAuthenticated(true);
+        console.log('✅ Auth updated:', data.user.email);
+        
+        // Fetch subscription
+        fetchSubscription();
+      }
+    }, 1000);
   };
 
   const statusChip = useMemo(() => {
@@ -352,6 +410,16 @@ export default function SubscribePage() {
               </a>
             </Button>
           </div>
+          
+          {/* Debug info - remove in production */}
+          {process.env.NODE_ENV === 'development' && (
+            <div className="bg-blue-500/10 border border-blue-500/30 rounded px-4 py-2 text-xs text-blue-300">
+              Auth: {authLoading ? 'Loading...' : authenticated ? '✅ Logged in' : '❌ Not logged in'} | 
+              User: {user?.email || 'None'} | 
+              Wallet: {shortAddress || 'Not connected'}
+            </div>
+          )}
+          
           <div className="text-center">
             <Badge className="mb-4 border border-orange-500/40 bg-transparent text-xs uppercase tracking-[0.3em] text-orange-400">
               Autopay + PoX Rewards
@@ -376,8 +444,12 @@ export default function SubscribePage() {
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Processing...
                 </>
-              ) : (
+              ) : authenticated && walletAddress ? (
                 "Start Subscription"
+              ) : authenticated ? (
+                "Connect Wallet"
+              ) : (
+                "Sign In to Subscribe"
               )}
             </Button>
             <Button
@@ -512,7 +584,7 @@ export default function SubscribePage() {
               )}
               <div className="mt-4 space-y-2 text-xs text-muted-foreground">
                 <p>
-                  Wallet: {shortAddress ?? "Connect wallet"} • Auth: {authLoading ? "Checking" : user ? "Magic link" : "Guest"}
+                  Wallet: {shortAddress ?? "Not connected"} • Auth: {authLoading ? "Checking..." : authenticated ? `✅ ${user?.email}` : "❌ Not logged in"}
                 </p>
                 
                 {walletError && (
@@ -521,7 +593,7 @@ export default function SubscribePage() {
                   </div>
                 )}
                 
-                {!user ? (
+                {!authenticated ? (
                   <Button
                     variant="outline"
                     className="w-full border-white/30 text-white"
@@ -541,7 +613,7 @@ export default function SubscribePage() {
                 ) : (
                   <>
                     <div className="text-xs text-green-400 mb-2">
-                      ✓ Wallet Connected: {shortAddress}
+                      ✅ Ready to subscribe: {user?.email}
                     </div>
                     {subscription?.status === "active" ? (
                       <div className="flex gap-2">
@@ -564,7 +636,15 @@ export default function SubscribePage() {
                           Cancel
                         </Button>
                       </div>
-                    ) : null}
+                    ) : (
+                      <Button
+                        className="w-full bg-orange-500 text-black hover:bg-orange-400"
+                        onClick={handleStartSubscription}
+                        disabled={actionLoading}
+                      >
+                        Start Subscription
+                      </Button>
+                    )}
                     <Button
                       variant="ghost"
                       size="sm"
@@ -587,7 +667,7 @@ export default function SubscribePage() {
         onSuccess={handleMagicLinkSuccess}
       />
 
-      {walletAddress && (
+      {walletAddress && authenticated && (
         <SubscriptionEnrollmentDialog
           open={enrollmentOpen}
           onOpenChange={setEnrollmentOpen}
