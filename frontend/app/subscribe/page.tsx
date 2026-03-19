@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { CheckCircle2, Sparkles, Zap, Loader2, ArrowLeft } from "lucide-react";
+import { CheckCircle2, Sparkles, Zap, Loader2, ArrowLeft, Wallet } from "lucide-react";
 import { request, AddressPurpose } from 'sats-connect';
 
 import { Button } from "@/components/ui/button";
-import { MagicLinkModal } from "@/components/magic-link-modal";
 import { SubscriptionEnrollmentDialog } from "@/components/subscription-enrollment-dialog";
 import {
   Card,
@@ -25,6 +24,7 @@ interface SubscriptionState {
   autoStack: boolean;
   nextChargeBlock: number | null;
   lastChargeBlock: number | null;
+  walletAddress: string;
 }
 
 const plans = [
@@ -52,95 +52,29 @@ const plans = [
   },
 ];
 
-const autopayTimeline = [
-  {
-    title: "Escrow Deposit",
-    detail: "Subscriber deposits 12 STX (covers 12 cycles)",
-  },
-  {
-    title: "Relayer Charge",
-    detail: "Relayer calls charge-subscription when interval elapsed",
-  },
-  {
-    title: "Auto-Stack",
-    detail: "1 STX routed to PoX delegate for BTC yield",
-  },
-  {
-    title: "Creator Paid",
-    detail: "Balance + stacking stats update instantly",
-  },
-];
-
 export default function SubscribePage() {
   // Wallet state
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
   const [walletError, setWalletError] = useState<string | null>(null);
   
-  // Auth state
-  const [user, setUser] = useState<any>(null);
-  const [authLoading, setAuthLoading] = useState(true);
-  
   // Subscription state
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [subscription, setSubscription] = useState<SubscriptionState | null>(null);
   const [error, setError] = useState<string | null>(null);
   
   // Modal state
-  const [magicLinkOpen, setMagicLinkOpen] = useState(false);
   const [enrollmentOpen, setEnrollmentOpen] = useState(false);
-  const [actionLoading, setActionLoading] = useState(false);
 
-  // Computed values
-  const shortAddress = useMemo(() => {
-    if (!walletAddress) return null;
-    return `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
-  }, [walletAddress]);
-
-  // Check for existing wallet on mount
+  // Check for saved wallet address on mount
   useEffect(() => {
-    const savedAddress = localStorage.getItem('walletAddress');
-    if (savedAddress) {
-      setWalletAddress(savedAddress);
+    const saved = localStorage.getItem('walletAddress');
+    if (saved) {
+      setWalletAddress(saved);
     }
   }, []);
 
-  // Check auth status
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        console.log('🔍 Checking authentication...');
-        
-        const res = await fetch('/api/auth/session', {
-          credentials: 'include', // Important: include cookies
-        });
-        
-        const data = await res.json();
-        console.log('📧 Auth response:', data);
-        
-        if (data.authenticated && data.user) {
-          setUser(data.user);
-          console.log('✅ User authenticated:', data.user.email);
-        } else {
-          setUser(null);
-          console.log('❌ Not authenticated');
-        }
-      } catch (err) {
-        console.error('Auth check failed:', err);
-        setUser(null);
-      } finally {
-        setAuthLoading(false);
-      }
-    };
-
-    checkAuth();
-    
-    // Re-check auth every 30 seconds
-    const interval = setInterval(checkAuth, 30000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Wallet connection function
+  // Connect wallet
   const connectWallet = async () => {
     setIsConnecting(true);
     setWalletError(null);
@@ -196,40 +130,74 @@ export default function SubscribePage() {
     }
   };
 
-  const disconnectWallet = () => {
-    setWalletAddress(null);
-    localStorage.removeItem('walletAddress');
-  };
-
+  // Fetch subscription data
   const fetchSubscription = async () => {
+    if (!walletAddress) return;
+
+    setLoading(true);
+    setError(null);
+
     try {
-      console.log('🔄 Fetching subscription...');
-      setLoading(true);
-      const res = await fetch("/api/subscription", {
-        credentials: 'include',
+      const response = await fetch('/api/subscription', {
+        headers: {
+          'x-wallet-address': walletAddress,
+        },
       });
-      const json = await res.json();
-      console.log('📊 Subscription response:', json);
-      setSubscription(json.subscription);
-      setError(null);
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch subscription');
+      }
+
+      const data = await response.json();
+      setSubscription(data);
     } catch (err) {
-      setError((err as Error).message);
+      console.error('Fetch error:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch subscription');
     } finally {
       setLoading(false);
     }
   };
 
+  // Fetch subscription when wallet connects
   useEffect(() => {
-    if (user || walletAddress) {
+    if (walletAddress) {
       fetchSubscription();
     }
-  }, [user, walletAddress]);
+  }, [walletAddress]);
 
-  const handleStartSubscription = () => {
-    if (!user) {
-      setMagicLinkOpen(true);
-      return;
+  // Handle subscription actions
+  const handleSubscriptionAction = async (action: string, data?: any) => {
+    if (!walletAddress) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/subscription', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-wallet-address': walletAddress,
+        },
+        body: JSON.stringify({ action, ...data }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update subscription');
+      }
+
+      const result = await response.json();
+      await fetchSubscription(); // Refresh data
+    } catch (err) {
+      console.error('Action error:', err);
+      setError(err instanceof Error ? err.message : 'Failed to update subscription');
+    } finally {
+      setLoading(false);
     }
+  };
+
+  // Handle start subscription
+  const handleStartSubscription = () => {
     if (!walletAddress) {
       connectWallet();
       return;
@@ -237,399 +205,212 @@ export default function SubscribePage() {
     setEnrollmentOpen(true);
   };
 
-  const handleTopUp = async () => {
-    if (!subscription?.id || !walletAddress) return;
-    setActionLoading(true);
-    try {
-      const { topUpSubscription, waitForTransaction } = await import("@/lib/subscription-contract");
-      const amount = parseFloat(prompt("Enter top-up amount (STX):", "5") || "0");
-      if (amount <= 0) return;
-
-      const { txId } = await topUpSubscription(amount * 1_000_000, walletAddress);
-      await waitForTransaction(txId);
-
-      const response = await fetch("/api/subscription", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "topup",
-          subscriptionId: subscription.id,
-          amount: amount * 1_000_000,
-          txId,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to record top-up");
-      }
-
-      await fetchSubscription();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Top-up failed");
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  const handleCancel = async () => {
-    if (!subscription?.id || !walletAddress) return;
-    if (!confirm("Are you sure you want to cancel your subscription? Remaining balance will be refunded.")) return;
-    
-    setActionLoading(true);
-    try {
-      const { cancelSubscription, waitForTransaction } = await import("@/lib/subscription-contract");
-      const { txId } = await cancelSubscription(walletAddress);
-      await waitForTransaction(txId);
-
-      const response = await fetch("/api/subscription", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "cancel",
-          subscriptionId: subscription.id,
-          txId,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to cancel subscription");
-      }
-
-      await fetchSubscription();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Cancellation failed");
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  const handleToggleAutoStack = async () => {
-    if (!subscription?.id || !walletAddress) return;
-    setActionLoading(true);
-    try {
-      const { toggleAutoStack, waitForTransaction } = await import("@/lib/subscription-contract");
-      const newState = !subscription.autoStack;
-      const { txId } = await toggleAutoStack(newState, walletAddress);
-      await waitForTransaction(txId);
-
-      const response = await fetch("/api/subscription", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "toggle-autostack",
-          subscriptionId: subscription.id,
-          autoStack: newState,
-          txId,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to toggle auto-stack");
-      }
-
-      await fetchSubscription();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Toggle failed");
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  const handleMagicLinkSuccess = () => {
-    console.log('🎉 Magic link success - forcing auth re-check...');
-    // Force immediate re-check after magic link success
-    setTimeout(async () => {
-      const res = await fetch('/api/auth/session', {
-        credentials: 'include',
-      });
-      const data = await res.json();
-      if (data.authenticated && data.user) {
-        setUser(data.user);
-        console.log('✅ User authenticated after magic link:', data.user.email);
-      }
-    }, 1000);
-    fetchSubscription();
-  };
-
-  const statusChip = useMemo(() => {
+  const getStatusBadge = () => {
     if (!subscription) return null;
-    if (subscription.status === "active") {
-      return (
-        <Badge className="bg-green-500/10 text-green-400 border-green-500/20">
-          Active Autopay
-        </Badge>
-      );
+    
+    switch (subscription.status) {
+      case 'active':
+        return <Badge className="bg-green-500/20 text-green-400">Active</Badge>;
+      case 'inactive':
+        return <Badge className="bg-gray-500/20 text-gray-400">Inactive</Badge>;
+      default:
+        return null;
     }
-    return (
-      <Badge className="bg-gray-500/10 text-gray-400 border-gray-500/20">
-        Inactive
-      </Badge>
-    );
-  }, [subscription]);
+  };
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white">
-      <section className="relative overflow-hidden border-b border-white/10 bg-gradient-to-b from-[#0A0A0A] via-[#101217] to-[#0A0A0A]">
-        <div className="container mx-auto flex flex-col items-center gap-8 px-6 py-20 text-center">
-          <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-muted-foreground hover:text-white"
-              asChild
-            >
-              <a href="/">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Home
-              </a>
-            </Button>
-          </div>
-          <div className="text-center">
-            <Badge className="mb-4 border border-orange-500/40 bg-transparent text-xs uppercase tracking-[0.3em] text-orange-400">
-              Autopay + PoX Rewards
-            </Badge>
-            <h1 className="text-4xl font-semibold tracking-tight text-white md:text-5xl">
-              Subscribe Monthly. Auto-Stack BTC Rewards.
-            </h1>
-            <p className="mt-4 text-lg text-muted-foreground">
-              Zero-friction autopay for creator memberships. Magic link onboarding, escrow safety,
-              and automatic stacking yields.
-            </p>
-          </div>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Button 
-              size="lg" 
-              className="bg-orange-500 text-black hover:bg-orange-400"
-              onClick={handleStartSubscription}
-              disabled={actionLoading}
-            >
-              {actionLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Processing...
-                </>
-              ) : !user ? (
-                "Sign In to Subscribe"
-              ) : !walletAddress ? (
-                "Connect Wallet"
-              ) : (
-                `✅ Ready to subscribe: ${user.email}`
-              )}
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-white/20 text-white hover:border-white hover:bg-white/5"
-              asChild
-            >
-              <a
-                href="https://explorer.hiro.so/txid/STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.subscription-autopay?chain=testnet"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                View Autopay Contract
-              </a>
-            </Button>
-          </div>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-green-400" />
-              Non-custodial escrow
+      {/* Header */}
+      <div className="border-b border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center">
+              <ArrowLeft className="h-5 w-5 mr-4 cursor-pointer hover:text-gray-400" onClick={() => window.history.back()} />
+              <h1 className="text-xl font-semibold">x402Pay Subscriptions</h1>
             </div>
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-purple-400" />
-              Auto-stacking enabled
-            </div>
-            <div className="flex items-center gap-2">
-              <Zap className="h-4 w-4 text-yellow-400" />
-              Relayer monitored every 10 minutes
-            </div>
+            {walletAddress && (
+              <div className="flex items-center gap-2">
+                <Wallet className="h-4 w-4 text-green-500" />
+                <span className="text-sm text-gray-400">
+                  {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+                </span>
+              </div>
+            )}
           </div>
         </div>
-      </section>
+      </div>
 
-      <section className="mx-auto grid max-w-5xl gap-6 px-6 py-16 md:grid-cols-3">
-        {plans.map((plan) => (
-          <Card key={plan.id} className="border border-white/10 bg-[#13141A]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Status Section */}
+        {subscription && (
+          <Card className="bg-[#1A1A1A] border-gray-800 mb-8">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="text-white">{plan.label}</CardTitle>
-                {plan.id === "annual" ? (
-                  <Badge className="bg-purple-500/20 text-purple-200">Best value</Badge>
-                ) : null}
-              </div>
-              <CardDescription className="text-lg text-white">
-                {plan.price}
-                <span className="text-sm text-muted-foreground"> / interval</span>
-              </CardDescription>
-              <p className="text-muted-foreground">{plan.description}</p>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <ul className="space-y-3 text-sm text-muted-foreground">
-                {plan.perks.map((perk) => (
-                  <li key={perk} className="flex items-start gap-2">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 text-orange-400" />
-                    <span>{perk}</span>
-                  </li>
-                ))}
-              </ul>
-              <Button 
-                className="w-full bg-orange-500 text-black hover:bg-orange-400"
-                onClick={handleStartSubscription}
-                disabled={actionLoading}
-              >
-                {actionLoading ? "Processing..." : `Choose ${plan.label.split(" ")[0]}`}
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
-      </section>
-
-      <section className="mx-auto max-w-5xl px-6 pb-20">
-        <div className="grid gap-6 lg:grid-cols-[2fr,1fr]">
-          <Card className="border-white/10 bg-[#101217]">
-            <CardHeader>
-              <CardTitle className="text-white">How Autopay Works</CardTitle>
-              <CardDescription>Every charge is monitored and mirrored in Supabase.</CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-4 md:grid-cols-2">
-              {autopayTimeline.map((step) => (
-                <div key={step.title} className="rounded border border-white/5 p-4">
-                  <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">
-                    {step.title}
-                  </p>
-                  <p className="mt-2 text-base text-white">{step.detail}</p>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          <Card className="border-lime-500/20 bg-[#0E1107]">
-            <CardHeader className="space-y-2">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-white">Subscription Status</CardTitle>
-                {statusChip}
+                <CardTitle className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-orange-500" />
+                  Your Subscription
+                </CardTitle>
+                {getStatusBadge()}
               </div>
               <CardDescription>
-                {subscription?.status === "active"
-                  ? "Relayer checks every 10 minutes."
-                  : "Complete magic link onboarding to unlock autopay."}
+                Manage your autopay subscription and rewards
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-3 text-sm text-white">
-              {loading ? (
-                <p className="text-muted-foreground">Loading subscription...</p>
-              ) : error ? (
-                <p className="text-red-400">{error}</p>
-              ) : (
-                <>
-                  <div className="flex items-center justify-between border-b border-white/5 pb-2">
-                    <span className="text-muted-foreground">Escrow Balance</span>
-                    <strong>{subscription?.escrowBalance ?? 0} STX</strong>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground">Interval</span>
-                    <strong>{subscription?.intervalBlocks ?? 4320} blocks</strong>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground">Strikes</span>
-                    <strong>{subscription?.strikes ?? 0} / 3</strong>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground">Auto-stack</span>
-                    <strong>{subscription?.autoStack ? "Enabled" : "Disabled"}</strong>
-                  </div>
-                  {subscription?.nextChargeBlock ? (
-                    <div className="rounded bg-black/40 p-3 text-xs text-muted-foreground">
-                      Next charge #{subscription.nextChargeBlock} • Last #{subscription.lastChargeBlock}
-                    </div>
-                  ) : null}
-                </>
-              )}
-              <div className="mt-4 text-xs text-muted-foreground">
-                <p>
-                  Wallet: {shortAddress ?? "Not connected"} • Auth: {authLoading ? "Checking" : user ? `✅ ${user.email}` : "❌ Not logged in"}
-                </p>
-                
-                {walletError && (
-                  <div className="text-red-400 text-xs mt-2">
-                    {walletError}
-                  </div>
-                )}
-                
-                {!user ? (
-                  <Button
-                    variant="outline"
-                    className="w-full border-white/30 text-white"
-                    onClick={() => setMagicLinkOpen(true)}
-                  >
-                    Sign In with Magic Link
-                  </Button>
-                ) : !walletAddress ? (
-                  <Button
-                    variant="outline"
-                    className="w-full border-white/30 text-white"
-                    onClick={connectWallet}
-                    disabled={isConnecting}
-                  >
-                    {isConnecting ? "Connecting..." : "Connect Wallet"}
-                  </Button>
-                ) : (
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div>
+                  <p className="text-sm text-gray-400">Escrow Balance</p>
+                  <p className="text-2xl font-bold text-orange-500">
+                    {subscription.escrowBalance} STX
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-400">Auto-Stack</p>
+                  <p className="text-lg font-semibold">
+                    {subscription.autoStack ? 'Enabled' : 'Disabled'}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-400">Strikes</p>
+                  <p className="text-lg font-semibold">{subscription.strikes}/3</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-400">Next Charge</p>
+                  <p className="text-lg font-semibold">
+                    {subscription.nextChargeBlock 
+                      ? `Block ${subscription.nextChargeBlock}`
+                      : 'N/A'
+                    }
+                  </p>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-4 mt-6">
+                {subscription.status === 'active' && (
                   <>
-                    <div className="text-xs text-green-400 mb-2">
-                      ✓ Wallet Connected: {shortAddress}
-                    </div>
-                    {subscription?.status === "active" ? (
-                      <div className="flex gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex-1 border-white/30 text-white"
-                          onClick={handleTopUp}
-                          disabled={actionLoading}
-                        >
-                          Top Up
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex-1 border-red-500/30 text-red-400"
-                          onClick={handleCancel}
-                          disabled={actionLoading}
-                        >
-                          Cancel
-                        </Button>
-                      </div>
-                    ) : null}
                     <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full text-xs text-muted-foreground hover:text-white"
-                      onClick={disconnectWallet}
+                      variant="outline"
+                      onClick={() => handleSubscriptionAction('topup', { amount: 5 })}
+                      disabled={loading}
                     >
-                      Disconnect Wallet
+                      {loading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
+                      Top Up (5 STX)
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      onClick={() => handleSubscriptionAction('cancel')}
+                      disabled={loading}
+                    >
+                      {loading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
+                      Cancel Subscription
                     </Button>
                   </>
                 )}
+                {subscription.autoStack && (
+                  <Button
+                    onClick={() => handleSubscriptionAction('toggle-autostack')}
+                    disabled={loading}
+                  >
+                    {loading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
+                    Disable Auto-Stack
+                  </Button>
+                )}
               </div>
             </CardContent>
           </Card>
-        </div>
-      </section>
+        )}
 
-      <MagicLinkModal
-        open={magicLinkOpen}
-        onOpenChange={setMagicLinkOpen}
-        onSuccess={handleMagicLinkSuccess}
+        {/* Plans Section */}
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-4">Choose Your Plan</h2>
+          <p className="text-gray-400 mb-8">
+            Start earning Bitcoin rewards on your subscription payments
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          {plans.map((plan) => (
+            <Card key={plan.id} className="bg-[#1A1A1A] border-gray-800">
+              <CardHeader>
+                <CardTitle>{plan.label}</CardTitle>
+                <CardDescription>{plan.description}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-orange-500 mb-6">
+                  {plan.price}
+                </div>
+                <ul className="space-y-3 mb-8">
+                  {plan.perks.map((perk, index) => (
+                    <li key={index} className="flex items-center gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-green-500" />
+                      <span className="text-sm">{perk}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button 
+                  className="w-full"
+                  onClick={() => setEnrollmentOpen(true)}
+                  disabled={!walletAddress}
+                >
+                  {!walletAddress ? 'Connect Wallet First' : `Choose ${plan.label}`}
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Wallet Connection */}
+        {!walletAddress && (
+          <Card className="bg-[#1A1A1A] border-gray-800 text-center">
+            <CardContent className="py-12">
+              <Wallet className="h-12 w-12 text-gray-600 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Connect Your Wallet</h3>
+              <p className="text-gray-400 mb-6">
+                Connect your Stacks wallet to manage subscriptions
+              </p>
+              <Button onClick={handleStartSubscription} disabled={isConnecting}>
+                {isConnecting && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
+                Connect Wallet
+              </Button>
+              {walletError && (
+                <p className="text-sm text-red-400 mt-4">{walletError}</p>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* x402 Demo Link */}
+        <Card className="bg-[#1A1A1A] border-gray-800">
+          <CardContent className="py-8 text-center">
+            <Zap className="h-8 w-8 text-orange-500 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold mb-2">Try HTTP 402 Payment Protocol</h3>
+            <p className="text-gray-400 mb-4">
+              Experience the future of micropayments with our interactive demo
+            </p>
+            <Button variant="outline" asChild>
+              <a href="/x402-demo">View x402 Demo</a>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Enrollment Dialog */}
+      <SubscriptionEnrollmentDialog
+        open={enrollmentOpen}
+        onOpenChange={setEnrollmentOpen}
+        walletAddress={walletAddress}
+        onSuccess={() => {
+          setEnrollmentOpen(false);
+          fetchSubscription();
+        }}
       />
 
-      {walletAddress && (
-        <SubscriptionEnrollmentDialog
-          open={enrollmentOpen}
-          onOpenChange={setEnrollmentOpen}
-          onSuccess={fetchSubscription}
-          userAddress={walletAddress}
-        />
+      {/* Error Display */}
+      {error && (
+        <div className="fixed bottom-4 right-4 bg-red-500/10 border border-red-500 rounded-lg p-4 max-w-md">
+          <p className="text-sm text-red-400">{error}</p>
+        </div>
       )}
     </div>
   );
