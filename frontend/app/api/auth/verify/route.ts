@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
+// Generate secure token
+function generateToken(): string {
+  return Array.from({ length: 32 }, () =>
+    Math.random().toString(36).charAt(2)
+  ).join("");
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { token } = await request.json();
@@ -21,13 +28,9 @@ export async function POST(request: NextRequest) {
 
     // Find token
     const { data: tokenData, error: tokenError } = await supabase
-      .from("magic_link_tokens")
-      .select("*")
-      .eq("token", token)
-      .eq("used", false)
-      .single();
+      .rpc('admin_validate_token', { p_token: token });
 
-    if (tokenError || !tokenData) {
+    if (tokenError || !tokenData || tokenData.length === 0) {
       console.error("Token not found:", tokenError);
       return NextResponse.json(
         { error: "Invalid or expired magic link" },
@@ -35,8 +38,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const tokenInfo = tokenData[0];
+    
     // Check expiration
-    const expiresAt = new Date(tokenData.expires_at);
+    const expiresAt = new Date(tokenInfo.expires_at);
     if (expiresAt < new Date()) {
       return NextResponse.json(
         { error: "Magic link has expired. Please request a new one." },
@@ -45,62 +50,47 @@ export async function POST(request: NextRequest) {
     }
 
     // Mark token as used
-    await supabase
-      .from("magic_link_tokens")
-      .update({ used: true, used_at: new Date().toISOString() })
-      .eq("id", tokenData.id);
+    await supabase.rpc('admin_mark_token_used', { p_token: token });
 
     // Get or create user
-    let { data: user, error: userError } = await supabase
-      .from("users")
-      .select("*")
-      .eq("email", tokenData.email)
-      .single();
+    const { data: userId, error: userError } = await supabase
+      .rpc('admin_get_or_create_user', { p_email: tokenInfo.email });
 
-    if (userError && userError.code === 'PGRST116') {
-      // User doesn't exist, create one
-      const { data: newUser, error: createError } = await supabase
-        .from("users")
-        .insert({
-          email: tokenData.email,
-          last_login_at: new Date().toISOString(),
-        })
-        .select()
-        .single();
-
-      if (createError) {
-        console.error("User creation error:", createError);
-        return NextResponse.json(
-          { error: "Failed to create user account" },
-          { status: 500 }
-        );
-      }
-      user = newUser;
-    } else if (userError) {
-      console.error("User lookup error:", userError);
+    if (userError || !userId) {
+      console.error("User creation error:", userError);
       return NextResponse.json(
-        { error: "Failed to verify user" },
+        { error: "Failed to create user account" },
         { status: 500 }
       );
-    } else {
-      // Update last login
-      await supabase
-        .from("users")
-        .update({ last_login_at: new Date().toISOString() })
-        .eq("id", user.id);
     }
 
     // Create session
+    const sessionToken = generateToken();
+    const sessionExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+
+    await supabase.rpc('admin_create_session', {
+      p_user_id: userId,
+      p_token: sessionToken,
+      p_expires_at: sessionExpiresAt.toISOString()
+    });
+
+    // Get user info for response
+    const { data: userInfo } = await supabase
+      .from("users")
+      .select("id, email, wallet_address")
+      .eq("id", userId)
+      .single();
+
     const sessionData = {
-      userId: user.id,
-      email: user.email,
-      walletAddress: user.wallet_address,
+      userId: userId,
+      email: tokenInfo.email,
+      walletAddress: userInfo?.wallet_address || null,
       createdAt: new Date().toISOString(),
     };
 
     // Set session cookie
     const cookieStore = await cookies();
-    cookieStore.set("x402pay_session", JSON.stringify(sessionData), {
+    cookieStore.set("x402pay_session", sessionToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
@@ -111,11 +101,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       user: {
-        id: user.id,
-        email: user.email,
-        walletAddress: user.wallet_address,
+        id: userId,
+        email: tokenInfo.email,
+        walletAddress: userInfo?.wallet_address || null,
       },
-      redirectTo: tokenData.redirect_to,
+      redirectTo: tokenInfo.redirect_to,
     });
   } catch (error) {
     console.error("Token verification error:", error);

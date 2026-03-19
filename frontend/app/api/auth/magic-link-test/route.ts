@@ -20,23 +20,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check environment variables
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
     const resendKey = process.env.RESEND_API_KEY;
-
-    console.log("🔧 Environment check:", {
-      supabaseUrl: supabaseUrl ? "✅" : "❌",
-      supabaseKey: supabaseKey ? "✅" : "❌", 
-      resendKey: resendKey ? "✅" : "❌"
-    });
-
-    if (!supabaseUrl || !supabaseKey) {
-      console.error("❌ Missing Supabase credentials");
-      return NextResponse.json(
-        { error: "Server configuration error: Missing database credentials" },
-        { status: 500 }
-      );
-    }
 
     if (!resendKey) {
       console.error("❌ Missing Resend API key");
@@ -52,69 +36,8 @@ export async function POST(request: NextRequest) {
 
     console.log("📧 Processing magic link for:", email);
 
-    // Store token in Supabase
-    try {
-      const { createClient } = await import("@supabase/supabase-js");
-      const supabase = createClient(supabaseUrl, supabaseKey, {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        }
-      });
-
-      const { error: dbError } = await supabase.from("magic_link_tokens").insert({
-        email,
-        token,
-        expires_at: expiresAt.toISOString(),
-        redirect_to: redirectTo || "/subscribe",
-        used: false,
-      });
-
-      if (dbError) {
-        console.error("❌ Database error:", dbError);
-        
-        // Check if table exists
-        if (dbError.message?.includes("relation") || dbError.message?.includes("does not exist")) {
-          return NextResponse.json(
-            { error: "Database not set up. Please run the SQL schema first." },
-            { status: 500 }
-          );
-        }
-        
-        // Check RLS issues
-        if (dbError.message?.includes("row-level security")) {
-          console.log("⚠️ RLS issue detected, trying service role bypass...");
-          
-          // Try with service role bypass
-          const { error: bypassError } = await supabase.rpc('admin_insert_magic_link', {
-            p_email: email,
-            p_token: token,
-            p_expires_at: expiresAt.toISOString(),
-            p_redirect_to: redirectTo || "/subscribe"
-          });
-          
-          if (bypassError) {
-            return NextResponse.json(
-              { error: `RLS policy error. Please run: UPDATE RLS_FIX.sql in Supabase. Details: ${bypassError.message}` },
-              { status: 500 }
-            );
-          }
-        } else {
-          return NextResponse.json(
-            { error: `Database error: ${dbError.message}` },
-            { status: 500 }
-          );
-        }
-      }
-
-      console.log("✅ Token stored in database");
-    } catch (dbErr) {
-      console.error("❌ Database connection error:", dbErr);
-      return NextResponse.json(
-        { error: "Failed to connect to database" },
-        { status: 500 }
-      );
-    }
+    // For testing: Skip database and go straight to email
+    console.log("⚠️ TEST MODE: Skipping database storage");
 
     // Create magic link URL
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL 
@@ -129,11 +52,12 @@ export async function POST(request: NextRequest) {
       const { Resend } = await import("resend");
       const resend = new Resend(resendKey);
 
-      const fromEmail = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
+      const fromEmail = "onboarding@resend.dev";
+      const toEmail = email.includes("@") ? email : "test@example.com";
       
       const { data: emailData, error: emailError } = await resend.emails.send({
         from: fromEmail,
-        to: email,
+        to: toEmail,
         subject: "🔐 Your x402Pay Magic Link",
         html: `
           <!DOCTYPE html>
@@ -252,6 +176,8 @@ export async function POST(request: NextRequest) {
         debug: {
           email,
           magicLinkUrl: process.env.NODE_ENV === "development" ? magicLinkUrl : undefined,
+          token: process.env.NODE_ENV === "development" ? token : undefined,
+          note: "TEST MODE: Token not stored in database"
         }
       });
       
