@@ -117,9 +117,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Create magic link URL
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}` 
-      : "http://localhost:3000";
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+    
+    console.log("🔗 URL construction:", {
+      NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+      VERCEL_URL: process.env.VERCEL_URL,
+      finalAppUrl: appUrl
+    });
     
     const magicLinkUrl = `${appUrl}/auth/verify?token=${token}`;
     console.log("🔗 Magic link URL:", magicLinkUrl);
