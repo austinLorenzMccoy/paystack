@@ -2,18 +2,17 @@
   <img src="frontend/public/x402pay-logo.svg" alt="x402Pay Logo" width="120" height="120" />
 </p>
 
-# ⚡ x402Pay — Bitcoin-Native Subscriptions with DeFi Yield
+# ⚡ x402Pay — HTTP 402 Payment Protocol for Bitcoin
 
-> **Automated recurring payments. DeFi yield optimization. Zero intermediaries.**
+> **HTTP 402 Payment Required. Bitcoin-native micropayments. Zero intermediaries.**
 
-x402Pay is the first Bitcoin-native subscription platform with automated DeFi yield optimization, built on [Stacks](https://www.stacks.co/). Creators earn BTC rewards on idle subscription funds while subscribers enjoy automated billing — all powered by programmable Clarity smart contracts and off-chain relayer infrastructure.
+x402Pay implements the long-awaited HTTP 402 Payment Required status code with Bitcoin-native micropayments. Built on [Stacks](https://www.stacks.co/), it enables direct creator-to-consumer payments without email, passwords, or traditional payment processors.
 
-**Live**: [x402pay-app.vercel.app](https://x402pay-app.vercel.app)  
-**Agent Marketplace**: [x402pay-app.vercel.app/agents](https://x402pay-app.vercel.app/agents)  
-**Subscription**: [x402pay-app.vercel.app/subscribe](https://x402pay-app.vercel.app/subscribe)  
+**Live Demo**: [x402pay-app.vercel.app](https://x402pay-app.vercel.app)  
+**Interactive x402 Demo**: [x402pay-app.vercel.app/x402-demo](https://x402pay-app.vercel.app/x402-demo)  
+**Subscriptions**: [x402pay-app.vercel.app/subscribe](https://x402pay-app.vercel.app/subscribe)  
 **Contracts**: [x402pay-app.vercel.app/contracts](https://x402pay-app.vercel.app/contracts)  
-**npm**: [@x402pay/sdk](https://www.npmjs.com/package/@x402pay/sdk) - `npm install @x402pay/sdk`  
-**WordPress Plugin**: `wordpress-plugin/x402pay-subscriptions.zip`
+**npm**: [@x402pay/sdk](https://www.npmjs.com/package/@x402pay/sdk) - `npm install @x402pay/sdk`
 
 **Deployed Contracts** (9 contracts, 2,163 lines of Clarity):
 - [`revenue-split`](https://explorer.hiro.so/txid/STZMYH3JZXAHA1E993K0AATCCAAPTTFQVHWCVARF.revenue-split?chain=testnet) - Multi-party payment distribution
@@ -32,22 +31,21 @@ x402Pay is the first Bitcoin-native subscription platform with automated DeFi yi
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                      x402Pay Full-Stack Platform                   │
+│                    x402Pay HTTP 402 Platform                        │
 ├──────────────┬───────────────────┬──────────────────┬──────────────┤
 │  frontend/   │  backend/         │  contracts/      │  relayer/    │
-│  Next.js 16  │  Supabase Edge    │  Clarity v2      │  Node.js     │
-│  TailwindCSS │  x402 Gateway     │  9 Contracts     │  Autopay     │
-│  Recharts    │  Agent Detection  │  DeFi Yield      │  Job Queue   │
-│  shadcn/ui   │  Agent Marketplace │  PoX-4 Stacking  │  3-Strike    │
-│  PWA Ready   │  Realtime Subs    │  Testnet Live    │  Email Notify│
+│  Next.js 16  │  x402 Gateway     │  Clarity v2      │  Node.js     │
+│  TailwindCSS │  Payment Verify   │  9 Contracts     │  Autopay     │
+│  shadcn/ui   │  Protected APIs   │  DeFi Yield      │  Job Queue   │
+│  PWA Ready   │  Stats Tracking   │  PoX-4 Stacking  │  3-Strike    │
 └──────────────┴───────────────────┴──────────────────┴──────────────┘
 ```
 
 | Layer | Stack | Purpose |
 |-------|-------|---------|
-| **Frontend** | Next.js 16, React 19, TailwindCSS, shadcn/ui, Recharts | Dashboard, yield tracking, wallet connect, magic link auth, PWA |
-| **Backend** | Supabase (Edge Functions, Auth, Realtime, Postgres) | x402 gateway, AI agent detection, agent marketplace, custodial wallets, analytics |
-| **Contracts** | Clarity v2 (Stacks L2, epoch 2.4) | 9-contract suite: subscriptions, autopay, DeFi yield, PoX-4, liquid staking |
+| **Frontend** | Next.js 16, React 19, TailwindCSS, shadcn/ui | Interactive x402 demo, wallet connect, subscription management |
+| **Backend** | Node.js API Routes | HTTP 402 implementation, payment verification, protected content access |
+| **Contracts** | Clarity v2 (Stacks L2) | 9-contract suite: subscriptions, autopay, DeFi yield, PoX-4 |
 | **Relayer** | Node.js, Bull Queue, Resend | Off-chain autopay automation, 3-strike system, email notifications |
 | **WordPress** | PHP Plugin | One-click integration, shortcodes, admin panel |
 
@@ -55,19 +53,49 @@ x402Pay is the first Bitcoin-native subscription platform with automated DeFi yi
 
 ## 🔑 Key Features
 
-### 🤖 Automated Subscription Infrastructure
-- **Off-Chain Relayer**: Node.js service with job queue for automated recurring charges
-- **3-Strike System**: Graceful degradation with retry logic before auto-cancellation
-- **Email Notifications**: Resend integration for payment reminders and receipts
-- **Escrow Top-Up**: Self-service balance management UI
-- **Health Monitoring**: Real-time subscription status tracking
+### 💳 HTTP 402 Payment Protocol
+- **True Implementation**: HTTP 402 Payment Required status code (30 years in the making)
+- **Bitcoin Native**: Direct wallet-to-creator payments, no intermediaries
+- **Access Tokens**: JWT-based post-payment authentication
+- **Protected Content**: APIs that return 402 until payment is verified
 
-### 💰 DeFi Yield Optimization (Industry-First!)
-- **PoX-4 Auto-Stacking**: Delegate idle subscription funds to earn BTC rewards
-- **Bitflow DEX Integration**: Automated token swaps for STX/BTC LP positions
-- **ALEX Protocol**: LP staking and yield farming for STX-USDA pools
-- **StackingDAO Liquid Staking**: Receive stSTX tokens while earning BTC rewards
-- **Automated Rebalancing**: Revenue optimizer routes funds to highest APY strategy every 30 days
+### 🎯 Interactive Demo Experience
+- **Step-by-Step Flow**: Visual 5-step payment process
+- **Real-Time Stats**: Transaction tracking and revenue dashboard
+- **Professional UI**: Loading states, error handling, user feedback
+- **Educational**: Learn about HTTP 402 and micropayments
+### 🚀 Quick Start
+
+#### Experience HTTP 402 in Action
+1. **Visit Demo**: [x402pay-app.vercel.app/x402-demo](https://x402pay-app.vercel.app/x402-demo)
+2. **Request Protected Content**: See HTTP 402 Payment Required
+3. **Simulate Payment**: Submit transaction hash for verification
+4. **Access Content**: Receive JWT token and unlock protected resources
+5. **View Stats**: Real-time transaction tracking and revenue
+
+#### API Usage Example
+```javascript
+// Step 1: Try to access protected content
+const response = await fetch('/api/ai/generate');
+// Returns: 402 Payment Required
+
+// Step 2: Complete payment
+const payment = await fetch('/api/x402/verify', {
+  method: 'POST',
+  body: JSON.stringify({
+    txHash: '0x1234...',
+    walletAddress: 'ST1...',
+    amount: 1
+  })
+});
+// Returns: { accessToken: 'jwt-token...' }
+
+// Step 3: Access content with token
+const content = await fetch('/api/ai/generate', {
+  headers: { 'Authorization': `Bearer ${accessToken}` }
+});
+// Returns: AI-generated content
+```
 - **Yield Dashboard**: Real-time APY tracking across all DeFi protocols
 
 ### 🎯 Zero-Friction User Experience
