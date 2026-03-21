@@ -9,7 +9,7 @@ const footerLinks = {
   ],
   Community: [
     { label: "Twitter", href: "https://twitter.com" },
-    { label: "GitHub", href: "https://github.com" },
+    { label: "GitHub", href: "https://github.com/austinLorenzMccoy/x402pay" },
     { label: "Discord", href: "https://discord.com" },
   ],
 };

@@ -77,7 +77,7 @@ export default function DocsPage() {
             Launch Dashboard
           </Link>
           <a
-            href="https://github.com"
+            href="https://github.com/austinLorenzMccoy/x402pay"
             target="_blank"
             rel="noreferrer"
             className="btn-brutalist border-stacks-purple text-foreground"
@@ -130,11 +130,10 @@ export default function DocsPage() {
                 key={asset.key}
                 type="button"
                 onClick={() => setSelectedAsset(asset)}
-                className={`btn-brutalist border ${
-                  selectedAsset.key === asset.key
+                className={`btn-brutalist border ${selectedAsset.key === asset.key
                     ? "border-bitcoin-orange text-bitcoin-orange"
                     : "border-border text-foreground"
-                }`}
+                  }`}
               >
                 {asset.label}
               </button>
@@ -154,7 +153,7 @@ export default function DocsPage() {
               Drop-in Component
             </div>
             <pre className="relative px-4 py-4 font-mono text-[13px] leading-6 text-success-green">
-{`import { PaywallButton } from '@x402pay/sdk'
+              {`import { PaywallButton } from '@x402pay/sdk'
 
 <PaywallButton
   contentId="${selectedAsset.label.toLowerCase()}-drop"

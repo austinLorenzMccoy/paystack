@@ -14,7 +14,7 @@ const navLinks = [
   { href: "/agents", label: "Agents" },
   { href: "/subscribe", label: "Subscribe" },
   { href: "/docs", label: "Docs" },
-  { href: "https://github.com", label: "GitHub", external: true },
+  { href: "https://github.com/austinLorenzMccoy/x402pay", label: "GitHub", external: true },
 ];
 
 export function Header() {
