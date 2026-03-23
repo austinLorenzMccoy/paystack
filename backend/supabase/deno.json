@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "lib": ["deno.window"],
+    "strict": true
+  },
+  "lint": {
+    "rules": {
+      "tags": ["recommended"]
+    }
+  },
+  "fmt": {
+    "files": {
+      "include": ["supabase/functions/"]
+    }
+  },
+  "tasks": {
+    "test": "deno test --allow-all supabase/functions/",
+    "test:watch": "deno test --allow-all --watch supabase/functions/",
+    "lint": "deno lint supabase/functions/",
+    "fmt": "deno fmt supabase/functions/"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "paystack-backend",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "test": "npm run test:relayer && npm run test:supabase",
+    "test:relayer": "cd relayer && npm test",
+    "test:supabase": "cd supabase && /Users/a/.deno/bin/deno task test",
+    "test:watch": "npm run test:relayer -- --watch && cd supabase && /Users/a/.deno/bin/deno task test:watch",
+    "lint": "npm run lint:relayer && npm run lint:supabase",
+    "lint:relayer": "cd relayer && npm run lint",
+    "lint:supabase": "cd supabase && /Users/a/.deno/bin/deno task lint"
+  },
+  "devDependencies": {
+    "@types/deno": "^5.44.0",
+    "typescript": "^5.6.3"
+  }
+}

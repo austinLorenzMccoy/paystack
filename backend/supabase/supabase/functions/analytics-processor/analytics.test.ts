@@ -81,10 +81,13 @@ class MockMetricsClient {
   }
   from() {
     return {
-      select: () => this,
-      eq: () => this,
-      gte: () => this,
-      order: async () => ({ data: this.data, error: null }),
+      select: () => ({
+        eq: () => ({
+          gte: () => ({
+            order: async () => ({ data: this.data, error: null }),
+          }),
+        }),
+      }),
     };
   }
 }

@@ -135,17 +135,17 @@ describe("revenue-optimizer contract", () => {
         deployer
       );
 
-      const poxAddr = {
+      const poxAddr = Cl.tuple({
         version: Cl.buffer(Uint8Array.from([0x01])),
         hashbytes: Cl.buffer(
           Uint8Array.from(new Array(32).fill(0x12))
         ),
-      };
+      });
 
       const { result } = simnet.callPublicFn(
         "revenue-optimizer",
         "optimize-yield",
-        [Cl.uint(2000000), Cl.some(Cl.tuple(poxAddr))],
+        [Cl.uint(2000000), Cl.some(poxAddr)],
         creator1
       );
       expect(result).toBeOk(Cl.stringAscii("pox-stacking"));
