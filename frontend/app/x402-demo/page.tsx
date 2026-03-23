@@ -394,7 +394,7 @@ export default function X402DemoPage() {
               Take it to the next level with our recursive demo where each payment unlocks content that contains another paywall. Watch payments chain together infinitely.
             </p>
             <Button asChild className="bg-purple-500 hover:bg-purple-400">
-              <a href="/recursive-demo">
+              <a href="/recursive">
                 Try Recursive Demo
                 <ArrowRight className="ml-2 h-4 w-4" />
               </a>
